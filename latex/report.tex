@@ -1,0 +1,71 @@
+\documentclass[]{htwg-report}
+
+\include{header/header}
+
+\addbibresource{./bib/report.bib}
+
+\begin{document}
+
+%% Use Roman numerals for the page numbers of the title pages and table of
+%% contents.
+\frontmatter
+
+%% 'reporttype' add background elements to the cover / front page
+%% possible values are:
+%% bachelor	--> B S C
+%% master	--> M S C
+%% other		--> none
+\reporttype{bachelor}
+
+\reporttypetext{Bachelor Thesis}
+
+\title[Is it Possible to Write a Sexy Thesis with LaTeX?]{Is it Possible to Write a Sexy Thesis with LaTeX?}
+
+\author{Max Mustermann}
+\studentnumber{123456}
+\studentemail{Max.Mustermann@htwg.de}
+\newcommand{\verfasser}{Max Mustermann}
+\newcommand{\thema}{Is it Possible to Write a Sexy Thesis with LaTeX?}
+\newcommand{\dob}{01.01.1990}
+\newcommand{\birthplace}{Konstanz}
+\newcommand{\hoschschule}{Hochschule für Technik, Wirtschaft und Gestaltung}
+\newcommand{\institut}{HTWG Konstanz, Institut für Optische Systeme}
+\newcommand{\prueferA}{Betreuer A}
+\newcommand{\prueferB}{Betreuer B}
+\newcommand{\ausgabedatum}{01.04.2019}
+\newcommand{\abgabedatum}{01.10.2019}
+\newcommand{\type}{Bachelor}
+\newcommand{\typeshortcut}{B}
+\newcommand{\studiengang}{Angewandte Informatik}
+\newcommand{\strasse}{Alfred-Wachtel Straße 11}
+\newcommand{\wohnort}{78462 Konstanz}
+\newcommand{\schlagworte}{Deep learning, Machine Vision}
+
+\doclocation{Konstanz}
+\docdate{01. April 2018}
+
+\makecover[]
+%          
+%% Include an optional title page.
+\input{title}
+
+\input{abstract}
+\input{extended_abstract}
+\input{affidavit}
+
+\tableofcontents
+
+%% Use Arabic numerals for the page numbers of the chapters.
+\mainmatter
+
+\input{chapter-1}
+
+%% Use letters for the chapter numbers of the appendices.
+\appendix
+
+%\input{appendix-a}
+
+\printbibliography[heading=bibintoc]
+
+\end{document}
+
