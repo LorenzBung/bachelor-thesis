@@ -30,8 +30,13 @@
 \RequirePackage{setspace}
 \onehalfspacing
 
+% Add inputenc and fontenc
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
+\inputencoding{utf8}
 %% English is the default language, but this can be changed to German by
 %% specifying the 'german' option to the document class.
 \if@german
@@ -209,13 +214,13 @@
 }
 
 %%% Define Command for background image for Title Page
-\newcommand\BackgroundImgTitelPage{
+\newcommand\BackgroundImgTitlePage{
     \put(0,0){
         \parbox[b][\paperheight]{\paperwidth}{%
             \vfill
             \centering
             \includegraphics[height=\paperheight,width=\paperwidth,
-            keepaspectratio]{report_titel_page.pdf}%
+            keepaspectratio]{report_title_page.pdf}%
             \vfill
         }
     }
