@@ -1,0 +1,14 @@
+# Exclude latex compile files
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.bak
+*.dvi
+*.lof
+*.lol
+*.lot
+*.toc
+*.synctex.gz
+preface\*.aux
