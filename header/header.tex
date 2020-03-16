@@ -1,0 +1,102 @@
+% !TEX root = ../thesis.tex
+\documentclass[11pt,a4paper,oneside]{report}		                     
+
+% Mathe
+\usepackage{marvosym}		% Package für Euro&Co.
+\usepackage{amsfonts}		% Package für Mengensymbole (IN, IR, ...)
+\usepackage{amsmath}		% Package für restlichen Mathekram
+\usepackage{amssymb}        % math. Symbole und Umgebungen
+\usepackage{mathtools}
+
+% Use german umlaute
+%\usepackage{ngerman}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% Zitierung und Literaturverzeichnis
+\usepackage{apacite}		% Zitierstil
+\usepackage{natbib} 		% Erweiterte zitiermöglichkeiten 
+\usepackage{babelbib}		% Übersetzung des Literaturverzeichnises und der Zitate
+
+% formatting
+\usepackage{a4}
+
+% Verbesserte Darstellug der Schriftzeichen und Zwischenräumen
+\usepackage{lmodern}				% Benutze skalierbare Schriftfamilie
+%\usepackage[activate]{microtype}
+
+% Heading styles
+\usepackage[sf,bf,raggedright]{titlesec}
+\titlespacing*{\section}
+{0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
+\titlespacing*{\subsection}
+{0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
+%\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter}{15pt}{\Huge\bfseries}
+
+% Header and Footer
+\usepackage{fancyhdr}
+
+\fancypagestyle{fancybody}{
+	\fancyhf{}
+	\fancyhead[R]{\sc{\nouppercase{\leftmark}}}
+	\fancyfoot[C]{\thepage}
+}
+
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyfoot[C]{\thepage}
+	\renewcommand{\headrulewidth}{0pt}
+}
+
+\pagestyle{fancybody}
+
+% Absatz einrücken unterdrücken
+\setlength{\parindent}{0pt}
+
+% Listings
+\usepackage{listings}
+\lstset{
+	backgroundcolor=\color{lighter-gray},
+	xleftmargin=\parindent,
+	basicstyle=\ttfamily\footnotesize,
+	breaklines=true,
+	captionpos=b,
+	showspaces=false,
+	showstringspaces=false,
+	frame=shadowbox,
+	rulesepcolor=\color{ll-gray},
+	rulecolor=\color{l-gray},
+	belowskip=11pt,
+}
+
+% Depth of chapters and subsections
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+% Url line break
+\def\UrlBreaks{\do\/\do-}
+\def\UrlBigBreaks{\do\:\do\/}
+
+% Links
+\usepackage[pdfstartview=FitV, 	% start in 'fit size height'-view
+colorlinks=true, 	% Links farbig markieren
+linkcolor=black, 	% Interne Links schwarz
+citecolor=black, 	% Links zur Literatur schwarz
+filecolor=black, 	% Links auf lokale Dateien schwarz
+urlcolor=black,   	% Externe Links blau
+breaklinks=true, 	% Links umbrechen
+linktocpage=true 	% Im Inhaltsverzeichnis sind Seitenzahlen UND Text Links
+]{hyperref}
+
+%Move to the right.
+\setlength{\hoffset}{5pt}
+
+% Suppress warning of too small headheight
+\headheight13.6pt
+
+% Abkuerzungsverzeichnis
+\usepackage[nohyperlinks, printonlyused]{acronym}
+\usepackage[mode=buildnew]{standalone}
+
+\usepackage[toc, page]{appendix}

@@ -1,0 +1,73 @@
+%
+% LaTeX template at the Institute for Optical Systems (IOS)
+%
+% Author: Nico Brügel  (nico.bruegel@htwg-konstanz.de)
+% Date: 11.10.2019
+%
+
+% Include header
+\include{header/header}
+
+% Set variables used in cover, title, abstract and affidavit.
+\newcommand{\ausgabedatum}{01.04.2020}
+\newcommand{\abgabedatum}{30.06.2020}
+\newcommand{\autor}{Lorenz Bung}
+\newcommand{\autorStrasse}{Banater Str. 9}
+\newcommand{\autorPLZ}{78467}
+\newcommand{\autorOrt}{Konstanz}
+\newcommand{\autorGeburtsort}{Konstanz}
+\newcommand{\autorGeburtsdatum}{26.06.1997}
+\newcommand{\prueferA}{Prof. Dr. Georg Umlauf}
+\newcommand{\prueferB}{Simon Schmei{\ss}er}
+\newcommand{\firma}{Isys Vision GmbH}
+\newcommand{\studiengang}{Angewandte Informatik}
+
+
+\newcommand{\thema}{Rekonstruktion von Meshes für industrielles Bin-Picking und Depalettieren}
+
+\newcommand{\schlagworte}{TODO}
+
+\begin{document}
+
+% Include title pages
+\include{title/cover}
+\include{title/title}
+
+% Set page numbering to roman
+\pagenumbering{Roman}
+
+% Include abstract and affidavit
+\include{title/affidavit}
+\include{title/abstract}
+\include{title/extended_abstract}
+
+% Include table of contents
+\tableofcontents
+\newpage
+
+% Aktuelle Seitenzahl in einem Zähler speichern
+% -> römische Seitennummerierung soll durchgängig
+% sein und wird nachher wieder aufgegriffen.
+% --------------------------------------------------------
+\newcounter{anhang}
+\setcounter{anhang}{\value{page}}
+
+% Set page numbering to arabic
+\pagenumbering{arabic}
+
+% Include the chapters
+% ---------------------------------------------------------------------------
+\include{chapters/introduction}
+\include{chapters/fundamentals}
+\include{chapters/experiments}
+\include{chapters/discussion-conclusion}
+
+% ---------------------------------------------------------------------------
+\pagenumbering{Roman}
+\setcounter{page}{\value{anhang}}
+\include{chapters/bibliography}
+\include{chapters/listoffigures}
+\include{chapters/listoftables}
+\include{appendix/appendix}
+
+\end{document}
