@@ -7,6 +7,7 @@
 \usepackage{amsmath}		% Package für restlichen Mathekram
 \usepackage{amssymb}        % math. Symbole und Umgebungen
 \usepackage{mathtools}
+\usepackage{unicode-math}   % Erlaubt die Mathe Schrift zu setzen
 
 % Use german umlaute
 %\usepackage{ngerman}
@@ -22,14 +23,16 @@
 
 % Fonts
 \usepackage{fontspec}
-\setmainfont[Path = fonts/, BoldFont=swis721-Bold.ttf, ItalicFont=swis721-Italic.ttf, BoldItalicFont=swis721-Bold-Italic.ttf]{swis721.ttf}
+\setmainfont[Path=fonts/, BoldFont=swis721-Bold.ttf, ItalicFont=swis721-Italic.ttf, BoldItalicFont=swis721-Bold-Italic.ttf]{swis721.ttf}
+\setmonofont[Path=fonts/, BoldFont=CourierNew-Bold.ttf, ItalicFont=CourierNew-Italic.ttf, BoldItalicFont=CourierNew-Bold-Italic.ttf]{CourierNew.ttf}
+\setmathfont[Path=fonts/]{CambriaMath.ttf}
 
 
 % formatting
 \usepackage{a4}
 
 % Verbesserte Darstellug der Schriftzeichen und Zwischenräumen
-\usepackage{lmodern}				% Benutze skalierbare Schriftfamilie
+%\usepackage{lmodern}				% Benutze skalierbare Schriftfamilie
 %\usepackage[activate]{microtype}
 
 % Heading styles
