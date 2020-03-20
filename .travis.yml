@@ -1,0 +1,8 @@
+language: shell
+os: linux
+
+install:
+- sudo apt-get update && sudo apt-get -y install texlive texlive-latex-extra texlive-full texlive-xetex texlive-pstricks
+
+script:
+- xelatex thesis.tex && biblatex thesis.aux && xelatex thesis.tex && xelatex thesis.tex
