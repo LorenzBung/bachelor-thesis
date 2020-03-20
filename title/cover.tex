@@ -1,31 +1,107 @@
 % !TEX root = ../thesis.tex
 \begin{titlepage}
 
-\vspace*{-2.5cm}
+\clearpage
+\newgeometry{margin=0pt}
+\thispagestyle{empty}
 
-\begin{figure}[h]
-\hspace*{-2cm}
-\includegraphics[height=2cm]{title/HTWG-Logo_de_300dpi.png}
-\hspace*{4cm}\includegraphics[height=2cm,]{title/IOS_Logo2016_lettering_de.png}
+\backgroundsetup{
+    scale = 1, angle = 0, opacity = 1,
+    contents = {\hspace*{-0.46cm}
+    \includegraphics[width = \paperwidth,
+    height = \paperheight, keepaspectratio]
+    {report_cover_empty.pdf}}
+}
+
+%\vspace*{-2.5cm}
+
+%\begin{figure}[h]
+%\hspace*{-2cm}
+%\includegraphics[height=2cm]{title/HTWG-Logo_de_300dpi.png}
+%\hspace*{4cm}\includegraphics[height=2cm,]{title/IOS_Logo2016_lettering_de.png}
 
 
-\end{figure}
+%\end{figure}
 
-\vspace{2cm}
+%\vspace{2cm}
 
-\begin{center}
-	 \LARGE{
-		\textbf{\thema} \\[5cm]
-	}
-	\Large{
-		\textbf{\autor}} \\[5.5cm]
-	\large{
-		\textbf{Konstanz, \abgabedatum} \\[2.3cm]
-	}
-	
-	\Huge{
-		\textbf{{\sf BACHELORARBEIT}}
-	}
-\end{center}
+%\begin{center}
+%	 \LARGE{
+%		\textbf{\thema} \\[5cm]
+%	}
+%	\Large{
+%		\textbf{\autor}} \\[5.5cm]
+%	\large{
+%		\textbf{Konstanz, \abgabedatum} \\[2.3cm]
+%	}
+%	
+%	\Huge{
+%		\textbf{{\sf BACHELORARBEIT}}
+%	}
+%\end{center}
 
+%% We need the this to perform coordinate calculations in TikZ.
+    \usetikzlibrary{calc}%
+    \begin{tikzpicture}[remember picture,overlay]
+    
+    %% Create the background elements.
+    %% - bachelor (B S C)
+    \begingroup
+        \node at (15.8mm,-82.1mm)[anchor=center]{
+            \includegraphics[scale=0.165]{fonts/B_black}
+        };
+        \node at (36.8mm,-250.1mm)[anchor=center]{
+            \includegraphics[scale=0.17]{fonts/S_black}
+        };
+        \node at (162.8mm,-124.1mm)[anchor=center]{
+            \includegraphics[scale=0.15]{fonts/C_black}
+        };
+    \endgroup
+
+
+        %% Create the title text box.
+        \node at (17.5mm,-180.5mm)[anchor=north west, fill=htwg-dark-blue]{
+            \begin{minipage}[t]{145mm}
+                \begin{flushleft}
+                    %% Print Report Type Text
+                    %\color{htwg-white}\Huge\textbf{\@report@typetext}
+                    %\\
+                    %% Print Report Title
+                    \color{htwg-white}\Huge{\thema}
+                \end{flushleft}
+            \end{minipage}
+        };
+
+
+        %% Create the author text box.
+        \node at (143.8mm,-37mm)[anchor=north west, fill=htwg-dark-blue]{
+            \begin{minipage}[t]{55mm}
+                \begin{flushleft}
+                    \color{htwg-white}\scriptsize\textbf{Eingereicht von}
+                    \linebreak
+                    \color{htwg-white}\scriptsize{\autor}
+                    \linebreak 
+                    \color{htwg-white}\scriptsize{Matrikelnummer \matrikelnummer}
+                    \linebreak
+                    \linebreak
+                    \color{htwg-white}\scriptsize{\autorEmail}
+                \end{flushleft}
+            \end{minipage}
+        };
+
+
+        %% Create the date text box.
+        \node at (143.8mm,-268mm)[anchor=north west, fill=htwg-dark-blue]{
+            \begin{minipage}[t]{55mm}
+                \begin{flushleft}
+                    \color{htwg-white}\scriptsize\textbf{\autorOrt,}
+                    \color{htwg-white}\scriptsize\textbf{\abgabedatum}
+                \end{flushleft}
+            \end{minipage}
+        };
+
+    \end{tikzpicture}
+    %% Restore the margins and turn the page white again.
+    \restoregeometry
+    \pagecolor{white}
 \end{titlepage}
