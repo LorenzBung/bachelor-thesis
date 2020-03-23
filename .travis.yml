@@ -5,4 +5,4 @@ install:
 - sudo apt-get -qq update && sudo apt-get -qq -y install texlive texlive-latex-extra texlive-full texlive-xetex texlive-pstricks
 
 script:
-- ./build.sh
+- ./build.sh && cat thesis.aux
