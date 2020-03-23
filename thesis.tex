@@ -6,7 +6,7 @@
 %
 
 % Include header
-\include{header/header}
+\input{header/header}
 
 % Set variables used in cover, title, abstract and affidavit.
 \newcommand{\ausgabedatum}{01.04.2020}
@@ -32,16 +32,16 @@
 \begin{document}
 
 % Include title pages
-\include{title/cover}
-\include{title/title}
+\input{title/cover}
+\input{title/title}
 
 % Set page numbering to roman
 \pagenumbering{Roman}
 
 % Include abstract and affidavit
-\include{title/affidavit}
-\include{title/abstract}
-\include{title/extended_abstract}
+\input{title/affidavit}
+\input{title/abstract}
+\input{title/extended_abstract}
 
 % Include table of contents
 \tableofcontents
@@ -59,15 +59,16 @@
 
 % Include the chapters
 % ---------------------------------------------------------------------------
-% \include{chapters/chapter1}
+% \input{chapters/chapter1}
+\input{notes/grundlagen}
 
 % ---------------------------------------------------------------------------
 \pagenumbering{Roman}
 \setcounter{page}{\value{anhang}}
-\include{chapters/bibliography}
+\input{chapters/bibliography}
 % Include appendix and lists if needed
-%\include{chapters/listoffigures}
-%\include{chapters/listoftables}
-%\include{appendix/appendix}
+%\input{chapters/listoffigures}
+%\input{chapters/listoftables}
+%\input{appendix/appendix}
 
 \end{document}
