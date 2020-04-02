@@ -37,6 +37,26 @@
 \usepackage{geometry}
 \usepackage{tikz}
 
+
+%%%%%%%%%%%%
+%% HTWG CI Colors
+%%%%%%%%%%%%
+\definecolor{htwg-white}{cmyk}{0.0,0.0,0.0,0.0}
+\definecolor{htwg-black}{cmyk}{0.0,0.0,0.0,1.0}
+\definecolor{htwg-black-90}{cmyk}{0.0,0.0,0.0,0.9}
+\definecolor{htwg-black-80}{cmyk}{0.0,0.0,0.0,0.8}
+\definecolor{htwg-black-70}{cmyk}{0.0,0.0,0.0,0.7}
+\definecolor{htwg-black-60}{cmyk}{0.0,0.0,0.0,0.6}
+\definecolor{htwg-black-50}{cmyk}{0.0,0.0,0.0,0.5}
+\definecolor{htwg-black-40}{cmyk}{0.0,0.0,0.0,0.4}
+\definecolor{htwg-black-30}{cmyk}{0.0,0.0,0.0,0.3}
+\definecolor{htwg-black-20}{cmyk}{0.0,0.0,0.0,0.2}
+\definecolor{htwg-black-10}{cmyk}{0.0,0.0,0.0,0.1}
+\definecolor{htwg-soft-blue}{cmyk}{0.1,0.0,0.0,0.1}
+\definecolor{htwg-dark-blue}{rgb}{0.165, 0.22, 0.29}
+\definecolor{htwg-teal}{cmyk}{1.0,0.0,0.5,0.0}
+
+
 % Verbesserte Darstellug der Schriftzeichen und Zwischenräumen
 %\usepackage{lmodern}				% Benutze skalierbare Schriftfamilie
 %\usepackage[activate]{microtype}
@@ -47,7 +67,7 @@
 {0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
 \titlespacing*{\subsection}
 {0pt}{5.5ex plus 1ex minus .2ex}{4.3ex plus .2ex}
-\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter}{15pt}{\Huge\bfseries}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter}{15pt}{\Huge\bfseries\color{htwg-teal}}
 
 % Header and Footer
 \usepackage{fancyhdr}
@@ -96,12 +116,12 @@
 
 % Links
 \usepackage[pdfstartview=FitV, 	% start in 'fit size height'-view
-colorlinks=true, 	% Links farbig markieren
-linkcolor=black, 	% Interne Links schwarz
-citecolor=black, 	% Links zur Literatur schwarz
-filecolor=black, 	% Links auf lokale Dateien schwarz
-urlcolor=black,   	% Externe Links blau
-breaklinks=true, 	% Links umbrechen
+colorlinks=true, 		% Links farbig markieren
+linkcolor=htwg-teal, 	% Interne Links
+citecolor=htwg-teal, 	% Links zur Literatur
+filecolor=black, 		% Links auf lokale Dateien
+urlcolor=htwg-teal,   	% Externe Links blau
+breaklinks=true, 		% Links umbrechen
 linktocpage=true 	% Im Inhaltsverzeichnis sind Seitenzahlen UND Text Links
 ]{hyperref}
 
@@ -117,22 +137,3 @@ linktocpage=true 	% Im Inhaltsverzeichnis sind Seitenzahlen UND Text Links
 \usepackage[mode=buildnew]{standalone}
 
 \usepackage[toc, page]{appendix}
-
-
-%%%%%%%%%%%%
-%% HTWG CI Colors
-%%%%%%%%%%%%
-\definecolor{htwg-white}{cmyk}{0.0,0.0,0.0,0.0}
-\definecolor{htwg-black}{cmyk}{0.0,0.0,0.0,1.0}
-\definecolor{htwg-black-90}{cmyk}{0.0,0.0,0.0,0.9}
-\definecolor{htwg-black-80}{cmyk}{0.0,0.0,0.0,0.8}
-\definecolor{htwg-black-70}{cmyk}{0.0,0.0,0.0,0.7}
-\definecolor{htwg-black-60}{cmyk}{0.0,0.0,0.0,0.6}
-\definecolor{htwg-black-50}{cmyk}{0.0,0.0,0.0,0.5}
-\definecolor{htwg-black-40}{cmyk}{0.0,0.0,0.0,0.4}
-\definecolor{htwg-black-30}{cmyk}{0.0,0.0,0.0,0.3}
-\definecolor{htwg-black-20}{cmyk}{0.0,0.0,0.0,0.2}
-\definecolor{htwg-black-10}{cmyk}{0.0,0.0,0.0,0.1}
-\definecolor{htwg-soft-blue}{cmyk}{0.1,0.0,0.0,0.1}
-\definecolor{htwg-dark-blue}{rgb}{0.165, 0.22, 0.29}
-\definecolor{htwg-teal}{cmyk}{1.0,0.0,0.5,0.0}

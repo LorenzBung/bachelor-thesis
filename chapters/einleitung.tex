@@ -4,22 +4,23 @@
 
 \section{Mikado}
 
-Isys vision GmbH \cite{isys} ist ein Unternehmen aus Freiburg im Breisgau, das sich mit Systemintegration und industrieller Bildverarbeitung beschäftigt.
+Isys vision GmbH \cite{isysWebsite} ist ein Unternehmen aus Freiburg im Breisgau, das sich mit Systemintegration und industrieller Bildverarbeitung beschäftigt.
 Neben Entwicklungen in der 2D-Bildverarbeitung (zum Beispiel in der Leiterplattenproduktion) spielt auch Machine Vision im 3D-Bereich in Kombination mit Robotik eine große Rolle.
 
 
-Mikado \cite{mikado} ist ein Softwarepaket von isys vision, welches zur Robotersteuerung und 3D-Bildverarbeitung in der Industrie eingesetzt wird.
+Mikado \cite{mikadoWebsite} ist ein Softwarepaket von isys vision, welches zur Robotersteuerung und 3D-Bildverarbeitung in der Industrie eingesetzt wird.
 Es besteht aus zwei Komponenten: Mikado 3D dient der eigentlichen Bildverarbeitung, während Mikado Adaptive Robot Control (ARC) zusätzlich dazu die Robotersteuerung und Kollisionsplanung beinhaltet.
 Die Hauptanwendung ist dabei das sogenannte "Bin-Picking", also das Greifen von sortenreinen Teilen aus einer unsortierten Kiste.
-Zur Erfassung der Bilddaten kommen 3D-Kameras von Ensenso \cite{ensenso} zum Einsatz.
+Zur Erfassung der Bilddaten kommen 3D-Kameras von Ensenso \cite{ensensoWebsite} zum Einsatz.
 
 
 \section{Motivation}
 
 Bei der Bestimmung der 6D-Posen von Objekten wird bei Mikado unter Anderem der "surface based matching"-Algorithmus von MvTec Halcon \cite{drost2014recognition} verwendet.
 Dafür wird ein CAD-Modell des Objekts benötigt, welches jedoch in vielen Fällen nicht vorhanden ist.
+
 Die Gründe dafür sind vielfältig.
-Es können die existierenden Modelle etwa im aktuellen Fertigungszustand nicht vorhanden sein.
+Etwa können die existierenden Modelle im aktuellen Fertigungszustand nicht vorhanden sein.
 Ein weiterer Grund für fehlende Modelle ist, dass diese aus organisatorischen Gründen schwer zu bekommen sind, beispielsweise wenn nur eine Weiterverarbeitung eines zugelieferten Bauteils stattfindet.
 
 Neben fehlenden Modellen sind auch häufig falsche Modelle ein Problem.
@@ -35,6 +36,9 @@ Besonders bei oft variierenden Produktkonfigurationen wird der Anwendungsprozess
 
 Ziel der Arbeit ist es, einen neuartigen Ansatz zur Rekonstruktion von CAD-Modellen aus 3D-Punktwolken zu entwickeln und zu implementieren sowie die Ergebnisse dieser Methode mit den Ergebnissen bestehender Algorithmen zu vergleichen.
 
+Dieser Vergleich soll sowohl bezüglich der wichtigsten Eigenschaft der Qualität, als auch auf Basis untergeordneter Faktoren wie Geschwindigkeit der Algorithmen und Nutzungskomfort der Ansätze stattfinden.
+
+%% Vielleicht in Kapitel Implementierung verschieben
 Für die Rekonstruktion gibt es drei mögliche Ansätze:
 
 \begin{enumerate}
@@ -46,6 +50,4 @@ Der Hintergrund der erfassten Daten wird zum Beispiel durch Plane-Fitting \cite{
 \item Es liegen mehrere Objekte der selben Art in verschiedenen Orientierungen vor, beispielsweise in einer Kiste.
 Aus den Teilansichten der unterschiedlichen Objekte wird ein repräsentatives Modell generiert.
 \end{enumerate}
-
-Dieser Vergleich soll sowohl bezüglich der wichtigsten Eigenschaft der Qualität, als auch auf Basis untergeordneter Faktoren wie Geschwindigkeit der Algorithmen und Nutzungskomfort der Ansätze stattfinden.
-
+%%

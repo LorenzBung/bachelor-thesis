@@ -5,6 +5,7 @@
 Zum Verständnis des Themas der Arbeit ist die Erklärung einiger Grundlagen notwendig.
 Zunächst einmal werden wichtige Grundbegriffe und Datenstrukturen erläutert, wie beispielsweise Punktwolken, Meshrepräsentationen, die \textit{Point Cloud Library (PCL)} oder das \textit{Robot Operating System (ROS)}.
 Außerdem sind selbstverständlich die bereits bestehenden Elemente des Mikado-Projekts relevant, da diese Arbeit fundamental darauf aufbaut.
+%% Vielleicht verschieben in Kapitel Vorhandene Arbeit
 Weiterhin sind die Algorithmen \texttt{yak} beziehungsweise \texttt{KinectFusion} wichtig, da sie das Grundgerüst oder auch das Kernelement des Themas darstellen.
 
 
@@ -16,7 +17,7 @@ Eine Stereokamera liefert im Gegensatz dazu zwei Bilder, die anschließend durch
 Eine weitere Möglichkeit besteht darin, ein bestimmtes Muster auf die Umgebung zu projezieren, dieses dann aus einer anderen Perspektive aufzunehmen und aus der räumlichen Verzerrung des Musters die Tiefe zu errechnen.
 
 Die so gewonnenen Informationen lassen sich durch mehrere verschiedene Datenmodelle repräsentieren.
-Bei einer Depth Map wird beispielsweise das aufgenommene Bild abgespeichert, und zusätzlich ein 2D-Array mit der Tiefeninformation des zugehörigen Pixels gespeichert.
+Bei einer Depth Map wird beispielsweise das aufgenommene Bild und zusätzlich ein 2D-Array mit der Tiefeninformation des zugehörigen Pixels gespeichert.
 In einem Voxel Grid wird ein dreidimensionales Raster, bestehend aus den sogenannten Voxeln, angelegt.
 Die Tiefeninformation wird dann in den Voxeln gespeichert: Ist ein Voxel teil eines Elements, wird er gefüllt, andernfalls nicht.
 
