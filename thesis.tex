@@ -50,6 +50,10 @@
 \newpage
 \setlength{\parskip}{\baselineskip}	% Zeilenumbrüche wieder aktivieren
 
+\renewcommand{\headheight}{14pt}
+
+\input{title/acronyms}
+
 % Aktuelle Seitenzahl in einem Zähler speichern
 % -> römische Seitennummerierung soll durchgängig
 % sein und wird nachher wieder aufgegriffen werden.
@@ -70,7 +74,7 @@
 \newpage
 \pagenumbering{Roman}
 \setcounter{page}{\value{anhang}}
-\input{chapters/bibliography}
+\printbibliography[heading=bibintoc]
 % Include appendix and lists if needed
 %\input{chapters/listoffigures}
 %\input{chapters/listoftables}

@@ -17,10 +17,25 @@
 %\usepackage[english]{babel}
 
 % Zitierung und Literaturverzeichnis
-\usepackage{cite}
+%\usepackage{cite}
 %\usepackage{apacite}		% Zitierstil
 %\usepackage{natbib} 		% Erweiterte zitiermöglichkeiten 
-\usepackage{babelbib}		% Übersetzung des Literaturverzeichnisses und der Zitate
+%\usepackage{babelbib}		% Übersetzung des Literaturverzeichnisses und der Zitate
+\usepackage[%
+  backend=bibtex      % biber or bibtex
+%,style=authoryear    % Alphabeticalsch
+ ,style=numeric-comp  % numerical-compressed
+ ,sorting=none        % no sorting
+ ,sortcites=true      % some other example options ...
+ ,block=none
+ ,indexing=false
+ ,citereset=none
+ ,isbn=true
+ ,url=true
+ ,doi=true            % prints doi
+ ,natbib=true         % if you need natbib functions
+]{biblatex}
+\addbibresource{bib/references.bib}
 
 % Fonts
 \usepackage{fontspec}
@@ -137,7 +152,7 @@ linktoc=page 	% Im Inhaltsverzeichnis sind Seitenzahlen UND Text Links
 \headheight13.6pt
 
 % Abkuerzungsverzeichnis
-\usepackage[nohyperlinks, printonlyused]{acronym}
+\usepackage[printonlyused]{acronym}
 \usepackage[mode=buildnew]{standalone}
 
 \usepackage[toc, page]{appendix}
