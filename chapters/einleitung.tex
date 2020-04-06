@@ -1,8 +1,11 @@
 % !TEX root = ../thesis.tex
 
 \chapter{Einleitung}
+\label{ch:einleitung}
+
 
 \section{Mikado}
+\label{sec:mikado}
 
 Isys vision GmbH \cite{isysWebsite} ist ein Unternehmen aus Freiburg im Breisgau, das sich mit Systemintegration und industrieller Bildverarbeitung beschäftigt.
 Neben Entwicklungen in der 2D-Bildverarbeitung (zum Beispiel in der Leiterplattenproduktion) spielt auch Machine Vision im 3D-Bereich in Kombination mit Robotik eine große Rolle.
@@ -15,6 +18,7 @@ Zur Erfassung der Bilddaten kommen 3D-Kameras von Ensenso \cite{ensensoWebsite} 
 
 
 \section{Motivation}
+\label{sec:motivation}
 
 Bei der Bestimmung der 6D-Posen von Objekten wird bei Mikado unter Anderem der ''surface based matching''-Algorithmus von MvTec Halcon \cite{drost2014recognition} verwendet.
 Dafür wird ein CAD-Modell des Objekts benötigt, welches jedoch in vielen Fällen nicht vorhanden ist.
@@ -33,12 +37,13 @@ Besonders bei oft variierenden Produktkonfigurationen wird der Anwendungsprozess
 
 
 \section{Zielsetzung}
+\label{sec:ziel}
 
 Ziel der Arbeit ist es, einen neuartigen Ansatz zur Rekonstruktion von CAD-Modellen aus 3D-Punktwolken zu entwickeln und zu implementieren sowie die Ergebnisse dieser Methode mit den Ergebnissen bestehender Algorithmen zu vergleichen.
 
 Dieser Vergleich soll sowohl bezüglich der wichtigsten Eigenschaft der Qualität, als auch auf Basis untergeordneter Faktoren wie Geschwindigkeit der Algorithmen und Nutzungskomfort der Ansätze stattfinden.
 
-%% Vielleicht in Kapitel Implementierung verschieben
+% TODO: Vielleicht in Kapitel Vorhandene Arbeit oder Implementierung verschieben
 Für die Rekonstruktion gibt es drei mögliche Ansätze:
 
 \begin{enumerate}
