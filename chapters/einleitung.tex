@@ -39,20 +39,22 @@ Besonders bei oft variierenden Produktkonfigurationen wird der Anwendungsprozess
 \section{Zielsetzung}
 \label{sec:ziel}
 
-Ziel der Arbeit ist es, einen neuartigen Ansatz zur Rekonstruktion von CAD-Modellen aus 3D-Punktwolken zu entwickeln und zu implementieren sowie die Ergebnisse dieser Methode mit den Ergebnissen bestehender Algorithmen zu vergleichen.
-
-Dieser Vergleich soll sowohl bezüglich der wichtigsten Eigenschaft der Qualität, als auch auf Basis untergeordneter Faktoren wie Geschwindigkeit der Algorithmen und Nutzungskomfort der Ansätze stattfinden.
-
-% TODO: Vielleicht in Kapitel Vorhandene Arbeit oder Implementierung verschieben
-Für die Rekonstruktion gibt es drei mögliche Ansätze:
+Für die Rekonstruktion aus der Punktwolke gibt es drei mögliche Ansätze:
 
 \begin{enumerate}
 \item Es liegt ein stationäres Objekt vor, welches mit einer am Roboter angebrachten 3D-Kamera erfasst wird.
-Der Hintergrund der erfassten Daten wird zum Beispiel durch Plane-Fitting \cite{schomaker1959fit} eliminiert.
+Der Roboter bewegt die Kamera um das Objekt herum, um so Informationen aus mehreren Perspektiven zu erhalten.
+Diese werden danach miteinander kombiniert; der Hintergrund der erfassten Daten wird anschließend eliminiert.
 
 \item Die Kamera ist stationär angebracht, während das zu erkennende Objekt freihändig demonstriert wird.
+So kann das Objekt aus mehreren Ansichten aufgenommen werden, welche dann zusammengeführt werden.
 
 \item Es liegen mehrere Objekte der selben Art in verschiedenen Orientierungen vor, beispielsweise in einer Kiste.
-Aus den Teilansichten der unterschiedlichen Objekte wird ein repräsentatives Modell generiert.
+Nach Segmentierung der Objekte wird aus den unterschiedlichen Teilansichten ein repräsentatives Modell generiert.
 \end{enumerate}
-%%
+
+
+Ziel der Arbeit ist es, eine geeignete Lösung für den dritten Ansatz zu entwickeln sowie die unterschiedlichen Rekonstruktionsmöglichkeiten zu implementieren.
+
+Weiterhin sollen die Ergebnisse untereinander und mit bereits bestehenden Algorithmen verglichen werden.
+Dieser Vergleich soll sowohl bezüglich der wichtigsten Eigenschaft der Qualität, als auch auf Basis untergeordneter Faktoren wie Geschwindigkeit der Algorithmen und Nutzungskomfort der Ansätze stattfinden.

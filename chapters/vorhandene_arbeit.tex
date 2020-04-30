@@ -6,11 +6,35 @@
 In diesem Kapitel wird der aktuelle Stand der Forschung genannt sowie bereits existierende Lösungsansätze erklärt.
 
 
-\section{Kinect Fusion}
-\label{sec:kinfu}
+\section{Lokale Registrierung}
+\label{sec:local-registration}
+
+Bei der lokalen Registrierung von zwei Punktwolken müssen diese bereits grob aneinander ausgerichtet sein.
+Der Registrierungsalgorithmus verfeinert diese Ausrichtung dann weiter.
+Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und seine vielen verschiedenen Varianten.
+
+
+\subsection{\acl{ICP}}
+\label{subsec:icp}
+
+\subsection{Kinect Fusion}
+\label{subsec:kinfu}
 
 Durch die Veröffentlichung der Microsoft Kinect im Jahr 2010, einer 3D-Kamera für die Nutzung im Entertainment- und Gamingbereich, wurde durch den niedrigen Preis erstmals der breiten Masse der Zugang zu Tiefenkameras ermöglicht \cite[1:55]{kinfuTalkYoutube}.
-\ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion}.
+\ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion} und bietet eine Möglichkeit, 3D-Rekonstruktionen in Echtzeit durchzuführen.
 
-\section{Yet Another Kinect Fusion}
-\label{sec:yak}
+% Hier YAK erwähnen und erklären
+
+
+\section{Globale Registrierung}
+\label{sec:global-registration}
+
+Bei der globalen Registrierung müssen sich die beiden Punktwolken nicht nahe der endgültigen Ausrichtung befinden - Translation und Rotation können beliebig sein.
+Der Nachteil ist die häufig sehr hohe Komplexität der Algorithmen.
+Außerdem bietet die globale Registrierung oft nur eine Grobregistrierung, weshalb sich oft eine lokale Registrierung zur Verbesserung der Ergebnisse anschließt.
+
+
+\subsection{\acl{4PCS}}
+\label{subsec:4pcs}
+
+% Hier Super4PCS erwähnen und erklären
