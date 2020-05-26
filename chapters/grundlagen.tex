@@ -132,7 +132,7 @@ Es gibt jedoch auch einige Nachteile gegenüber den anderen Repräsentationen:
 \item Die Rekonstruktion eines Meshs ist nicht eindeutig.
 Beim Voxel Grid lässt sich, beispielsweise mithilfe des Marching-Cubes-Algorithmus \cite{lorensen1987marching}, ein eindeutiges Mesh rekonstruieren.
 Bei einer Punktwolke ist im Gegensatz dazu nicht festgelegt, welche Punkte miteinander verbunden werden sollen.
-\item Viele Techniken aus der Bildverarbeitung (wie zum Beispiel Segmentierung, Filterung usw.) lassen sich auf Tiefenbilder direkt übertragen.
+\item Viele bekannte Techniken aus der 2D-Bildverarbeitung (wie zum Beispiel Segmentierung, Filterung usw.) lassen sich auf Tiefenbilder direkt übertragen.
 Dies ist bei Punktwolken nicht möglich.
 \end{itemize}
 
@@ -150,6 +150,15 @@ Dies ist bei Punktwolken nicht möglich.
 
 \section{Point Cloud Library}
 \label{sec:pcl}
+
+Bei der \ac{PCL} \cite{rusu2011pcl} handelt es sich um eine Bibliothek, welche die Arbeit mit 3D-Punktwolken immens vereinfacht.
+Sie bietet Möglichkeiten zur Filterung, Segmentierung, Oberflächenrekonstruktion und Visualisierung von Punktwolken, sowie weitere Module.
+
+Neben den zahlreichen unterstützten Anwendungsgebieten und implementierten Algorithmen bietet die \ac{PCL} den weiteren entscheidenden Vorteil, dass sie direkt zu \ac{ROS} kompatibel ist.
+Die Kompatibilität wird durch das ROS-Paket \texttt{perception\_pcl} hergestellt, wodurch Punktwolken, Meshes oder andere Datenstrukturen direkt per Message versendet werden können.
+
+Greedy Projection Reconstruction \cite{Marton09ICRA},
+Poisson Reconstruction \cite{kazhdan2006poisson}
 
 
 \section{Robot Operating System}

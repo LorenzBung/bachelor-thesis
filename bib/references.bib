@@ -1,79 +1,4 @@
-@inproceedings{kazhdan2006poisson,
-  title={Poisson surface reconstruction},
-  author={Kazhdan, Michael and Bolitho, Matthew and Hoppe, Hugues},
-  booktitle={Proceedings of the fourth Eurographics symposium on Geometry processing},
-  volume={7},
-  year={2006}
-}
-@inproceedings{rusu2011pcl,
-  title={3d is here: Point cloud library (pcl)},
-  author={Rusu, Radu Bogdan and Cousins, Steve},
-  booktitle={2011 IEEE international conference on robotics and automation},
-  pages={1--4},
-  year={2011},
-  organization={IEEE}
-}
-@inproceedings{barnes2009patchmatch,
-  title={PatchMatch: A randomized correspondence algorithm for structural image editing},
-  author={Barnes, Connelly and Shechtman, Eli and Finkelstein, Adam and Goldman, Dan B},
-  booktitle={ACM Transactions on Graphics (ToG)},
-  volume={28},
-  number={3},
-  pages={24},
-  year={2009},
-  organization={ACM}
-}
-@misc{drost2014recognition,
-  title={Recognition and pose determination of 3D objects in 3D scenes},
-  author={Drost, Bertram Heinrich and Ulrich, Markus},
-  year={2014},
-  month=sep # "~9",
-  publisher={Google Patents},
-  note={US Patent 8,830,229}
-}
-@inproceedings{izadi2011kinectfusion,
-  title={KinectFusion: real-time 3D reconstruction and interaction using a moving depth camera},
-  author={Izadi, Shahram and Kim, David and Hilliges, Otmar and Molyneaux, David and Newcombe, Richard and Kohli, Pushmeet and Shotton, Jamie and Hodges, Steve and Freeman, Dustin and Davison, Andrew and others},
-  booktitle={Proceedings of the 24th annual ACM symposium on User interface software and technology},
-  pages={559--568},
-  year={2011}
-}
-@inproceedings{klingensmith2015chisel,
-  title={Chisel: Real Time Large Scale 3D Reconstruction Onboard a Mobile Device using Spatially Hashed Signed Distance Fields},
-  author={Klingensmith, Matthew and Dryanovski, Ivan and Srinivasa, Siddhartha and Xiao, Jizhong},
-  booktitle={Robotics: science and systems},
-  volume={4},
-  pages={1},
-  year={2015}
-}
-@inproceedings{rusinkiewicz2001efficient,
-  title={Efficient variants of the ICP algorithm},
-  author={Rusinkiewicz, Szymon and Levoy, Marc},
-  booktitle={Proceedings Third International Conference on 3-D Digital Imaging and Modeling},
-  pages={145--152},
-  year={2001},
-  organization={IEEE}
-}
-@article{schomaker1959fit,
-  title={To fit a plane or a line to a set of points by least squares},
-  author={Schomaker, V and Waser, J and Marsh, RE t and Bergman, G},
-  journal={Acta crystallographica},
-  volume={12},
-  number={8},
-  pages={600--604},
-  year={1959},
-  publisher={International Union of Crystallography}
-}
-@inproceedings{quigley2009ros,
-  title={ROS: an open-source Robot Operating System},
-  author={Quigley, Morgan and Conley, Ken and Gerkey, Brian and Faust, Josh and Foote, Tully and Leibs, Jeremy and Wheeler, Rob and Ng, Andrew Y},
-  booktitle={ICRA workshop on open source software},
-  volume={3},
-  number={3.2},
-  pages={5},
-  year={2009},
-  organization={Kobe, Japan}
-}
+% Isys, Ensenso, Mikado Websites
 @online{isysWebsite,
   title={Isys Vision GmbH},
   url={https://www.isys-vision.de/},
@@ -89,26 +14,10 @@
   url={https://www.ensenso.com},
   urldate={2020-03-30}
 }
-@inproceedings{arsalan2017synthesizing,
-  title={Synthesizing 3d shapes via modeling multi-view depth maps and silhouettes with deep generative networks},
-  author={Arsalan Soltani, Amir and Huang, Haibin and Wu, Jiajun and Kulkarni, Tejas D and Tenenbaum, Joshua B},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={1511--1519},
-  year={2017}
-}
-@inproceedings{redert2006philips,
-  title={Philips 3D solutions: From content creation to visualization},
-  author={Redert, Andre and Berretty, Robert-Paul and Varekamp, Chris and Willemsen, Oscar and Swillens, Jos and Driessen, Hans},
-  booktitle={Third International Symposium on 3D Data Processing, Visualization, and Transmission (3DPVT'06)},
-  pages={429--431},
-  year={2006},
-  organization={IEEE}
-}
-@phdthesis{strasser1974schnelle,
-  title={Schnelle Kurven-und Fl{\"a}chendarstellung auf grafischen Sichtger{\"a}ten},
-  author={Stra{\ss}er, Wolfgang},
-  year={1974}
-}
+
+
+% Basics
+% Depth maps
 @article{muller2010depth,
   title={3-D video representation using depth maps},
   author={Muller, Karsten and Merkle, Philipp and Wiegand, Thomas},
@@ -119,10 +28,83 @@
   year={2010},
   publisher={IEEE}
 }
+% Depth map Philips
+@inproceedings{redert2006philips,
+  title={Philips 3D solutions: From content creation to visualization},
+  author={Redert, Andre and Berretty, Robert-Paul and Varekamp, Chris and Willemsen, Oscar and Swillens, Jos and Driessen, Hans},
+  booktitle={Third International Symposium on 3D Data Processing, Visualization, and Transmission (3DPVT'06)},
+  pages={429--431},
+  year={2006},
+  organization={IEEE}
+}
+
+
+% PCL Library
+@inproceedings{rusu2011pcl,
+  title={3d is here: Point cloud library (pcl)},
+  author={Rusu, Radu Bogdan and Cousins, Steve},
+  booktitle={2011 IEEE international conference on robotics and automation},
+  pages={1--4},
+  year={2011},
+  organization={IEEE}
+}
+% Greedy Projection Reconstruction
+@InProceedings{Marton09ICRA,
+  author    = {Zoltan Csaba Marton and Radu Bogdan Rusu and Michael Beetz},
+  title     = {{On Fast Surface Reconstruction Methods for Large and Noisy Datasets}},
+  booktitle = {Proceedings of the IEEE International Conference on Robotics and Automation (ICRA)},
+  month     = {May 12-17},
+  year      = {2009},
+  address   = {Kobe, Japan},
+}
+% Marching Cubes Reconstruction
+@article{lorensen1987marching,
+  title={Marching cubes: A high resolution 3D surface construction algorithm},
+  author={Lorensen, William E and Cline, Harvey E},
+  journal={ACM siggraph computer graphics},
+  volume={21},
+  number={4},
+  pages={163--169},
+  year={1987},
+  publisher={ACM New York, NY, USA}
+}
+% Poisson Reconstruction
+@inproceedings{kazhdan2006poisson,
+  title={Poisson surface reconstruction},
+  author={Kazhdan, Michael and Bolitho, Matthew and Hoppe, Hugues},
+  booktitle={Proceedings of the fourth Eurographics symposium on Geometry processing},
+  volume={7},
+  year={2006}
+}
+% PCL Voxel Grid
 @online{pclVoxelGrid,
   title={Downsampling a PointCloud using a VoxelGrid filter},
   url={http://pointclouds.org/documentation/tutorials/voxel_grid.php},
-  urldate={2020-04-06}
+  urldate={2020-04-06},
+  note={Website URL changed in may 2020}
+}
+
+
+% ROS
+@inproceedings{quigley2009ros,
+  title={ROS: an open-source Robot Operating System},
+  author={Quigley, Morgan and Conley, Ken and Gerkey, Brian and Faust, Josh and Foote, Tully and Leibs, Jeremy and Wheeler, Rob and Ng, Andrew Y},
+  booktitle={ICRA workshop on open source software},
+  volume={3},
+  number={3.2},
+  pages={5},
+  year={2009},
+  organization={Kobe, Japan}
+}
+
+
+% Kinect Fusion
+@inproceedings{izadi2011kinectfusion,
+  title={KinectFusion: real-time 3D reconstruction and interaction using a moving depth camera},
+  author={Izadi, Shahram and Kim, David and Hilliges, Otmar and Molyneaux, David and Newcombe, Richard and Kohli, Pushmeet and Shotton, Jamie and Hodges, Steve and Freeman, Dustin and Davison, Andrew and others},
+  booktitle={Proceedings of the 24th annual ACM symposium on User interface software and technology},
+  pages={559--568},
+  year={2011}
 }
 @online{microsoftKinfuYoutube,
   title={KinectFusion: Real-time 3D Reconstruction and Interaction Using a Moving Depth Camera},
@@ -136,6 +118,9 @@
   url={https://www.youtube.com/watch?v=RvrCAw1IFG0},
   urldate={2020-04-09}
 }
+
+
+% 4-Point Congruent Set / OpenGR
 @article{aiger2008fpcs,
   author={D. Aiger and N. J. Mitra and D. Cohen-Or},
   title={4-points Congruent Sets for Robust Surface Registration},
@@ -170,16 +155,75 @@ year = {2014},
   pages={1--10},
   year={2008}
 }
-@article{lorensen1987marching,
-  title={Marching cubes: A high resolution 3D surface construction algorithm},
-  author={Lorensen, William E and Cline, Harvey E},
-  journal={ACM siggraph computer graphics},
-  volume={21},
-  number={4},
-  pages={163--169},
-  year={1987},
-  publisher={ACM New York, NY, USA}
+
+
+% Halcon Pose Determination
+@misc{drost2014recognition,
+  title={Recognition and pose determination of 3D objects in 3D scenes},
+  author={Drost, Bertram Heinrich and Ulrich, Markus},
+  year={2014},
+  month=sep # "~9",
+  publisher={Google Patents},
+  note={US Patent 8,830,229}
 }
+
+
+@inproceedings{barnes2009patchmatch,
+  title={PatchMatch: A randomized correspondence algorithm for structural image editing},
+  author={Barnes, Connelly and Shechtman, Eli and Finkelstein, Adam and Goldman, Dan B},
+  booktitle={ACM Transactions on Graphics (ToG)},
+  volume={28},
+  number={3},
+  pages={24},
+  year={2009},
+  organization={ACM}
+}
+% YAK
+@inproceedings{klingensmith2015chisel,
+  title={Chisel: Real Time Large Scale 3D Reconstruction Onboard a Mobile Device using Spatially Hashed Signed Distance Fields},
+  author={Klingensmith, Matthew and Dryanovski, Ivan and Srinivasa, Siddhartha and Xiao, Jizhong},
+  booktitle={Robotics: science and systems},
+  volume={4},
+  pages={1},
+  year={2015}
+}
+@inproceedings{arsalan2017synthesizing,
+  title={Synthesizing 3d shapes via modeling multi-view depth maps and silhouettes with deep generative networks},
+  author={Arsalan Soltani, Amir and Huang, Haibin and Wu, Jiajun and Kulkarni, Tejas D and Tenenbaum, Joshua B},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages={1511--1519},
+  year={2017}
+}
+@phdthesis{strasser1974schnelle,
+  title={Schnelle Kurven-und Fl{\"a}chendarstellung auf grafischen Sichtger{\"a}ten},
+  author={Stra{\ss}er, Wolfgang},
+  year={1974}
+}
+
+
+% Efficient ICP
+@inproceedings{rusinkiewicz2001efficient,
+  title={Efficient variants of the ICP algorithm},
+  author={Rusinkiewicz, Szymon and Levoy, Marc},
+  booktitle={Proceedings Third International Conference on 3-D Digital Imaging and Modeling},
+  pages={145--152},
+  year={2001},
+  organization={IEEE}
+}
+% Plane Fitting (least squares)
+@article{schomaker1959fit,
+  title={To fit a plane or a line to a set of points by least squares},
+  author={Schomaker, V and Waser, J and Marsh, RE t and Bergman, G},
+  journal={Acta crystallographica},
+  volume={12},
+  number={8},
+  pages={600--604},
+  year={1959},
+  publisher={International Union of Crystallography}
+}
+
+
+% Other
 @online{stanfordbunny,
   title={Stanford Bunny},
   author={Stanford University Computer Graphics Laboratory},
