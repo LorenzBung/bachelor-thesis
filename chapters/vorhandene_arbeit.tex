@@ -17,6 +17,26 @@ Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und se
 \subsection{\acl{ICP}}
 \label{subsec:icp}
 
+\ac{ICP} \cite{besl1992method} ist der wohl bekannteste Algorithmus zur lokalen Registrierung von Punktwolken.
+Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt \cite{rusinkiewicz2001efficient}.
+
+Der Ansatz zur Registrierung der Punktwolke $A$ an der Punktwolke $B$ ist dabei der Folgende:
+\begin{enumerate}
+\item $A$ wird iterativ mithilfe von Translationen und Rotationen in eine neue Position gebracht.
+\item Zu jedem Punkt $p \in A$ wird der Punkt $q \in B$ gesucht, der den geringsten Abstand $\varepsilon$ von $p$ hat: $\varepsilon = \sqrt{(p_x - q_x)^2 + (p_y - q_y)^2 + (p_z - q_z)^2}$.
+\item Standardmäßig wird nun als Fehler $e$ die Summe der Residuenquadrate verwendet: $e = \sum \varepsilon^2$
+\item Wiederholung, bis eine der Abbruchbedingungen eintritt.
+\end{enumerate}
+
+Der Algorithmus terminiert, wenn:
+\begin{itemize}
+\item der Fehler $e$ unter einen Grenzwert fällt
+\item $e$ bei erneuter Wiederholung nicht um einen bestimmten Wert sinkt
+\item eine festgelegte Zahl von Iterationen abgelaufen ist.
+\end{itemize}
+
+Selbstverständlich lassen sich beliebig viele Abbruchbedingungen manuell definieren, beispielsweise eine festgelegte maximale Laufzeit.
+
 \subsection{Kinect Fusion}
 \label{subsec:kinfu}
 

@@ -26,7 +26,7 @@ Die so gewonnenen Informationen lassen sich durch mehrere verschiedene Datenmode
 \label{subsec:tiefenbild}
 
 Ein Tiefenbild ist eine einfache Möglichkeit, in einem zweidimensionalen Bild zusätzlich Informationen über die Entfernung der Kamera zu Objekten abzuspeichern.
-Diese Technik ist unter Anderem aus der Computergrafik bekannt, wo sie beim Z-Buffering Anwendung findet \cite{strasser1974schnelle}.
+Diese Technik ist unter Anderem aus der Computergrafik bekannt, wo sie beim Z-Buffering Anwendung findet \cite[S.32]{catmull1974subdivision}.
 Dabei werden sowohl das aufgenommene Bild, aber zusätzlich auch ein 2D-Array mit der Tiefeninformation des zugehörigen Pixels gespeichert.
 
 So kann das originale 2D-Bild um eine dritte Dimension erweitert werden, wodurch sich beispielsweise dreidimensionale Formen modellieren oder rekonstruieren lassen \cite{arsalan2017synthesizing}.
@@ -140,12 +140,23 @@ Dies ist bei Punktwolken nicht möglich.
 \section{Meshrepräsentationen}
 \label{sec:meshrepr}
 
+Die bisher angesprochenen Datenstrukturen beinhalten ausschließlich Informationen über Punkte im dreidimensionalen Raum, welche bisher in keinem Zusammenhang zueinander stehen.
+Das Polygonmesh erweitert diese Daten durch Kanteninformationen: Punkte (sogenannte Vertices) sind durch Kanten (Edges) miteinander verbunden.
+Die so entstehenden Flächen der Polygone werden als Faces bezeichnet.
+Da jedes Polygon in Dreiecke zerlegt werden kann, werden meist nur diese gespeichert.
+
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.66\textwidth, frame]{images/bunny_mesh.png}
 	\caption{Mesh des Stanford Bunny \cite{stanfordbunny}}
 	\label{fig:bunny_mesh}
 \end{figure}
+
+Vertices, Edges und Faces können in unterschiedlichen Repräsentationen gespeichert werden.
+Diese haben unterschiedliche Eigenschaften und Vor- und Nachteile, auf die im Folgenden näher eingegangen wird.
+
+\subsection{Vertex-Vertex-Mesh}
+\label{subsec:v-v-mesh}
 
 
 \section{Point Cloud Library}
@@ -155,7 +166,7 @@ Bei der \ac{PCL} \cite{rusu2011pcl} handelt es sich um eine Bibliothek, welche d
 Sie bietet Möglichkeiten zur Filterung, Segmentierung, Oberflächenrekonstruktion und Visualisierung von Punktwolken, sowie weitere Module.
 
 Neben den zahlreichen unterstützten Anwendungsgebieten und implementierten Algorithmen bietet die \ac{PCL} den weiteren entscheidenden Vorteil, dass sie direkt zu \ac{ROS} kompatibel ist.
-Die Kompatibilität wird durch das ROS-Paket \texttt{perception\_pcl} hergestellt, wodurch Punktwolken, Meshes oder andere Datenstrukturen direkt per Message versendet werden können.
+Die Kompatibilität wird durch ROS-Nodelets im Paket \texttt{perception\_pcl} hergestellt, sodass Punktwolken, Meshes oder andere Datenstrukturen direkt per Message versendet werden können.
 
 Greedy Projection Reconstruction \cite{Marton09ICRA},
 Poisson Reconstruction \cite{kazhdan2006poisson}

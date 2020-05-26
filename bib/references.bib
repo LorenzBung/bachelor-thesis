@@ -17,7 +17,7 @@
 
 
 % Basics
-% Depth maps
+% Depth map video, only used for picture
 @article{muller2010depth,
   title={3-D video representation using depth maps},
   author={Muller, Karsten and Merkle, Philipp and Wiegand, Thomas},
@@ -36,6 +36,14 @@
   pages={429--431},
   year={2006},
   organization={IEEE}
+}
+% Depth map 3D reconstruction
+@inproceedings{arsalan2017synthesizing,
+  title={Synthesizing 3d shapes via modeling multi-view depth maps and silhouettes with deep generative networks},
+  author={Arsalan Soltani, Amir and Huang, Haibin and Wu, Jiajun and Kulkarni, Tejas D and Tenenbaum, Joshua B},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages={1511--1519},
+  year={2017}
 }
 
 
@@ -168,6 +176,7 @@ year = {2014},
 }
 
 
+% PatchMatch (2D-ICP)
 @inproceedings{barnes2009patchmatch,
   title={PatchMatch: A randomized correspondence algorithm for structural image editing},
   author={Barnes, Connelly and Shechtman, Eli and Finkelstein, Adam and Goldman, Dan B},
@@ -178,7 +187,7 @@ year = {2014},
   year={2009},
   organization={ACM}
 }
-% YAK
+% YAK?
 @inproceedings{klingensmith2015chisel,
   title={Chisel: Real Time Large Scale 3D Reconstruction Onboard a Mobile Device using Spatially Hashed Signed Distance Fields},
   author={Klingensmith, Matthew and Dryanovski, Ivan and Srinivasa, Siddhartha and Xiao, Jizhong},
@@ -187,21 +196,26 @@ year = {2014},
   pages={1},
   year={2015}
 }
-@inproceedings{arsalan2017synthesizing,
-  title={Synthesizing 3d shapes via modeling multi-view depth maps and silhouettes with deep generative networks},
-  author={Arsalan Soltani, Amir and Huang, Haibin and Wu, Jiajun and Kulkarni, Tejas D and Tenenbaum, Joshua B},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={1511--1519},
-  year={2017}
-}
-@phdthesis{strasser1974schnelle,
-  title={Schnelle Kurven-und Fl{\"a}chendarstellung auf grafischen Sichtger{\"a}ten},
-  author={Stra{\ss}er, Wolfgang},
-  year={1974}
+% Z-Buffering
+@techreport{catmull1974subdivision,
+  title={A subdivision algorithm for computer display of curved surfaces},
+  author={Catmull, Edwin},
+  year={1974},
+  institution={UTAH UNIV SALT LAKE CITY SCHOOL OF COMPUTING}
 }
 
 
-% Efficient ICP
+% ICP
+@inproceedings{besl1992method,
+  title={Method for registration of 3-D shapes},
+  author={Besl, Paul J and McKay, Neil D},
+  booktitle={Sensor fusion IV: control paradigms and data structures},
+  volume={1611},
+  pages={586--606},
+  year={1992},
+  organization={International Society for Optics and Photonics}
+}
+% Efficient ICP variants
 @inproceedings{rusinkiewicz2001efficient,
   title={Efficient variants of the ICP algorithm},
   author={Rusinkiewicz, Szymon and Levoy, Marc},
@@ -221,6 +235,18 @@ year = {2014},
   year={1959},
   publisher={International Union of Crystallography}
 }
+% RANSAC
+@article{fischler1981random,
+  title={Random sample consensus: a paradigm for model fitting with applications to image analysis and automated cartography},
+  author={Fischler, Martin A and Bolles, Robert C},
+  journal={Communications of the ACM},
+  volume={24},
+  number={6},
+  pages={381--395},
+  year={1981},
+  publisher={ACM New York, NY, USA}
+}
+
 
 
 % Other
