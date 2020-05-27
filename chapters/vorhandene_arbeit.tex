@@ -18,11 +18,11 @@ Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und se
 \label{subsec:icp}
 
 \ac{ICP} \cite{besl1992method} ist der wohl bekannteste Algorithmus zur lokalen Registrierung von Punktwolken.
-Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt \cite{rusinkiewicz2001efficient}.
+Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt \cite{rusinkiewicz2001efficient, bouaziz2013sparse}.
 
 Der Ansatz zur Registrierung der Punktwolke $A$ an der Punktwolke $B$ ist dabei der Folgende:
 \begin{enumerate}
-\item $A$ wird iterativ mithilfe von Translationen und Rotationen in eine neue Position gebracht.
+\item $A$ wird iterativ mithilfe von Translationen und Rotationen \cite{horn1987closed} in eine neue Position gebracht.
 \item Zu jedem Punkt $p \in A$ wird der Punkt $q \in B$ gesucht, der den geringsten Abstand $\varepsilon$ von $p$ hat: $\varepsilon = \sqrt{(p_x - q_x)^2 + (p_y - q_y)^2 + (p_z - q_z)^2}$.
 \item Standardmäßig wird nun als Fehler $e$ die Summe der Residuenquadrate verwendet: $e = \sum \varepsilon^2$
 \item Wiederholung, bis eine der Abbruchbedingungen eintritt.
@@ -35,16 +35,65 @@ Der Algorithmus terminiert, wenn:
 \item eine festgelegte Zahl von Iterationen abgelaufen ist.
 \end{itemize}
 
-Selbstverständlich lassen sich beliebig viele Abbruchbedingungen manuell definieren, beispielsweise eine festgelegte maximale Laufzeit.
+Selbstverständlich lassen sich beliebig viele zusätzliche Abbruchbedingungen manuell definieren, beispielsweise eine festgelegte maximale Laufzeit.
 
 \subsection{Kinect Fusion}
 \label{subsec:kinfu}
 
-Durch die Veröffentlichung der Microsoft Kinect im Jahr 2010, einer 3D-Kamera für die Nutzung im Entertainment- und Gamingbereich, wurde durch den niedrigen Preis erstmals der breiten Masse der Zugang zu Tiefenkameras ermöglicht \cite[1:55]{kinfuTalkYoutube}.
+Durch die Veröffentlichung der Microsoft Kinect im Jahr 2010, einer 3D-Kamera, welche ursprünglich für die Nutzung im Entertainment- und Gamingbereich entwickelt worden ist, wurde durch den niedrigen Preis erstmals der breiten Masse der Zugang zu Tiefenkameras ermöglicht \cite[1:55]{kinfuTalkYoutube}.
 \ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion} und bietet eine Möglichkeit, 3D-Rekonstruktionen in Echtzeit durchzuführen.
 
+\ac{KinFu} kombiniert dabei die lokale Registrierung durch den \ac{ICP}-Algorithmus mit einem \ac{TSDF}.
+Ein \ac{TSDF} ist im Grunde genommen nichts anderes als ein Voxel Grid.
+Während  ein Voxel im ursprünglichen Voxel Grid entweder gefüllt ist oder nicht, wird hier die Entfernung zur nächsten Oberfläche gespeichert \cite{curless1996volumetric}.
+Dies ermöglicht bei einer relativ geringen Voxelauflösung dennoch eine recht genaue Rekonstruktion der vorhandenen Oberflächen.
+Um dies zu erreichen, werden die eingetragenen Werte interpoliert, und Fehler durch die geringe Auflösung so minimiert.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.66\textwidth, frame]{images/kinfu-integration.png}
+	\caption{Integration eines Tiefenbilds in \ac{KinFu}. Entnommen aus \cite{izadi2011kinectfusion}}
+	\label{fig:kinfu-integration}
+\end{figure}
+
+Durch eine schnelle GPU-Implementierung erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz.
+Somit ist die zeitliche Differenz zwischen zwei Aufnahmen sehr niedrig.
+Es wird davon ausgegangen, dass die Kamera handgeführt (bzw. mit geringer Geschwindigkeit bewegt) wird, daher hält sich auch die räumliche Distanz zwischen einzelnen Frames in Grenzen.
+Aufgrund dieser Gegebenheiten reicht bei \ac{KinFu} eine lokale Registrierung aus, es kann also direkt \ac{ICP} verwendet werden.
+
+In \autoref{fig:kinfu-integration} ist der Ablauf der Integration eines neuen Tiefenbilds ins \ac{TSDF} bei \ac{KinFu} dargestellt.
+Das Tiefenbild wird zunächst in eine Punktwolke konvertiert.
+Diese wird anschließend durch \ac{ICP} registriert, um dann unter Bildung eines Mittelwerts in das \ac{TSDF} integriert zu werden.
+Zur Darstellung der Szene wird dieses anschließend mithilfe eines Raycasters gerendert.
+
+
 % Hier YAK erwähnen und erklären
-YAK? \cite{klingensmith2015chisel}
+Es gibt zahlreiche Optimierungen und veränderte Versionen von \ac{KinFu}.
+Unter anderem gibt es in der \ac{PCL} eine freie Implementierung \cite{pirovano2012kinfu}.
+Eine optimierte Version ist beispielsweise Chisel \cite{klingensmith2015chisel}, wo eine effizientere Voxelstrategie verwendet wird.
+Weiterhin ist Chisel eine reine CPU-Implementierung, was die Nutzung auf Mobilgeräten ermöglicht.
+
+Die in dieser Arbeit verwendete Implementierung ist \ac{YAK}.
+\ac{YAK} ist eine auf \ac{ROS} angepasste Version von \ac{KinFu}, um Trajectory Waypoints für die Robotersteuerung zu errechnen \cite{schornak2019yak}.
+Die Verwendung von \ac{KinFu} in industriellen Robotikanlagen ist in vielerlei Hinsicht sinnvoll:
+\begin{itemize}
+\item Objekte können aus mehreren Perspektiven gescannt werden, was eine bessere Darstellung der Szene liefert.
+\item Rauschen durch den Bildsensor wird aufgrund der Mittelwertbildung minimiert.
+Das Ergebnis ist ein glatteres und realistischeres Modell.
+\item Durch die GPU-Implementierung können Tiefenbilder in Echtzeit integriert werden, was insbesondere bei Robotikanwendungen ein großer Vorteil ist.
+\item Ein häufig in der Bildverarbeitung auftretendes Problem sind reflektierende bzw. spiegelnde Oberflächen.
+Die betroffenen Regionen können oft nur falsch, verzerrt oder gar nicht modelliert werden.
+Da hier eine Aufnahme aus mehreren Perspektiven möglich ist, können derartige Fehler weitestgehend vermieden werden. In \autoref{fig:yak-reflecting-model} ist dies an einem Beispiel besonders gut sichtbar.
+\end{itemize}
+
+\begin{figure}[ht]
+	\centering
+	\subfloat{{\includegraphics[width=0.4\textwidth]{images/yak-reflecting-scene.jpg} }}
+	\qquad
+	\subfloat{{\includegraphics[width=0.4\textwidth]{images/yak-reflecting-reconstruction.png} }}
+	\caption{Szene und Rekonstruktion eines reflektierenden Objekts durch \ac{YAK}. Entnommen aus \cite{schornak2019yak}}
+	\label{fig:yak-reflecting-model}
+\end{figure}
 
 
 \section{Globale Registrierung}

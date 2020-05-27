@@ -57,7 +57,7 @@
   organization={IEEE}
 }
 % Greedy Projection Reconstruction
-@InProceedings{Marton09ICRA,
+@inproceedings{Marton09ICRA,
   author    = {Zoltan Csaba Marton and Radu Bogdan Rusu and Michael Beetz},
   title     = {{On Fast Surface Reconstruction Methods for Large and Noisy Datasets}},
   booktitle = {Proceedings of the IEEE International Conference on Robotics and Automation (ICRA)},
@@ -126,6 +126,39 @@
   url={https://www.youtube.com/watch?v=RvrCAw1IFG0},
   urldate={2020-04-09}
 }
+% KinFu PCL version
+@article{pirovano2012kinfu,
+  title={Kinfu--an open source implementation of Kinect Fusion+ case study: implementing a 3D scanner with PCL},
+  author={Pirovano, Michele},
+  journal={Project Assignment},
+  year={2012}
+}
+% TSDF
+@inproceedings{curless1996volumetric,
+  title={A volumetric method for building complex models from range images},
+  author={Curless, Brian and Levoy, Marc},
+  booktitle={Proceedings of the 23rd annual conference on Computer graphics and interactive techniques},
+  pages={303--312},
+  year={1996}
+}
+% Chisel (KinFu CPU + optimized Voxel Grid)
+@inproceedings{klingensmith2015chisel,
+  title={Chisel: Real Time Large Scale 3D Reconstruction Onboard a Mobile Device using Spatially Hashed Signed Distance Fields},
+  author={Klingensmith, Matthew and Dryanovski, Ivan and Srinivasa, Siddhartha and Xiao, Jizhong},
+  booktitle={Robotics: science and systems},
+  volume={4},
+  pages={1},
+  year={2015}
+}
+% Yet another KinectFusion
+@online{schornak2019yak,
+  title={YAK: 3D Reconstruction in ROS2},
+  author={Joseph Schornak},
+  url={https://rosindustrial.org/news/2019/8/7/yak-3d-reconstruction-in-ros2},
+  month={August 07},
+  year={2019},
+  urldate={2020-05-27}
+}
 
 
 % 4-Point Congruent Set / OpenGR
@@ -187,15 +220,6 @@ year = {2014},
   year={2009},
   organization={ACM}
 }
-% YAK?
-@inproceedings{klingensmith2015chisel,
-  title={Chisel: Real Time Large Scale 3D Reconstruction Onboard a Mobile Device using Spatially Hashed Signed Distance Fields},
-  author={Klingensmith, Matthew and Dryanovski, Ivan and Srinivasa, Siddhartha and Xiao, Jizhong},
-  booktitle={Robotics: science and systems},
-  volume={4},
-  pages={1},
-  year={2015}
-}
 % Z-Buffering
 @techreport{catmull1974subdivision,
   title={A subdivision algorithm for computer display of curved surfaces},
@@ -223,6 +247,28 @@ year = {2014},
   pages={145--152},
   year={2001},
   organization={IEEE}
+}
+% Sparse ICP (outliers, missing data)
+@inproceedings{bouaziz2013sparse,
+  title={Sparse iterative closest point},
+  author={Bouaziz, Sofien and Tagliasacchi, Andrea and Pauly, Mark},
+  booktitle={Computer graphics forum},
+  volume={32},
+  number={5},
+  pages={113--123},
+  year={2013},
+  organization={Wiley Online Library}
+}
+% Orientation using quarternions
+@article{horn1987closed,
+  title={Closed-form solution of absolute orientation using unit quaternions},
+  author={Horn, Berthold KP},
+  journal={Josa a},
+  volume={4},
+  number={4},
+  pages={629--642},
+  year={1987},
+  publisher={Optical Society of America}
 }
 % Plane Fitting (least squares)
 @article{schomaker1959fit,
