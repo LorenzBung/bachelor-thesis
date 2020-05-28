@@ -40,9 +40,12 @@ Selbstverständlich lassen sich beliebig viele zusätzliche Abbruchbedingungen m
 \subsection{Kinect Fusion}
 \label{subsec:kinfu}
 
-Durch die Veröffentlichung der Microsoft Kinect im Jahr 2010, einer 3D-Kamera, welche ursprünglich für die Nutzung im Entertainment- und Gamingbereich entwickelt worden ist, wurde durch den niedrigen Preis erstmals der breiten Masse der Zugang zu Tiefenkameras ermöglicht \cite[1:55]{kinfuTalkYoutube}.
-\ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion} und bietet eine Möglichkeit, 3D-Rekonstruktionen in Echtzeit durchzuführen.
+Durch die Veröffentlichung der Microsoft Kinect im Jahr 2010 wurde aufgrund ihres niedrigen Preises erstmals der breiten Masse der Zugang zu Tiefenkameras ermöglicht \cite[1:55]{kinfuTalkYoutube}.
+Die Kinect ist eine 3D-Kamera, welche ursprünglich für die Nutzung im Entertainment- und Gamingbereich entwickelt worden ist.
+Bestehend aus einem Lichtemitter, Infrarotsensor, einer 2D-RGB-Kamera und weiteren Sensoren, liefert sie 3D-Daten bei einer Bildwiederholfrequenz von 30 Hz.
+Neben dem ursprünglichen Anwendungsgebiet findet sie heute auch in vielen anderen, auch wissenschaftlichen Bereichen Anwendung, beispielsweise bei der Aufzeichnung geomorphologischer Daten \cite{mankoff2013kinect}.
 
+\ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion} und bietet eine Möglichkeit, mithilfe der Kinect 3D-Rekonstruktionen in Echtzeit durchzuführen.
 \ac{KinFu} kombiniert dabei die lokale Registrierung durch den \ac{ICP}-Algorithmus mit einem \ac{TSDF}.
 Ein \ac{TSDF} ist im Grunde genommen nichts anderes als ein Voxel Grid.
 Während  ein Voxel im ursprünglichen Voxel Grid entweder gefüllt ist oder nicht, wird hier die Entfernung zur nächsten Oberfläche gespeichert \cite{curless1996volumetric}.
@@ -56,7 +59,7 @@ Um dies zu erreichen, werden die eingetragenen Werte interpoliert, und Fehler du
 	\label{fig:kinfu-integration}
 \end{figure}
 
-Durch eine schnelle GPU-Implementierung erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz.
+Durch eine schnelle GPU-Implementierung auf Basis von CUDA erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz, der Bildwiederholfrequenz der Kinect.
 Somit ist die zeitliche Differenz zwischen zwei Aufnahmen sehr niedrig.
 Es wird davon ausgegangen, dass die Kamera handgeführt (bzw. mit geringer Geschwindigkeit bewegt) wird, daher hält sich auch die räumliche Distanz zwischen einzelnen Frames in Grenzen.
 Aufgrund dieser Gegebenheiten reicht bei \ac{KinFu} eine lokale Registrierung aus, es kann also direkt \ac{ICP} verwendet werden.
@@ -71,7 +74,7 @@ Zur Darstellung der Szene wird dieses anschließend mithilfe eines Raycasters ge
 Es gibt zahlreiche Optimierungen und veränderte Versionen von \ac{KinFu}.
 Unter anderem gibt es in der \ac{PCL} eine freie Implementierung \cite{pirovano2012kinfu}.
 Eine optimierte Version ist beispielsweise Chisel \cite{klingensmith2015chisel}, wo eine effizientere Voxelstrategie verwendet wird.
-Weiterhin ist Chisel eine reine CPU-Implementierung, was die Nutzung auf Mobilgeräten ermöglicht.
+Weiterhin ist Chisel eine reine CPU-Implementierung, was die Nutzung auf Mobilgeräten ohne Grafikkarte ermöglicht.
 
 Die in dieser Arbeit verwendete Implementierung ist \ac{YAK}.
 \ac{YAK} ist eine auf \ac{ROS} angepasste Version von \ac{KinFu}, um Trajectory Waypoints für die Robotersteuerung zu errechnen \cite{schornak2019yak}.
@@ -102,6 +105,8 @@ Da hier eine Aufnahme aus mehreren Perspektiven möglich ist, können derartige 
 Bei der globalen Registrierung müssen sich die beiden Punktwolken nicht nahe der endgültigen Ausrichtung befinden - Translation und Rotation können beliebig sein.
 Der Nachteil ist die häufig sehr hohe Komplexität der Algorithmen.
 Außerdem bietet die globale Registrierung oft nur eine Grobregistrierung, weshalb es sich meist anbietet, anschließend noch eine lokale Registrierung zur Verbesserung der Ergebnisse durchzuführen.
+
+Zur globalen Registrierung von Punktwolken existieren verschiedene Ansätze \cite{chaudhury2015global, zhou2016fast, rusu2009fast}.
 
 
 \subsection{\acl{4PCS}}

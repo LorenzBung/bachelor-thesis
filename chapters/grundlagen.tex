@@ -72,15 +72,22 @@ Dieses Prinzip lässt sich einfach auf den dreidimensionalen Raum erweitern.
 Die so erhaltene Datenstruktur nennt sich Voxel Grid.
 Als Voxel bezeichnet man somit eine einzelne Datenzelle im 3D-Array, also das dreidimensionale Äquivalent zum Pixel.
 
-Voxel Grids finden in vielen Bereichen Anwendung, zum Beispiel in der Medizin. %TODO CITATION
+Voxel Grids finden in vielen Bereichen Anwendung, zum Beispiel in der Medizin \cite{van2008hippocampus, klein2009elastix, mohanty2012secure, roche1999towards} oder Geographie \cite{chmielewski2017estimating}.
 Auch zum Downsampling von Punktwolken werden sie verwendet \cite{pclVoxelGrid}. %TODO Zu Punktwolken / Implementierung...
 
 Gegenüber einem Tiefenbild hat ein Voxel Grid den inhärenten Nachteil, dass Speicherplatz für jeden Voxel benötigt wird.
 Dies führt schnell zu großem Speicherbedarf $M$, da dieser kubisch zur Auflösung $r$ steigt: $M = r_x * r_y * r_z * b$ bei Bittiefe $b$.
+Da der Speicher bereits bei der Initialisierung reserviert werden muss, ist die Änderung der Auflösung oder der Größe des abgedeckten Raumes unmöglich.
+In diesem Fall müssen ein neues Voxel Grid (mit der neuen Auflösung bzw. Größe) angelegt und sämtliche Daten kopiert werden.
+
+Zur Reduzierung des großen Speicherbedarfs werden deswegen häufig Baumstrukturen (sogenannte Octrees) eingesetzt.
+Dabei wird der Raum in 8 Voxel geteilt, welche jeweils ein Blatt des Baumes darstellen.
+Ist der Voxel gefüllt, wird er wieder entsprechend in 8 Untervoxel geteilt.
+Dies wird wiederholt, bis die gewünschte Auflösung erreicht oder eine bestimmte Tiefe im Baum erreicht ist.
+Szenen, die große Unterschiede in der Auflösung aufweisen oder viele leere Voxel beinhalten, brauchen so deutlich weniger Speicherplatz.
 
 Ein Vorteil im Vergleich zum Tiefenbild ist jedoch, dass die Abhängigkeit von der Kameraperspektive wegfällt.
 Dadurch können hier auch Objekte modelliert werden, die im Tiefenbild durch eine Verdeckung versteckt wären.
-
 Desweiteren ist der Raum einheitlich diskretisiert.
 Dies kann je nach Szene und Kameraposition sowohl ein Vor- als auch ein Nachteil sein:
 Bei einem Tiefenbild nimmt der Abstand der Messpunkte mit der Tiefe ab.
@@ -120,10 +127,10 @@ Es lässt sich sehr einfach über die Punkte iterieren.
 Beim Voxel Grid muss dagegen bereits am Anfang Speicher für jede Zelle reserviert werden, egal ob ein Punkt enthalten ist oder nicht.
 \item Man ist nicht, wie beim Tiefenbild oder Voxelgrid, auf eine feste Anzahl an Punkten limitiert.
 Beim Tiefenbild können maximal $n * m$ Punkte (ein Wert pro Pixel) mit einer Tiefeninformation versehen werden, beim Voxel Grid maximal $x * y * z$ Punkte (ein Wert pro Voxel).
-Eine Kapazitätserweiterung, wie beispielsweise das Hinzufügen neuer Pixelspalten oder -zeilen im Tiefenbild, entfallen bei der Punktwolke.
+Eine Kapazitätserweiterung, wie beispielsweise das Hinzufügen neuer Pixelspalten oder -zeilen im Tiefenbild, ist bei der Punktwolke nicht notwendig.
 \item Die Auflösung ist nur durch die Gleitkommagenauigkeit der Maschine limitiert.
 Beim Voxel Grid ist sie im Gegensatz dazu durch die Größe der Voxel limitiert.
-Beim Tiefenbild ist die Auflösung abhängig von der Tiefe im Bild - bei weiter entfernten Objekten ist die Auflösung auch niedriger.
+Beim Tiefenbild ist die Auflösung abhängig von der Bittiefe und der z-Tiefe im Bild - bei weiter entfernten Objekten ist die Auflösung auch niedriger.
 \end{itemize}
 
 Es gibt jedoch auch einige Nachteile gegenüber den anderen Repräsentationen:
