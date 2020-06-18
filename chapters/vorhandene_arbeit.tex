@@ -102,13 +102,25 @@ Da hier eine Aufnahme aus mehreren Perspektiven möglich ist, können derartige 
 \label{sec:global-registration}
 
 Bei der globalen Registrierung müssen sich die beiden Punktwolken nicht nahe der endgültigen Ausrichtung befinden - Translation und Rotation können beliebig sein.
-Der Nachteil ist die häufig sehr hohe Komplexität der Algorithmen.
-Außerdem bietet die globale Registrierung oft nur eine Grobregistrierung, weshalb es sich meist anbietet, anschließend noch eine lokale Registrierung zur Verbesserung der Ergebnisse durchzuführen.
+Ein Nachteil ist jedoch, dass die globale Registrierung oft nur eine Grobregistrierung bietet, also keine optimalen Ergebnisse liefert.
+Aus diesem Grund bietet es sich meist an, anschließend noch eine lokale Registrierung zur Verbesserung der Ergebnisse durchzuführen.
 
 Zur globalen Registrierung von Punktwolken existieren verschiedene Ansätze \cite{chaudhury2015global, zhou2016fast, rusu2009fast}.
+Die in dieser Arbeit verwendete Methode ist Super4PCS \cite{mellado2014super4pcs}, eine optimierte Version von \ac{4PCS} \cite{aiger2008fpcs}.
+Dieser Ansatz wird verwendet, da die vorhandene Implementierung \ac{OpenGR} \cite{mellado2018opengr} über einen Wrapper bereits zur \ac{PCL} kompatibel ist.
+
+%TODO 4PCS Funktionsweise erklären
 
 
-\subsection{\acl{4PCS}}
-\label{subsec:4pcs}
+\section{Segmentierung}
+\label{sec:segmentation}
 
-% Hier Super4PCS erwähnen und erklären
+Ziel der Segmentierung ist es, zusammengehörende Bildregionen zu identifizieren und durch Zuweisung verschiedener Klassen voneinander zu trennen.
+Dies ist, insbesondere in der 2D-Bildverarbeitung, ein altes Problem, für das es viele verschiedene Lösungsansätze gibt.
+Auch im dreidimensionalen Raum ist eine Segmentierung häufig notwendig.
+Häufig gibt es dabei nicht eine beste Methode - die Objektart, -größe, -form und viele weitere Faktoren beeinflussen die Wahl eines geeigneten Ansatzes.
+
+Die Forschung ist in diesem Bereich weiterhin sehr aktuell:
+Beispielsweise zeigen \citeauthor{uckermann2012real} einen Versuch, in Echtzeit und ohne vorher bekannte Objekte zu segmentieren \cite{uckermann2012real}.
+Eine Übersicht bieten \citeauthor{nguyen20133d}, die verschiedene Varianten vergleichen und die Vor- und Nachteile diskutieren \cite{nguyen20133d}.
+In den letzten Jahren findet auch verstärkt Forschung zur Segmentierung mithilfe von Neuronalen Netzen statt \cite{te2018rgcnn}.
