@@ -200,8 +200,9 @@ Dies erhöht zwar den Speicherbedarf und die Komplexität der Datenstruktur, bes
 \label{subsec:winged-edge}
 
 In der Winged-Edge-Datenstruktur \cite{baumgart1975polyhedron} werden sowohl Vertices als auch Edges und Faces explizit abgespeichert.
-Diese Repräsentation ermöglicht es, schnell auf aneinander angrenzende Faces zuzugreifen oder die Geometrie des Meshes zu verändern.
+Diese Repräsentation ermöglicht es, die Geometrie des Meshes im Vergleich zu anderen Strukturen leichter zu verändern.
 Der Nachteil ist jedoch, dass der Speicheraufwand sehr hoch und die Datenstruktur im Vergleich zu den anderen Darstellungen sehr komplex ist.
+
 Die in \autoref{img:winged-edge-triangles} gezeigte Darstellung von zwei beispielhaften Dreiecken $(v_1, v_2, v_3)$ und $(v_2, v_4, v_3)$ ist in \autoref{tab:winged-edge-table} dargestellt.
 
 \begin{figure}[ht]
@@ -275,7 +276,9 @@ $F_2$ & $e_4, e_5, e_2$\\
 \end{table}
 
 
-%TODO andere arten von meshes
+%TODO Half-edge
+\subsection{Half Edge}
+\label{subsec:half-edge}
 
 
 \section{Point Cloud Library}
