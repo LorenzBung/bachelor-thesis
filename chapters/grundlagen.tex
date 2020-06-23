@@ -160,14 +160,13 @@ Da jedes Polygon in Dreiecke zerlegt werden kann, werden meist nur diese gespeic
 \end{figure}
 
 Vertices, Edges und Faces können in verschiedenen Repräsentationen gespeichert werden.
-Diese haben unterschiedliche Eigenschaften und Vor- und Nachteile, die in \cite{smith2006vertex} genauer beleuchtet werden.
-Im Folgenden wird eine Übersicht über die verschiedenen Repräsentationen dargestellt.
+Diese haben unterschiedliche Eigenschaften und Vor- und Nachteile, die im folgenden genauer beleuchtet werden.
 
 \subsection{\acl{VVM}}
 \label{subsec:v-v-mesh}
 
 Beim \ac{VVM} werden nur Vertices gespeichert, Kanten und Flächen ergeben sich implizit.
-Existiert beispielsweise eine Verbindung zwischen den Vertices $v_1$ und $v_2$, $v_2$ und $v_3$ sowie $v_3$ und $v_1$ (ein einfaches Dreieck), werden folgende Werte in einer Liste gespeichert:
+Existiert beispielsweise eine Verbindung zwischen den Vertices $v_1$ und $v_2$, $v_2$ und $v_3$ sowie $v_3$ und $v_1$ (ein einfaches Dreieck), werden die Werte in \autoref{tab:vvm-vertex-table} in einer Liste gespeichert:
 
 \begin{table}[ht]
 \centering
@@ -192,7 +191,89 @@ Zum Hinzufügen eines Knotens muss beispielsweise nur ein neuer Eintrag in der L
 Um jedoch Informationen zu bestimmten Kanten oder Flächen zu bekommen, muss über die gesamte Liste iteriert werden.
 Dies ist sehr langsam und schränkt den praktischen Nutzen von \acp{VVM} stark ein.
 
-%TODO
+Ein Vergleich und eine Abwägung der Vor- und Nachteile mit anderen Datenstrukturen findet sich in \cite[Kap. 11]{smith2006vertex}.
+Neben dem \ac{VVM} kann man in beliebigen Kombinationen auch Listen für Kanten oder Faces hinzufügen.
+Dies erhöht zwar den Speicherbedarf und die Komplexität der Datenstruktur, bestimmte Zugriffe werden dadurch jedoch stark beschleunigt.
+
+
+\subsection{Winged Edge}
+\label{subsec:winged-edge}
+
+In der Winged-Edge-Datenstruktur \cite{baumgart1975polyhedron} werden sowohl Vertices als auch Edges und Faces explizit abgespeichert.
+Diese Repräsentation ermöglicht es, schnell auf aneinander angrenzende Faces zuzugreifen oder die Geometrie des Meshes zu verändern.
+Der Nachteil ist jedoch, dass der Speicheraufwand sehr hoch und die Datenstruktur im Vergleich zu den anderen Darstellungen sehr komplex ist.
+Die in \autoref{img:winged-edge-triangles} gezeigte Darstellung von zwei beispielhaften Dreiecken $(v_1, v_2, v_3)$ und $(v_2, v_4, v_3)$ ist in \autoref{tab:winged-edge-table} dargestellt.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=2.5]
+\coordinate[label=-135:$v_1$] (v_1) at (0,0);
+\coordinate[label=-45:$v_2$] (v_2) at (1,0);
+\coordinate[label=135:$v_3$] (v_3) at (0,1);
+\coordinate[label=45:$v_4$] (v_4) at (1,1);
+\coordinate[label=$F_1$] (F_1) at (0.3,0.2);
+\coordinate[label=$F_2$] (F_2) at (0.75,0.66);
+\draw (v_1) to node[below]{$e_1$} (v_2);
+\draw (v_2) to node[right]{$e_2$} (v_3);
+\draw (v_3) to node[left]{$e_3$} (v_1);
+\draw (v_2) to node[right]{$e_4$} (v_4);
+\draw (v_4) to node[above]{$e_5$} (v_3);
+\fill (v_1) circle (1pt);
+\fill (v_2) circle (1pt);
+\fill (v_3) circle (1pt);
+\fill (v_4) circle (1pt);
+\end{tikzpicture}
+\caption{Beispieldreiecke zur Winged-Edge-Datenstruktur}
+\label{img:winged-edge-triangles}
+\end{figure}
+
+\begin{table}[ht]
+\begin{center}
+% Vertices
+\begin{tabular}{| l | l |}
+\hline
+\multicolumn{2}{| c |}{\textbf{Vertices}}\\
+\hline\hline
+Vertex & Edges\\
+\hline
+$v_1$ & $e_1, e_3$\\
+$v_2$ & $e_1, e_2, e_4$\\
+$v_3$ & $e_2, e_3, e_5$\\
+$v_4$ & $e_4, e_5$\\
+\hline
+\end{tabular}
+\quad
+% Edges
+\begin{tabular}{| l | l | l | l |}
+\hline
+\multicolumn{4}{| c |}{\textbf{Edges}}\\
+\hline\hline
+Edge & Vertices & Faces & Wing Edges\\
+\hline
+$e_1$ & $v_1, v_2$ & $F_1$ & $e_3, e_3, e_2, e_4$\\
+$e_2$ & $v_2, v_3$ & $F_1, F_2$ & $e_1, e_4, e_3, e_5$\\
+$e_3$ & $v_3, v_1$ & $F_1$ & $e_2, e_5, e_1, e_1$\\
+$e_4$ & $v_2, v_4$ & $F_2$ & $e_2, e_1, e_5, e_5$\\
+$e_5$ & $v_4, v_3$ & $F_2$ & $e_4, e_4, e_2, e_3$\\
+\hline
+\end{tabular}
+\quad
+% Faces
+\begin{tabular}{| l | l |}
+\hline
+\multicolumn{2}{| c |}{\textbf{Faces}}\\
+\hline\hline
+Face & Edges\\
+\hline
+$F_1$ & $e_1, e_2, e_3$\\
+$F_2$ & $e_4, e_5, e_2$\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Vertex-, Edge- und Face-Tabellen bei Winged Edge}
+\label{tab:winged-edge-table}
+\end{table}
+
 
 %TODO andere arten von meshes
 
