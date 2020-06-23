@@ -147,7 +147,7 @@ Dies ist bei Punktwolken nicht möglich.
 \section{Meshrepräsentationen}
 \label{sec:meshrepr}
 
-Die bisher angesprochenen Datenstrukturen beinhalten ausschließlich Informationen über Punkte im dreidimensionalen Raum, welche bisher in keinem Zusammenhang zueinander stehen.
+Die bisher angesprochenen Datenstrukturen beinhalten ausschließlich Informationen über Punkte im dreidimensionalen Raum (Geometrie), nicht jedoch aber über die Relation, in der diese zueinander stehen (Topologie).
 Das Polygonmesh erweitert diese Daten durch Kanteninformationen: Punkte (sogenannte Vertices) sind durch Kanten (Edges) miteinander verbunden.
 Die so entstehenden Flächen der Polygone werden als Faces bezeichnet.
 Da jedes Polygon in Dreiecke zerlegt werden kann, werden meist nur diese gespeichert.
@@ -159,11 +159,38 @@ Da jedes Polygon in Dreiecke zerlegt werden kann, werden meist nur diese gespeic
 	\label{fig:bunny_mesh}
 \end{figure}
 
-Vertices, Edges und Faces können in unterschiedlichen Repräsentationen gespeichert werden.
-Diese haben unterschiedliche Eigenschaften und Vor- und Nachteile, auf die im Folgenden näher eingegangen wird.
+Vertices, Edges und Faces können in verschiedenen Repräsentationen gespeichert werden.
+Diese haben unterschiedliche Eigenschaften und Vor- und Nachteile, die in \cite{smith2006vertex} genauer beleuchtet werden.
+Im Folgenden wird eine Übersicht über die verschiedenen Repräsentationen dargestellt.
 
-\subsection{Vertex-Vertex-Mesh}
+\subsection{\acl{VVM}}
 \label{subsec:v-v-mesh}
+
+Beim \ac{VVM} werden nur Vertices gespeichert, Kanten und Flächen ergeben sich implizit.
+Existiert beispielsweise eine Verbindung zwischen den Vertices $v_1$ und $v_2$, $v_2$ und $v_3$ sowie $v_3$ und $v_1$ (ein einfaches Dreieck), werden folgende Werte in einer Liste gespeichert:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{| l | l |}
+	\hline
+	Vertex & verbundene Vertices\\
+	\hline
+	$v_1$ & $v_2, v_3$\\
+	$v_2$ & $v_1, v_3$\\
+	$v_3$ & $v_1, v_2$\\
+	\hline
+\end{tabular}
+\caption{Vertextabelle beim \ac{VVM}}
+\label{tab:vvm-vertex-table}
+\end{table}
+
+Der Speicherbedarf dieser simplen Darstellung ist sehr gering.
+Die Einträge in der Tabelle können als Indizes der Vertexliste gespeichert werden.
+Weiterhin sind Vertex-basierte Operationen sehr schnell.
+Zum Hinzufügen eines Knotens muss beispielsweise nur ein neuer Eintrag in der Liste angelegt werden, sowie der neue Knoten zu den verbundenen Vertices hinzugefügt werden.
+
+Um jedoch Informationen zu bestimmten Kanten oder Flächen zu bekommen, muss über die gesamte Liste iteriert werden.
+Dies ist sehr langsam und schränkt den praktischen Nutzen von \acp{VVM} stark ein.
 
 %TODO
 
