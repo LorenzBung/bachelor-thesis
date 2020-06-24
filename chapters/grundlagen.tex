@@ -203,11 +203,44 @@ In der Winged-Edge-Datenstruktur \cite{baumgart1975polyhedron} werden sowohl Ver
 Diese Repräsentation ermöglicht es, die Geometrie des Meshes im Vergleich zu anderen Strukturen leichter zu verändern.
 Der Nachteil ist jedoch, dass der Speicheraufwand sehr hoch und die Datenstruktur im Vergleich zu den anderen Darstellungen sehr komplex ist.
 
-Die in \autoref{img:winged-edge-triangles} gezeigte Darstellung von zwei beispielhaften Dreiecken $(v_1, v_2, v_3)$ und $(v_2, v_4, v_3)$ ist in \autoref{tab:winged-edge-table} dargestellt.
+Bei der Winged-Edge-Darstellung werden in der Kantentabelle jeweils die vorhergehenden und nachfolgenden Kanten im und gegen den Uhrzeigersinn gespeichert. Dies ermöglicht die schnelle Bestimmung von angrenzenden Kanten, Vertices oder Faces, bedeutet aber gleichzeitig auch viel Verwaltungsaufwand der Indizes. In \autoref{fig:winged-edge-edges} findet sich eine Übersicht über die entsprechenden Kanten.
 
 \begin{figure}[ht]
 \centering
-\begin{tikzpicture}[scale=2.5]
+\begin{tikzpicture}[scale=2]
+\coordinate[label=45:$v_1$] (v_1) at (1,1);
+\coordinate[label=135:$v_2$] (v_2) at (2,1);
+\coordinate[label=-135:$v_3$] (v_3) at (0.5,2);
+\coordinate[label=135:$v_4$] (v_4) at (0.5,0);
+\coordinate[label=-45:$v_5$] (v_5) at (2.5,2);
+\coordinate[label=45:$v_6$] (v_6) at (2.5,0);
+\coordinate[label=$F_1$] (F_1) at (1.5,0.2);
+\coordinate[label=$F_2$] (F_2) at (1.5,1.5);
+\draw (v_1) to node[below]{$e$} (v_2);
+\draw (v_1) to node[above right]{$\leftarrow\circlearrowleft$} (v_3);
+\draw (v_1) to node[below right]{$\leftarrow\circlearrowright$} (v_4);
+\draw (v_2) to node[above left]{$\rightarrow\circlearrowleft$} (v_5);
+\draw (v_2) to node[below left]{$\rightarrow\circlearrowright$} (v_6);
+\draw[dashed] (v_1) to (0,1.5);
+\draw[dashed] (v_1) to (0,0.5);
+\draw[dashed] (v_2) to (3,1.5);
+\draw[dashed] (v_2) to (3,0.5);
+\fill (v_1) circle (1pt);
+\fill (v_2) circle (1pt);
+\fill (v_3) circle (1pt);
+\fill (v_4) circle (1pt);
+\fill (v_5) circle (1pt);
+\fill (v_6) circle (1pt);
+\end{tikzpicture}
+\caption{Vor- und Nachfolgerkanten der Winged-Edge-Datenstruktur (nach \cite[S.591]{baumgart1975polyhedron}}
+\label{fig:winged-edge-edges}
+\end{figure}
+
+Die in \autoref{fig:winged-edge-triangles} gezeigte Darstellung von zwei beispielhaften Dreiecken $(v_1, v_2, v_3)$ und $(v_2, v_4, v_3)$ ist in \autoref{tab:winged-edge-table} dargestellt.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=3]
 \coordinate[label=-135:$v_1$] (v_1) at (0,0);
 \coordinate[label=-45:$v_2$] (v_2) at (1,0);
 \coordinate[label=135:$v_3$] (v_3) at (0,1);
@@ -225,53 +258,35 @@ Die in \autoref{img:winged-edge-triangles} gezeigte Darstellung von zwei beispie
 \fill (v_4) circle (1pt);
 \end{tikzpicture}
 \caption{Beispieldreiecke zur Winged-Edge-Datenstruktur}
-\label{img:winged-edge-triangles}
+\label{fig:winged-edge-triangles}
 \end{figure}
 
 \begin{table}[ht]
-\begin{center}
-% Vertices
-\begin{tabular}{| l | l |}
-\hline
-\multicolumn{2}{| c |}{\textbf{Vertices}}\\
-\hline\hline
-Vertex & Edges\\
-\hline
-$v_1$ & $e_1, e_3$\\
-$v_2$ & $e_1, e_2, e_4$\\
-$v_3$ & $e_2, e_3, e_5$\\
-$v_4$ & $e_4, e_5$\\
-\hline
-\end{tabular}
-\quad
+\centering
 % Edges
-\begin{tabular}{| l | l | l | l |}
+\begin{tabular}{| l | l | l | l | l | l | l |}
 \hline
-\multicolumn{4}{| c |}{\textbf{Edges}}\\
+\multicolumn{7}{| c |}{\textbf{Edges}}\\
 \hline\hline
-Edge & Vertices & Faces & Wing Edges\\
+Edge & Vertices & Faces & $\leftarrow \circlearrowleft$ & $\leftarrow \circlearrowright$ & $\rightarrow \circlearrowleft$ & $\rightarrow \circlearrowright$\\
 \hline
-$e_1$ & $v_1, v_2$ & $F_1$ & $e_3, e_3, e_2, e_4$\\
-$e_2$ & $v_2, v_3$ & $F_1, F_2$ & $e_1, e_4, e_3, e_5$\\
-$e_3$ & $v_3, v_1$ & $F_1$ & $e_2, e_5, e_1, e_1$\\
-$e_4$ & $v_2, v_4$ & $F_2$ & $e_2, e_1, e_5, e_5$\\
-$e_5$ & $v_4, v_3$ & $F_2$ & $e_4, e_4, e_2, e_3$\\
+$e_1$ & $v_1, v_2$ & $F_1$ & $e_3$ & $e_3$ & $e_2$ & $e_4$\\
+$e_2$ & $v_2, v_3$ & $F_1, F_2$ & $e_1$ & $e_4$ & $e_3$ & $e_5$\\
+$e_3$ & $v_3, v_1$ & $F_1$ & $e_2$ & $e_5$ & $e_1$ & $e_1$\\
+$e_4$ & $v_2, v_4$ & $F_2$ & $e_2$ & $e_1$ & $e_5$ & $e_5$\\
+$e_5$ & $v_4, v_3$ & $F_2$ & $e_4$ & $e_4$ & $e_2$ & $e_3$\\
 \hline
+\multicolumn{7}{}{}\\
+\cline{1-2}\cline{6-7}
+\multicolumn{2}{| c |}{\textbf{Vertices}} & \multicolumn{3}{}{} & \multicolumn{2}{| c |}{\textbf{Faces}}\\
+\cline{1-2}\cline{6-7}\noalign{\vskip\doublerulesep\vskip-\arrayrulewidth}\cline{1-2}\cline{6-7}
+Vertex & Edges & \multicolumn{3}{c|}{} & Face & Edges\\\cline{1-2}\cline{6-7}
+$v_1$ & $e_1, e_3$ & \multicolumn{3}{c|}{} & $F_1$ & $e_1, e_2, e_3$\\
+$v_2$ & $e_1, e_2, e_4$ & \multicolumn{3}{c|}{} & $F_2$ & $e_4, e_5, e_2$\\\cline{6-7}
+$v_3$ & $e_2, e_3, e_5$ & \multicolumn{5}{}{}\\
+$v_4$ & $e_4, e_5$ & \multicolumn{5}{}{}\\\cline{1-2}
 \end{tabular}
-\quad
-% Faces
-\begin{tabular}{| l | l |}
-\hline
-\multicolumn{2}{| c |}{\textbf{Faces}}\\
-\hline\hline
-Face & Edges\\
-\hline
-$F_1$ & $e_1, e_2, e_3$\\
-$F_2$ & $e_4, e_5, e_2$\\
-\hline
-\end{tabular}
-\end{center}
-\caption{Vertex-, Edge- und Face-Tabellen bei Winged Edge}
+\caption{Vertex-, Edge- und Face-Tabellen zu \autoref{fig:winged-edge-triangles}}
 \label{tab:winged-edge-table}
 \end{table}
 
