@@ -9,6 +9,14 @@ In diesem Kapitel wird der aktuelle Stand der Forschung genannt sowie bereits ex
 \section{Registrierung von Punktwolken}
 \label{sec:registration}
 
+Beim Erfassen von Objekten in der Realität, beispielsweise mithilfe eines Laserscanners, werden häufig Punktwolken aus verschiedenen Perspektiven aufgenommen.
+Der Grund dafür ist, dass aus einer Scanposition nicht immer die gesamte Oberfläche sichtbar ist, etwa aufgrund von Verschattungen durch das Objekt selbst.
+
+In vielen Fällen kann die zugehörige Kameraposition nicht bestimmt werden oder ist unzureichend genau.
+Aus diesem Grund müssen die erfassten Punktwolken erst in dasselbe Koordinatensystem gebracht werden.
+Diesen Prozess nennt man die Registrierung von zwei Punktwolken.
+
+
 \subsection{Lokale Registrierung}
 \label{subsec:local-registration}
 
@@ -24,6 +32,22 @@ Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und se
 Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt \cite{rusinkiewicz2001efficient, bouaziz2013sparse}.
 
 Der Ansatz zur Registrierung der Punktwolke $A$ an der Punktwolke $B$ ist dabei der Folgende:
+
+\begin{algorithm}[ht]
+\caption{\acl{ICP}}
+\label{alg:icp}
+\begin{algorithmic}
+\State $PointMap \gets \emptyset$
+\ForAll{$p \in cloud1$}
+	\State $q \gets$ \Call{findNearestNeighbor}{$cloud2, p$}
+	\If{$q \geq maxDist$}
+		\State \Call{$PointMap$.add}{$p, q$}
+	\EndIf
+\EndFor
+\State TODO %TODO
+\end{algorithmic}
+\end{algorithm}
+
 \begin{enumerate}
 \item $A$ wird iterativ durch Anwendung von Translationen und Rotationen in eine neue Position gebracht, zum Beispiel mithilfe von Quaternionen \cite{horn1987closed}.
 \item Zu jedem Punkt $p \in A$ wird der Punkt $q \in B$ gesucht, der den geringsten Abstand $\varepsilon$ von $p$ hat: $\varepsilon = \sqrt{(p_x - q_x)^2 + (p_y - q_y)^2 + (p_z - q_z)^2}$.
