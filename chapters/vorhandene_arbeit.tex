@@ -140,7 +140,39 @@ Survey \cite{shamir2008survey}, SDF \cite{shapira2008consistent}
 \subsection{Marching Cubes}
 \label{subsec:marching-cubes}
 %TODO
-Marching Cubes \cite{lorensen1987marching}
+Marching Cubes \cite{lorensen1987marching} \autoref{alg:marching-cubes}
+
+\begin{algorithm}[ht]
+\caption{Marching Cubes}
+\label{alg:marching-cubes}
+\begin{algorithmic}
+\Function{marchingCubes}{}
+	\State $vertexList \gets \emptyset$
+	\Comment{The list of output triangles}
+	\State $V \gets Voxels$
+	\ForAll{$v \in V$}
+		\State $index \gets$ \Call{calculateIndex}{v}
+		\State $edgeList \gets edgeTable[index]$
+		\ForAll{$edge \in edgeList$}
+			\State $vertex \gets$ \Call{interpolate}{$edge[0], edge[1]$}
+			\Comment{interpolate corners}
+			\State \Call{$vertexList$.add}{$vertex$}
+		\EndFor
+	\EndFor
+\EndFunction
+\Function{calculateIndex}{$voxel$}
+	\State $voxelIndex \gets 0$
+	\For{$cornerIndex \in [0..8]$}
+		\If{$voxel[cornerIndex] < isolevel$}
+		\Comment{corner inside isosurface}
+			\State $voxelIndex\ |=\ 1 << cornerIndex$
+			\Comment{Set the i-th bit of the index}
+		\EndIf
+	\EndFor
+	\State \Return{$voxelIndex$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 
 \subsection{Poisson}

@@ -9,6 +9,11 @@
 \usepackage{mathtools}
 \usepackage{unicode-math}   % Erlaubt die Mathe Schrift zu setzen
 
+\usepackage{algorithm}		% Pseudocode listings
+\usepackage{algpseudocode}
+\algrenewcommand{\algorithmiccomment}[1]{\hskip3em$//$ #1}	% Kommentarformat
+\newcommand{\algorithmautorefname}{Algorithmus}		% Autoref für Pseudocode listings
+
 % Use german umlaute
 %\usepackage{ngerman}
 \usepackage[ngerman]{babel}
