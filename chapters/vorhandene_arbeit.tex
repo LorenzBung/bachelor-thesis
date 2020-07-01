@@ -181,11 +181,23 @@ Survey \cite{shamir2008survey}, SDF \cite{shapira2008consistent}
 \section{Triangulierung}
 \label{sec:triangulation}
 
+Die Konvertierung einer Datenstruktur zu einem aus Polygonen bestehenden Mesh nennt sich Triangulierung.
+Gerade bei der Triangulierung von Punktwolken gibt es jedoch nicht immer eine einzelne korrekte Lösung dieses Problems.
+Es ist beispielweise nicht immer sichergestellt, dass jeder Punkt auch tatsächlich die zu rekonstruierende Oberfläche darstellt - Rauschen, Reflektionen oder sonstige Fehler können auftreten.
+Weiterhin stellt sich die Frage, aus welchen der Punkten in der Wolke sich ein bestimmtes Polygon zusammensetzt.
+
+Diese und andere Probleme führen dazu, dass es viele verschiedene Ansätze zur Triangulierung gibt.
+
 
 \subsection{Marching Cubes}
 \label{subsec:marching-cubes}
-%TODO
-Marching Cubes \cite{lorensen1987marching} \autoref{alg:marching-cubes}
+
+Bei Marching Cubes \cite{lorensen1987marching} handelt es sich um einen Algorithmus, der die Triangulation einer Punktwolke auf ein Voxel Grid zurückführt.
+Der Ablauf ist in \autoref{alg:marching-cubes} beschrieben.
+
+Die eingegebene Punktwolke wird also zunächst diskretisiert, was bei geringer Kantenlänge der Voxel zu Datenverlust führt.
+Anschließend wird jeder Voxel getrennt betrachtet und anhand der Eckkonfiguration die zu verbindenden Kanten mithilfe einer \ac{LUT} ermittelt.
+Dieses Vorgehen wird nun für jeden Voxel wiederholt, was zu einer vollständigen Rekonstruktion der Oberfläche führt.
 
 \begin{algorithm}[ht]
 \caption{Marching Cubes}
@@ -193,7 +205,7 @@ Marching Cubes \cite{lorensen1987marching} \autoref{alg:marching-cubes}
 \begin{algorithmic}
 \Function{marchingCubes}{}
 	\State $vertexList \gets \emptyset$
-	\Comment{The list of output triangles}
+	\Comment{The list of output vertices (Faces implicit)}
 	\State $V \gets Voxels$
 	\ForAll{$v \in V$}
 		\State $index \gets$ \Call{calculateIndex}{v}
@@ -218,6 +230,16 @@ Marching Cubes \cite{lorensen1987marching} \autoref{alg:marching-cubes}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
+
+Einer der entscheidenden Nachteile bei diesem Algorithmus ist, dass die Qualität des Meshs direkt abhängig von der gewählten Kantenlänge der Voxel ist.
+Dies macht viele Vorteile der Punktwolke gegenüber einem Voxel Grid zunichte.
+Bei zu geringer Kantenlänge nimmt die Zahl der möglichen rekonstruierten Polygone ab, was zu einer geringeren Qualität führt.
+Wählt man die Auflösung jedoch zu hoch, treten Oversampling-Effekte auf und es entstehen Lücken im Mesh.
+Insbesondere bei großen Differenzen der Distanzen zwischen Punkten in der Punktwolke führt dies zu Problemen.
+
+Weiterhin weisen die Meshes in der Standardimplementierung zackenartige Artefakte auf.
+Dies passiert dann, wenn die Vertices zu den entsprechenden Kanten mittig auf diesen gewählt werden.
+Durch eine Interpolation zwischen den Werten der beiden Eckpunkte des Voxels lässt sich dieser Effekt minimieren.
 
 
 \subsection{Poisson}
