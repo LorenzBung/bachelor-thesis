@@ -28,6 +28,7 @@ Die so gewonnenen Informationen lassen sich durch mehrere verschiedene Datenmode
 Ein Tiefenbild ist eine einfache Möglichkeit, in einem zweidimensionalen Bild zusätzlich Informationen über die Entfernung der Kamera zu Objekten abzuspeichern.
 Diese Technik ist unter Anderem aus der Computergrafik bekannt, wo sie beim Z-Buffering Anwendung findet \cite[S.32]{catmull1974subdivision}.
 Dabei werden sowohl das aufgenommene Bild, aber zusätzlich auch ein 2D-Array mit der Tiefeninformation des zugehörigen Pixels gespeichert.
+Ein Beispiel für den Zusammenhang zwischen diesen beiden Komponenten ist in \autoref{fig:depth_map} dargestellt.
 
 So kann das originale 2D-Bild um eine dritte Dimension erweitert werden, wodurch sich beispielsweise dreidimensionale Formen modellieren oder rekonstruieren lassen \cite{arsalan2017synthesizing}.
 Auch in der 3D-Fotografie finden Tiefenbilder Anwendung \cite{redert2006philips}.
@@ -35,7 +36,7 @@ Auch in der 3D-Fotografie finden Tiefenbilder Anwendung \cite{redert2006philips}
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.66\textwidth]{images/depth_map.png}
-	\caption{Depth Map eines 2D-Farbbilds. Entnommen aus \cite[S.649]{muller2010depth}}
+	\caption{2D-Farbbild und zugehöriges Tiefenbild. Entnommen aus \cite[S.649]{muller2010depth}}
 	\label{fig:depth_map}
 \end{figure}
 
@@ -101,7 +102,7 @@ Dies führt zu verbesserter Auflösung bei entfernten und zu schlechterer Auflö
 
 Ein weiteres häufig verwendetes Datenmodell ist eine Punktwolke.
 Als Punktwolke bezeichnet man eine Menge $M \subset \mathbb{R}^3$ von Punkten im (mindestens) dreidimensionalen Raum.
-Zusätzlich zur räumlichen Information können auch noch weitere Daten pro Punkt gespeichert sein, wie RGB-Werte, Genauigkeit oder Objektklasse (falls schon eine Segmentierung vorgenommen wurde).
+Zusätzlich zur räumlichen Information können auch noch weitere Daten pro Punkt gespeichert sein, wie RGB-Werte, Normalen, Genauigkeit oder Objektklasse (falls schon eine Segmentierung vorgenommen wurde).
 Dadurch gilt:
 $$M = \begin{pmatrix}
 p_x^1 & p_y^1 & p_z^1 & \cdots\\
@@ -121,7 +122,7 @@ Die Nutzung von Punktwolken bringt im Vergleich zu anderen 3D-Datenmodellen eini
 
 \begin{itemize}
 \item Die zugrundeliegende Datenstruktur ist extrem trivial; es handelt sich um eine einfache Liste.
-Dies ermöglicht sehr schnelle Operationen, wie zum Beispiel das Hinzufügen eines Punktes.
+Dies ermöglicht sehr schnelle Operationen, wie zum Beispiel das Hinzufügen eines Punktes oder die Erweiterung um zusätzliche Informationen.
 Es lässt sich sehr einfach über die Punkte iterieren.
 \item Der Speicherbedarf einer Punktwolke wächst dynamisch, und zwar linear mit der Zahl der enthaltenen Punkte.
 Beim Voxel Grid muss dagegen bereits am Anfang Speicher für jede Zelle reserviert werden, egal ob ein Punkt enthalten ist oder nicht.
@@ -161,12 +162,36 @@ Da jedes Polygon in Dreiecke zerlegt werden kann, werden meist nur diese gespeic
 
 Vertices, Edges und Faces können in verschiedenen Repräsentationen gespeichert werden.
 Diese haben unterschiedliche Eigenschaften und Vor- und Nachteile, die im folgenden genauer beleuchtet werden.
+Zum besseren Verständnis wird das in \autoref{fig:triangles-example} dargestellte Polygonnetz jeweils in den unterschiedlichen Strukturen codiert.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=3]
+\coordinate[label=-135:$v_1$] (v_1) at (0,0);
+\coordinate[label=-45:$v_2$] (v_2) at (1,0);
+\coordinate[label=135:$v_3$] (v_3) at (0,1);
+\coordinate[label=45:$v_4$] (v_4) at (1,1);
+\coordinate[label=$F_1$] (F_1) at (0.3,0.2);
+\coordinate[label=$F_2$] (F_2) at (0.75,0.66);
+\draw (v_1) to node[below]{$e_1$} (v_2);
+\draw (v_2) to node[right]{$e_2$} (v_3);
+\draw (v_3) to node[left]{$e_3$} (v_1);
+\draw (v_2) to node[right]{$e_4$} (v_4);
+\draw (v_4) to node[above]{$e_5$} (v_3);
+\fill (v_1) circle (1pt);
+\fill (v_2) circle (1pt);
+\fill (v_3) circle (1pt);
+\fill (v_4) circle (1pt);
+\end{tikzpicture}
+\caption{Beispielhaftes Polygonnetz, bestehend aus Knoten, Kanten und Facetten}
+\label{fig:triangles-example}
+\end{figure}
 
 \subsection{\acl{VVM}}
 \label{subsec:v-v-mesh}
 
 Beim \ac{VVM} werden nur Vertices gespeichert, Kanten und Flächen ergeben sich implizit.
-Existiert beispielsweise eine Verbindung zwischen den Vertices $v_1$ und $v_2$, $v_2$ und $v_3$ sowie $v_3$ und $v_1$ (ein einfaches Dreieck), werden die Werte in \autoref{tab:vvm-vertex-table} in einer Liste gespeichert:
+Zu den in \autoref{fig:triangles-example} dargestellten Dreiecken wird also die Liste in \autoref{tab:vvm-table} gespeichert.
 
 \begin{table}[ht]
 \centering
@@ -175,12 +200,13 @@ Existiert beispielsweise eine Verbindung zwischen den Vertices $v_1$ und $v_2$, 
 	Vertex & verbundene Vertices\\
 	\hline
 	$v_1$ & $v_2, v_3$\\
-	$v_2$ & $v_1, v_3$\\
-	$v_3$ & $v_1, v_2$\\
+	$v_2$ & $v_1, v_3, v_4$\\
+	$v_3$ & $v_1, v_2, v_4$\\
+	$v_4$ & $v_2, v_3$\\
 	\hline
 \end{tabular}
 \caption{Vertextabelle beim \ac{VVM}}
-\label{tab:vvm-vertex-table}
+\label{tab:vvm-table}
 \end{table}
 
 Der Speicherbedarf dieser simplen Darstellung ist sehr gering.
@@ -202,8 +228,6 @@ Dies erhöht zwar den Speicherbedarf und die Komplexität der Datenstruktur, bes
 In der Winged-Edge-Datenstruktur \cite{baumgart1975polyhedron} werden sowohl Vertices als auch Edges und Faces explizit abgespeichert.
 Diese Repräsentation ermöglicht es, die Geometrie des Meshes im Vergleich zu anderen Strukturen leichter zu verändern.
 Der Nachteil ist jedoch, dass der Speicheraufwand sehr hoch und die Datenstruktur im Vergleich zu den anderen Darstellungen sehr komplex ist.
-
-Bei der Winged-Edge-Darstellung werden in der Kantentabelle jeweils die vorhergehenden und nachfolgenden Kanten im und gegen den Uhrzeigersinn gespeichert. Dies ermöglicht die schnelle Bestimmung von angrenzenden Kanten, Vertices oder Faces, bedeutet aber gleichzeitig auch viel Verwaltungsaufwand der Indizes. In \autoref{fig:winged-edge-edges} findet sich eine Übersicht über die entsprechenden Kanten.
 
 \begin{figure}[ht]
 \centering
@@ -236,30 +260,12 @@ Bei der Winged-Edge-Darstellung werden in der Kantentabelle jeweils die vorherge
 \label{fig:winged-edge-edges}
 \end{figure}
 
-Die in \autoref{fig:winged-edge-triangles} gezeigte Darstellung von zwei beispielhaften Dreiecken $(v_1, v_2, v_3)$ und $(v_2, v_4, v_3)$ ist in \autoref{tab:winged-edge-table} dargestellt.
+Bei der Winged-Edge-Darstellung werden in der Kantentabelle jeweils die vorhergehenden und nachfolgenden Kanten im und gegen den Uhrzeigersinn gespeichert.
+Dies ermöglicht die schnelle Bestimmung von angrenzenden Kanten, Vertices oder Faces, bedeutet aber gleichzeitig auch viel Verwaltungsaufwand der Indizes.
+In \autoref{fig:winged-edge-edges} findet sich eine Übersicht über die entsprechenden Kanten.
 
-\begin{figure}[ht]
-\centering
-\begin{tikzpicture}[scale=3]
-\coordinate[label=-135:$v_1$] (v_1) at (0,0);
-\coordinate[label=-45:$v_2$] (v_2) at (1,0);
-\coordinate[label=135:$v_3$] (v_3) at (0,1);
-\coordinate[label=45:$v_4$] (v_4) at (1,1);
-\coordinate[label=$F_1$] (F_1) at (0.3,0.2);
-\coordinate[label=$F_2$] (F_2) at (0.75,0.66);
-\draw (v_1) to node[below]{$e_1$} (v_2);
-\draw (v_2) to node[right]{$e_2$} (v_3);
-\draw (v_3) to node[left]{$e_3$} (v_1);
-\draw (v_2) to node[right]{$e_4$} (v_4);
-\draw (v_4) to node[above]{$e_5$} (v_3);
-\fill (v_1) circle (1pt);
-\fill (v_2) circle (1pt);
-\fill (v_3) circle (1pt);
-\fill (v_4) circle (1pt);
-\end{tikzpicture}
-\caption{Beispieldreiecke zur Winged-Edge-Datenstruktur}
-\label{fig:winged-edge-triangles}
-\end{figure}
+Die Winged-Edge-Datenstruktur zum Beispiel in \autoref{fig:triangles-example} ist in \autoref{tab:winged-edge-table} zu sehen.
+
 
 \begin{table}[ht]
 \centering
@@ -286,7 +292,7 @@ $v_2$ & $e_1, e_2, e_4$ & \multicolumn{3}{c|}{} & $F_2$ & $e_4, e_5, e_2$\\\clin
 $v_3$ & $e_2, e_3, e_5$ & \multicolumn{5}{}{}\\
 $v_4$ & $e_4, e_5$ & \multicolumn{5}{}{}\\\cline{1-2}
 \end{tabular}
-\caption{Vertex-, Edge- und Face-Tabellen zu \autoref{fig:winged-edge-triangles}}
+\caption{Vertex-, Edge- und Face-Tabellen bei der Winged-Edge-Darstellung}
 \label{tab:winged-edge-table}
 \end{table}
 
@@ -294,6 +300,12 @@ $v_4$ & $e_4, e_5$ & \multicolumn{5}{}{}\\\cline{1-2}
 %TODO Half-edge
 \subsection{Half Edge}
 \label{subsec:half-edge}
+
+Im Gegensatz zu bisherigen Modellen ist die Idee bei der Half-Edge-Datenstruktur, die Edges in jeweils zwei Halbkanten aufzuteilen.
+Eine Halbkante hat somit einen Vor- und Nachfolger, sowie einen gegenüberliegenden Nachbarn.
+
+Der Vorteil dieser Art der Speicherung ist, dass sowohl Kantenvorgänger und -nachfolger schnell bestimmt werden können, aber insbesondere auch aneinander angrenzende Faces.
+
 
 
 \section{Point Cloud Library}
