@@ -195,7 +195,7 @@ Zu den in \autoref{fig:triangles-example} dargestellten Dreiecken wird also die 
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{| l | l |}
+\begin{tabular}{| c | c |}
 	\hline
 	Vertex & verbundene Vertices\\
 	\hline
@@ -270,7 +270,7 @@ Die Winged-Edge-Datenstruktur zum Beispiel in \autoref{fig:triangles-example} is
 \begin{table}[ht]
 \centering
 % Edges
-\begin{tabular}{| l | l | l | l | l | l | l |}
+\begin{tabular}{| c | c | c | c | c | c | c |}
 \hline
 \multicolumn{7}{| c |}{\textbf{Edges}}\\
 \hline\hline
@@ -306,11 +306,13 @@ Eine Halbkante hat somit einen Vor- und Nachfolger, sowie einen gegenüberliegen
 
 Der Vorteil dieser Art der Speicherung ist, dass sowohl Kantenvorgänger und -nachfolger schnell bestimmt werden können, aber insbesondere auch aneinander angrenzende Faces. Das Hinzufügen, Entfernen oder Ändern von Daten ist jedoch leichter als bei der Winged-Edge-Darstellung, da nicht zu jeder Kante 4 Nachbarkanten und alle Faces gespeichert werden müssen.
 
+Die Vertex- Edge- und Face-Tabellen zu \autoref{fig:triangles-example} sind in \autoref{tab:half-edge-table} aufgelistet. Statt der vollständigen Außen- bzw. Innenzyklen können bei den Faces auch nur einzelne Halbkanten gespeichert werden. Die entsprechenden Vorgänger- und Nachfolgerhalbkanten repräsentieren den kompletten Zyklus implizit.
+
 \begin{table}[ht]
 \centering
 \begin{tabular}{| c | c | c | c | c | c |}
 \hline
-\multicolumn{6}{| c |}{\textbf{Edges}}\\
+\multicolumn{6}{| c |}{\textbf{Half-Edges}}\\
 \hline
 \hline
 Edge & $\leftarrow$ Edge & $\rightarrow$ Edge & Twin & Origin & Face\\
@@ -344,8 +346,7 @@ $v_4$ & $e_{4b}, e_{5a}$ & \multicolumn{4}{}{}\\
 \end{table}
 
 
-
-\section{Point Cloud Library}
+\section{\acl{PCL}}
 \label{sec:pcl}
 
 Bei der \ac{PCL} \cite{rusu2011pcl} handelt es sich um eine Bibliothek, welche die Arbeit mit 3D-Punktwolken immens vereinfacht.
