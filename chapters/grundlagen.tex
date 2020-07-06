@@ -304,7 +304,44 @@ $v_4$ & $e_4, e_5$ & \multicolumn{5}{}{}\\\cline{1-2}
 Im Gegensatz zu bisherigen Modellen ist die Idee bei der Half-Edge-Datenstruktur, die Edges in jeweils zwei Halbkanten aufzuteilen.
 Eine Halbkante hat somit einen Vor- und Nachfolger, sowie einen gegenüberliegenden Nachbarn.
 
-Der Vorteil dieser Art der Speicherung ist, dass sowohl Kantenvorgänger und -nachfolger schnell bestimmt werden können, aber insbesondere auch aneinander angrenzende Faces.
+Der Vorteil dieser Art der Speicherung ist, dass sowohl Kantenvorgänger und -nachfolger schnell bestimmt werden können, aber insbesondere auch aneinander angrenzende Faces. Das Hinzufügen, Entfernen oder Ändern von Daten ist jedoch leichter als bei der Winged-Edge-Darstellung, da nicht zu jeder Kante 4 Nachbarkanten und alle Faces gespeichert werden müssen.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{| c | c | c | c | c |}
+\hline
+\multicolumn{5}{| c |}{\textbf{Edges}}\\
+\hline
+\hline
+Edge & $\leftarrow$ Edge & $\rightarrow$ Edge & Origin & Face\\
+\hline
+$e_{1a}$ & $e_{3a}$ & $e_{2a}$ & $v_1$ & $F_1$\\
+$e_{1b}$ & $e_{4b}$ & $e_{3b}$ & $v_2$ &     -\\
+$e_{2a}$ & $e_{1a}$ & $e_{3a}$ & $v_2$ & $F_1$\\
+$e_{2b}$ & $e_{5a}$ & $e_{4a}$ & $v_3$ & $F_2$\\
+$e_{3a}$ & $e_{2a}$ & $e_{1a}$ & $v_3$ & $F_1$\\
+$e_{3b}$ & $e_{1b}$ & $e_{5b}$ & $v_1$ &     -\\
+$e_{4a}$ & $e_{2b}$ & $e_{5a}$ & $v_2$ & $F_2$\\
+$e_{4b}$ & $e_{5b}$ & $e_{1b}$ & $v_4$ &     -\\
+$e_{5a}$ & $e_{4a}$ & $e_{2b}$ & $v_4$ & $F_2$\\
+$e_{5b}$ & $e_{3b}$ & $e_{4b}$ & $v_3$ &     -\\
+\hline
+\multicolumn{5}{}{}\\
+\hline
+\multicolumn{2}{| c |}{\textbf{Vertices}} & \multicolumn{3}{| c |}{\textbf{Faces}}\\
+\hline\hline
+Vertex & ausgehend & Face & Außenzyklus & Innenzyklus\\
+\hline
+$v_1$ & $e_{1a}, e_{3b}$ & $F_1$ & $e_{1b}, e_{3b}, e_{2b}$ & $e_{1a}, e_{2a}, e_{3a}$\\
+$v_2$ & $e_{1b}, e_{2a}, e_{4a}$ & $F_2$ & $e_{4b}, e_{2a}, e_{5b}$ & $e_{2b}, e_{4a}, e_{5a}$\\
+\cline{3-5}
+$v_3$ & $e_{2b}, e_{3a}, e_{5b}$ & \multicolumn{3}{}{}\\
+$v_4$ & $e_{4b}, e_{5a}$ & \multicolumn{3}{}{}\\
+\cline{1-2}
+\end{tabular}
+\caption{Vertex-, Edge- und Face-Tabellen bei der Half-Edge-Darstellung}
+\label{tab:half-edge-table}
+\end{table}
 
 
 
