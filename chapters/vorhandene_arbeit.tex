@@ -205,6 +205,7 @@ Diese Methode der Segmentierung im dreidimensionalen Raum ist sehr einfach.
 Sie basiert auf der Annahme, dass Punkte so lange zu einem Cluster gehören, so lange ihr Abstand unter einem Grenzwert liegt.
 
 In \autoref{alg:euclidean-cluster-extraction} beschreibt, wie die Cluster $\mathcal{C} \subseteq P$ für die Punktwolke $P$ nach \cite[S.89f]{RusuDoctoralDissertation} errechnet werden.
+Der Threshold $\delta$ gibt dabei den minimalen Abstand zwischen zwei Clustern an.
 
 \begin{algorithm}
 \caption{\acl{ECE}}
@@ -231,8 +232,17 @@ In \autoref{alg:euclidean-cluster-extraction} beschreibt, wie die Cluster $\math
 \end{algorithmic}
 \end{algorithm}
 
+Nach der Berechnung der verschiedenen Cluster werden diese noch gefiltert.
+Dabei werden nur Cluster mit $\theta_{min} < |\mathcal{C}| < \theta_{max}$ erhalten, alle anderen werden verworfen.
+Die untere Grenze $\theta_{min}$ dient dabei der Robustheit gegen Rauschen und statistische Ausreißer, während die obere Grenze $\theta_{max}$ verhindert, dass untersegmentierte Regionen zurückgegeben werden.
+
 \subsubsection{Region Growing}
 \label{subsubsec:region-growing}
+
+Ein großer Nachteil von \ac{ECE} ist, dass nur die räumliche Distanz betrachtet wird.
+Bei nicht optimal getrennten Regionen wird die Punktwolke daher untersegmentiert, und aufgrund der Filterung am Ende werden viele Cluster wieder verworfen.
+Dies ist auch bei den meisten Anwendungen in der Realität der Fall.
+Selbst bei gesetzter \ac{RoI} und somit bereits gefiltertem Hintergrund liegen Objekte häufig nahe beieinander.
 
 
 \subsection{Watershed-Algorithmus}
