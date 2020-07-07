@@ -244,6 +244,16 @@ Bei nicht optimal getrennten Regionen wird die Punktwolke daher untersegmentiert
 Dies ist auch bei den meisten Anwendungen in der Realität der Fall.
 Selbst bei gesetzter \ac{RoI} und somit bereits gefiltertem Hintergrund liegen Objekte häufig nahe beieinander.
 
+Der Region-Growing-Algorithmus umgeht dieses Problem, indem statt der Distanzmetrik die Krümmung im entsprechenden Punkt betrachtet wird.
+Als Krümmung bezeichnet man die Änderungsrate der Normalendifferenz (siehe \autoref{eq:normalendifferenz} und \autoref{eq:bitmap}).
+
+\begin{eqnarray}
+\label{eq:normalendifferenz}
+f: \mathbb{R}^3, \mathbb{R}^3 \rightarrow \mathbb{R} & \mathrm{mit} & f(\overrightarrow{n}, \overrightarrow{m}) \mapsto \overrightarrow{n} \angle \overrightarrow{m} = acos(\overrightarrow{n} * \overrightarrow{m})\\
+\kappa : \mathbb{R}^3, \mathbb{R}^3 \rightarrow \mathbb{R} & \mathrm{mit} & \kappa = f'
+\label{eq:kruemmung}
+\end{eqnarray}
+
 
 \subsection{Watershed-Algorithmus}
 \label{subsec:watershed}
