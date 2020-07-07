@@ -3,7 +3,11 @@
 \chapter{Vorhandene Arbeit}
 \label{ch:vorhandene-arbeit}
 
-In diesem Kapitel wird der aktuelle Stand der Forschung genannt sowie bereits existierende Lösungsansätze erklärt.
+In diesem Kapitel werden die Kernaufgaben dieser Arbeit behandelt:
+Registrierung von mehreren Punktwolken in einem Koordinatensystem (\ref{sec:registration}), Segmentierung in einzelne Cluster (\ref{sec:segmentation}) und Triangulation der Wolke zu einem Polygonnetz (\ref{sec:triangulation}).
+
+Neben Erläuterung der Problematik wird ein Blick auf die aktuelle Forschung zum jeweiligen Thema geworfen.
+Außerdem werden mögliche Lösungsansätze auf ihren praktischen Nutzen untersucht und die Vor- und Nachteile diskutiert.
 
 
 \section{Registrierung von Punktwolken}
@@ -11,17 +15,18 @@ In diesem Kapitel wird der aktuelle Stand der Forschung genannt sowie bereits ex
 
 Beim Erfassen von Objekten in der Realität, beispielsweise mithilfe eines Laserscanners, werden häufig Punktwolken aus verschiedenen Perspektiven aufgenommen.
 Der Grund dafür ist, dass aus einer Scanposition nicht immer die gesamte Oberfläche sichtbar ist, etwa aufgrund von Verschattungen durch das Objekt selbst.
+Weiterhin können so Reflektionen und spiegelnde Oberflächen wie auch Hintergrundrauschen gemittelt werden, sodass weitgehend robuste Daten erhalten werden.
 
-In vielen Fällen kann die zugehörige Kameraposition nicht bestimmt werden oder ist unzureichend genau.
-Aus diesem Grund müssen die erfassten Punktwolken erst in dasselbe Koordinatensystem gebracht werden.
-Diesen Prozess nennt man die Registrierung von zwei Punktwolken.
+In vielen Fällen ist die zugehörige Aufnahmeposition nicht bekannt, unzureichend genau oder es liegt kein kalibriertes System vor.
+Aus diesem Grund müssen die erfassten Punktwolken erst in ein globales Koordinatensystem gebracht werden.
+Diesen Prozess nennt man Registrierung.
 
 
 \subsection{Lokale Registrierung}
 \label{subsec:local-registration}
 
 Bei der lokalen Registrierung von zwei Punktwolken müssen diese bereits grob aneinander ausgerichtet sein.
-Der Registrierungsalgorithmus verfeinert diese Ausrichtung dann weiter.
+Der Registrierungsalgorithmus verfeinert diese Ausrichtung dann weiter und findet ein lokales Minimum.
 Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und seine vielen verschiedenen Varianten.
 
 
@@ -29,24 +34,24 @@ Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und se
 \label{subsubsec:icp}
 
 \ac{ICP} \cite{besl1992method} ist der wohl bekannteste Algorithmus zur lokalen Registrierung von Punktwolken.
-Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt \cite{rusinkiewicz2001efficient, bouaziz2013sparse}. Unter anderem existiert auch eine vorhandene Implementierung in der \ac{PCL} \cite{holz2015registration}.
+Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt, die beispielsweise auch die Normalen in den Punkten in Betracht ziehen oder besonders resistent gegen statistische Ausreißer sind \cite{rusinkiewicz2001efficient, bouaziz2013sparse, munch2010modified}. Unter anderem existiert auch eine vorhandene Implementierung in der \ac{PCL} \cite{holz2015registration}.
 
-Der Algorithmus zur Registrierung der Punktwolke $A$ an der Punktwolke $B$ ist in \autoref{alg:icp} beschrieben.
+\autoref{alg:icp} beschreibt, wie Punktwolke $A$ an Punktwolke $B$ registriert werden kann.
 Der Ablauf lässt sich folgendermaßen grob erklären:
 
 \begin{enumerate}
 \item $A$ wird iterativ durch Anwendung von Translationen und Rotationen in eine neue Position gebracht, zum Beispiel mithilfe von Quaternionen \cite{horn1987closed}.
-\item Zu jedem Punkt $p \in A$ wird der Punkt $q \in B$ gesucht, der den geringsten Abstand $\varepsilon$ von $p$ hat.
-\item Berechne den Fehler $e$, Standard ist die Summe der Residuenquadrate.
+\item Zu jedem Punkt $p \in A$ wird der Punkt $q \in B$ gesucht, der den geringsten Abstand $e = \|p - q\|$ von $p$ hat.
+\item Berechne den Fehler $\varepsilon = \sum e^2$, Standard ist die Summe der Residuenquadrate.
 \item Wiederholung, bis eine der Abbruchbedingungen eintritt.
 \end{enumerate}
 
 Die Abbruchbedingungen sind dabei je nach Implementierung unterschiedlich.
-Häufig kommen aber folgende Kriterien zum Einsatz:
+Meist terminiert der Algorithmus jedoch, wenn
 
 \begin{itemize}
-\item der Fehler $e$ unter einen Grenzwert fällt
-\item $e$ bei erneuter Wiederholung nicht um einen bestimmten Wert sinkt
+\item $\varepsilon < \alpha$ mit Grenzwert $\alpha > 0$ für den Restfehler
+\item $\Delta e > \delta$, mit $\delta > 0$ als Grenzwert für die Änderung des Fehlers
 \item eine festgelegte Zahl von Iterationen abgelaufen ist.
 \end{itemize}
 
@@ -70,16 +75,16 @@ Selbstverständlich lassen sich beliebig viele zusätzliche Kriterien definieren
 	\Comment{Now, align the clouds}
 		\State $t \gets$ \Call{estimateTransformation()}{}
 		\State \Call{$cloud1$.transform}{$t$}
-		\State $e \gets$ \Call{calculateError}{$PointMap$}
+		\State $\varepsilon \gets$ \Call{calculateError}{$PointMap$}
 	\EndWhile
 \EndFunction
 \Function{calculateError}{$PointMap$}
-	\State $e \gets 0$
+	\State $\varepsilon \gets 0$
 	\ForAll{$p, q \in PointMap$}
-		\State $\varepsilon \gets \sqrt{(p_x - q_x)^2 + (p_y - q_y)^2 + (p_z - q_z)^2}$
-		\State $e \gets e + \varepsilon^2$
+		\State $e \gets \|p - q\| = \sqrt{(p_x - q_x)^2 + (p_y - q_y)^2 + (p_z - q_z)^2}$
+		\State $\varepsilon \gets \varepsilon + e^2$
 	\EndFor
-	\State \Return{$e$}
+	\State \Return{$\varepsilon$}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -96,9 +101,12 @@ Neben dem ursprünglichen Anwendungsgebiet findet sie heute auch in vielen ander
 \ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion} und bietet eine Möglichkeit, mithilfe der Kinect 3D-Rekonstruktionen in Echtzeit durchzuführen.
 \ac{KinFu} kombiniert dabei die lokale Registrierung durch den \ac{ICP}-Algorithmus mit einem \ac{TSDF}.
 Ein \ac{TSDF} ist im Grunde genommen nichts anderes als ein Voxel Grid.
-Während  ein Voxel im ursprünglichen Voxel Grid entweder gefüllt ist oder nicht, wird hier die Entfernung zur nächsten Oberfläche gespeichert \cite{curless1996volumetric}.
-Dies ermöglicht bei einer relativ geringen Voxelauflösung dennoch eine recht genaue Rekonstruktion der vorhandenen Oberflächen.
-Um dies zu erreichen, werden die eingetragenen Werte interpoliert, und Fehler durch die geringe Auflösung so minimiert.
+Während der Wert eines Voxel im ursprünglichen Voxel Grid Informationen über die Daten im betreffenden Voxel enthält, wird hier die Entfernung zur nächsten Oberfläche gespeichert \cite{curless1996volumetric}.
+Somit stehen innerhalb des Objekts negative Werte in den Voxeln und außerhalb positive Werte.
+Die Oberfläche wird damit implizit durch den Nulldurchgang der Distanzen in den Voxeln definiert.
+
+Dies ermöglicht bei einer relativ geringen Auflösung dennoch eine recht genaue Rekonstruktion der vorhandenen Oberflächen.
+Um dies zu erreichen, werden die Distanzen in den Voxeln interpoliert und Fehler durch die geringe Auflösung oder Sensorrauschen minimiert.
 
 \begin{figure}[ht]
 	\centering
@@ -107,7 +115,7 @@ Um dies zu erreichen, werden die eingetragenen Werte interpoliert, und Fehler du
 	\label{fig:kinfu-integration}
 \end{figure}
 
-Durch eine schnelle GPU-Implementierung auf Basis von CUDA erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz, der Bildwiederholfrequenz der Kinect.
+Durch eine schnelle GPU-Implementierung auf Basis von \ac{CUDA} erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz, der Bildwiederholfrequenz der Kinect.
 Somit ist die zeitliche Differenz zwischen zwei Aufnahmen sehr niedrig.
 Es wird davon ausgegangen, dass die Kamera handgeführt (bzw. mit geringer Geschwindigkeit bewegt) wird, daher hält sich auch die räumliche Distanz zwischen einzelnen Frames in Grenzen.
 Aufgrund dieser Gegebenheiten reicht bei \ac{KinFu} eine lokale Registrierung aus, es kann also direkt \ac{ICP} verwendet werden.
@@ -118,8 +126,6 @@ Diese wird anschließend durch \ac{ICP} registriert, um dann unter Bildung eines
 Zur Darstellung der Szene wird dieses anschließend mithilfe eines Raycasters gerendert.
 
 
-% Hier YAK erwähnen und erklären
-% YAK evtl. in Implementierung
 Es gibt zahlreiche Optimierungen und veränderte Versionen von \ac{KinFu}.
 Unter anderem gibt es in der \ac{PCL} eine freie Implementierung \cite{pirovano2012kinfu}.
 Eine optimierte Version ist beispielsweise Chisel \cite{klingensmith2015chisel}, wo eine effizientere Voxelstrategie verwendet wird.
@@ -145,6 +151,10 @@ Da hier eine Aufnahme aus mehreren Perspektiven möglich ist, können derartige 
 	\caption{Szene und Rekonstruktion eines reflektierenden Objekts durch \ac{YAK}. Entnommen aus \cite{schornak2019yak}}
 	\label{fig:yak-reflecting-model}
 \end{figure}
+
+Der Vorteil der Echtzeitintegration ist jedoch gleichzeitig auch ein großes Problem.
+In industriellen Robotikanlagen sind nur selten Grafikkarten verbaut.
+Eine Hochleistungs-GPU-Einheit mit \ac{CUDA}-Unterstützung ist dabei aber unerlässlich, da sonst nur ein Bruchteil der Geschwindigkeit erreicht werden kann.
 
 
 \subsection{Globale Registrierung}

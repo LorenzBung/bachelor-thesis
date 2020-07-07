@@ -4,10 +4,9 @@
 \label{ch:grundlagen}
 
 Zum Verständnis des Themas der Arbeit ist die Erklärung einiger Grundlagen notwendig.
-In \ref{sec:3d-bilder} und \ref{sec:meshrepr} werden zunächst einmal wichtige Grundbegriffe und Datenstrukturen erläutert, die bei der Arbeit mit 3D-Daten auftreten.
-Anschließend werden die verwendeten Bibliotheken \ac{PCL} und \ac{ROS} erklärt, welche zur Datenverarbeitung bzw. zur Robotersteuerung verwendet wurden.
-%TODO Remove ROS
-Außerdem sind selbstverständlich die bereits bestehenden Elemente des Mikado-Projekts relevant, da diese Arbeit fundamental darauf aufbaut.
+In \ref{sec:3d-bilder} werden zunächst wichtige Datenstrukturen zur Arbeit mit 3D-Daten eingeführt und die verschiedenen Vor- und Nachteile beleuchtet.
+Weiterhin werden in \ref{sec:meshrepr} unterschiedliche Methoden und Repräsentationen zur Arbeit mit Polygonnetzen erklärt.
+Auch hier wird diskutiert, welche positiven und negativen Aspekte die jeweiligen Ansätze auszeichnet.
 
 
 \section{Aufnahme und Speicherung von 3D-Bildern}
@@ -59,15 +58,19 @@ Insbesondere bei hoher notwendiger Auflösung im nahen Bereich, aber gleichzeiti
 \subsection{Voxel Grid}
 \label{subsec:voxel-grid}
 
-Bei einem als Bitmap vorliegendes 2D-Bild werden die Bilddaten diskretisiert in einem zweidimensionalen Array $I$ gespeichert.
-Mit einer Bittiefe $b$, einer Bildhöhe $i$ und einer Bildbreite $j$ ergibt sich damit folgende Matrix:
+Bei einem als Bitmap vorliegenden 2D-Grauwertbild werden die Bilddaten diskretisiert in einem zweidimensionalen Array $I$ gespeichert.
+Mit einer Bittiefe $b$, einer Bildhöhe $i$ und einer Bildbreite $j$ ergibt sich damit die in \autoref{eq:bitmap} dargestellte Matrix für $I$.
 
-$$I = \begin{pmatrix}
-v_{11} & v_{12} & v_{13} & \cdots\\
-v_{21} & v_{22} & v_{23} & \cdots\\
-v_{31} & v_{32} & v_{33} & \cdots\\
-\vdots & \vdots & \vdots & \ddots
-\end{pmatrix}, v_{ij} \in [0; 2^b) \wedge b, i, j \in \mathbb{N}^+$$
+\begin{equation}
+I = \begin{pmatrix}
+v_{11} & v_{12} & v_{13} &        & v_{1j}\\
+v_{21} & v_{22} & v_{23} & \cdots & v_{2j}\\
+v_{31} & v_{32} & v_{33} &        & v_{3j}\\
+       & \vdots &        & \ddots & \vdots\\
+v_{i1} & v_{i2} & v_{i3} & \cdots & v_{ij}
+\end{pmatrix},\ v_{ij} \in [0; 2^b),\ b, i, j \in \mathbb{N}^+
+\label{eq:bitmap}
+\end{equation}
 
 Dieses Prinzip lässt sich einfach auf den dreidimensionalen Raum erweitern.
 Die so erhaltene Datenstruktur nennt sich Voxel Grid.
@@ -82,13 +85,13 @@ Da der Speicher bereits bei der Initialisierung reserviert werden muss, ist die 
 In diesem Fall müssen ein neues Voxel Grid (mit der neuen Auflösung bzw. Größe) angelegt und sämtliche Daten kopiert werden.
 
 Zur Reduzierung des großen Speicherbedarfs werden deswegen häufig Baumstrukturen (sogenannte Octrees) eingesetzt.
-Dabei wird der Raum in 8 Voxel geteilt, welche jeweils ein Blatt des Baumes darstellen.
-Ist der Voxel gefüllt, wird er wieder entsprechend in 8 Untervoxel geteilt.
+Dabei wird der Raum in 8 Subvoxel geteilt, welche jeweils ein Blatt des Baumes darstellen.
+Ist der Voxel gefüllt, wird er wieder entsprechend in 8 Subvoxel geteilt.
 Dies wird wiederholt, bis die gewünschte Auflösung erreicht oder eine bestimmte Tiefe im Baum erreicht ist.
 Szenen, die große Unterschiede in der Auflösung aufweisen oder viele leere Voxel beinhalten, brauchen so deutlich weniger Speicherplatz.
 
 Ein Vorteil im Vergleich zum Tiefenbild ist jedoch, dass die Abhängigkeit von der Kameraperspektive wegfällt.
-Dadurch können hier auch Objekte modelliert werden, die im Tiefenbild durch eine Verdeckung versteckt wären.
+Dadurch können hier auch Objekte modelliert werden, die im Tiefenbild durch eine Verdeckung nicht sichtbar wären.
 Desweiteren ist der Raum einheitlich diskretisiert.
 Dies kann je nach Szene und Kameraposition sowohl ein Vor- als auch ein Nachteil sein:
 Bei einem Tiefenbild nimmt der Abstand der Messpunkte mit der Tiefe ab.
@@ -103,13 +106,17 @@ Dies führt zu verbesserter Auflösung bei entfernten und zu schlechterer Auflö
 Ein weiteres häufig verwendetes Datenmodell ist eine Punktwolke.
 Als Punktwolke bezeichnet man eine Menge $M \subset \mathbb{R}^3$ von Punkten im (mindestens) dreidimensionalen Raum.
 Zusätzlich zur räumlichen Information können auch noch weitere Daten pro Punkt gespeichert sein, wie RGB-Werte, Normalen, Genauigkeit oder Objektklasse (falls schon eine Segmentierung vorgenommen wurde).
-Dadurch gilt:
-$$M = \begin{pmatrix}
+Dadurch gilt \autoref{eq:punktwolke} für $M$.
+
+\begin{equation}
+M = \begin{pmatrix}
 p_x^1 & p_y^1 & p_z^1 & \cdots\\
 p_x^2 & p_y^2 & p_z^2 & \cdots\\
 p_x^3 & p_y^3 & p_z^3 & \cdots\\
 \vdots & \vdots & \vdots & \ddots
-\end{pmatrix}$$
+\end{pmatrix}
+\label{eq:punktwolke}
+\end{equation}
 
 \begin{figure}[ht]
 	\centering
@@ -297,7 +304,6 @@ $v_4$ & $e_4, e_5$ & \multicolumn{5}{}{}\\\cline{1-2}
 \end{table}
 
 
-%TODO Half-edge
 \subsection{Half Edge}
 \label{subsec:half-edge}
 
