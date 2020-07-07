@@ -189,6 +189,56 @@ In den letzten Jahren findet auch verstärkt Forschung zur Segmentierung mithilf
 Survey \cite{shamir2008survey}, SDF \cite{shapira2008consistent}
 
 
+\subsection{3D-Ansätze}
+\label{subsec:3d-segmentation}
+
+Im dreidimensionalen Raum gibt es viele verschiedene Eigenschaften (Features), die zur Segmentierung von Punktwolken herangezogen werden können.
+Es spielt selbstverständlich die Distanz zwischen den Punkten eine Rolle, aber auch andere Faktoren wie Normalenorientierung, Farbe oder Krümmung bieten in vielen Fällen nützliche Zusatzinformationen.
+
+Im Folgenden werden die zwei getesteten Methoden \ac{ECE} und Region Growing erklärt.
+Eine gute Übersicht über die beiden Verfahren bietet auch \citeauthor{RusuDoctoralDissertation} in \cite[S.88--93]{RusuDoctoralDissertation}.
+
+\subsubsection{\acl{ECE}}
+\label{subsubsec:euclidean-cluster-extraction}
+
+Diese Methode der Segmentierung im dreidimensionalen Raum ist sehr einfach.
+Sie basiert auf der Annahme, dass Punkte so lange zu einem Cluster gehören, so lange ihr Abstand unter einem Grenzwert liegt.
+
+In \autoref{alg:euclidean-cluster-extraction} beschreibt, wie die Cluster $\mathcal{C} \subseteq P$ für die Punktwolke $P$ nach \cite[S.89f]{RusuDoctoralDissertation} errechnet werden.
+
+\begin{algorithm}
+\caption{\acl{ECE}}
+\label{alg:euclidean-cluster-extraction}
+\begin{algorithmic}
+\State $\mathcal{C} \gets \emptyset$
+\Comment{list of clusters}
+\State $\mathcal{Q} \gets \emptyset$
+\Comment{current cluster queue}
+\ForAll{$p \in P$}
+	\State $\mathcal{Q} \gets p$
+	\ForAll{unprocessed points $q \in \mathcal{Q}$}
+		\State mark $q$ as processed
+		\State $\mathcal{N} \gets$ \Call{nearestKSearch}{$q, \delta$}
+		\Comment{$\delta$-region around q}
+		\State $\mathcal{Q} \gets$ all unprocessed points in $\mathcal{N}$
+	\EndFor
+	\State $\mathcal{C} \gets \mathcal{Q}$
+	\Comment{add processed queue to clusters}
+	\State $\mathcal{Q} \gets \emptyset$
+	\Comment{reset the queue}
+\EndFor
+\State \Return{$\mathcal{C}$}
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Region Growing}
+\label{subsubsec:region-growing}
+
+
+\subsection{Watershed-Algorithmus}
+\label{subsec:watershed}
+
+
 \section{Triangulierung}
 \label{sec:triangulation}
 
