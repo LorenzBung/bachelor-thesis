@@ -42,7 +42,7 @@ Der Ablauf lässt sich folgendermaßen grob erklären:
 \begin{enumerate}
 \item $A$ wird iterativ durch Anwendung von Translationen und Rotationen in eine neue Position gebracht, zum Beispiel mithilfe von Quaternionen \cite{horn1987closed}.
 \item Zu jedem Punkt $p \in A$ wird der Punkt $q \in B$ gesucht, der den geringsten Abstand $e = \|p - q\|$ von $p$ hat.
-\item Berechne den Fehler $\varepsilon = \sum e^2$, Standard ist die Summe der Residuenquadrate.
+\item Berechne den Fehler $\varepsilon = \sum e^2$, Standard ist der \ac{MSE}.
 \item Wiederholung, bis eine der Abbruchbedingungen eintritt.
 \end{enumerate}
 
@@ -98,7 +98,7 @@ Die Kinect ist eine 3D-Kamera, welche ursprünglich für die Nutzung im Entertai
 Bestehend aus einem Lichtemitter, Infrarotsensor, einer 2D-RGB-Kamera und weiteren Sensoren, liefert sie 3D-Daten bei einer Bildwiederholfrequenz von 30 Hz.
 Neben dem ursprünglichen Anwendungsgebiet findet sie heute auch in vielen anderen, auch wissenschaftlichen Bereichen Anwendung, beispielsweise bei der Aufzeichnung geomorphologischer Daten \cite{mankoff2013kinect}.
 
-\ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion} und bietet eine Möglichkeit, mithilfe der Kinect 3D-Rekonstruktionen in Echtzeit durchzuführen.
+\ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion, microsoftKinfuYoutube} und bietet eine Möglichkeit, mithilfe der Kinect 3D-Rekonstruktionen in Echtzeit durchzuführen.
 \ac{KinFu} kombiniert dabei die lokale Registrierung durch den \ac{ICP}-Algorithmus mit einem \ac{TSDF}.
 Ein \ac{TSDF} ist im Grunde genommen nichts anderes als ein Voxel Grid.
 Während der Wert eines Voxel im ursprünglichen Voxel Grid Informationen über die Daten im betreffenden Voxel enthält, wird hier die Entfernung zur nächsten Oberfläche gespeichert \cite{curless1996volumetric}.
@@ -245,14 +245,31 @@ Dies ist auch bei den meisten Anwendungen in der Realität der Fall.
 Selbst bei gesetzter \ac{RoI} und somit bereits gefiltertem Hintergrund liegen Objekte häufig nahe beieinander.
 
 Der Region-Growing-Algorithmus umgeht dieses Problem, indem statt der Distanzmetrik die Krümmung im entsprechenden Punkt betrachtet wird.
-Als Krümmung bezeichnet man die Änderungsrate der Normalendifferenz (siehe \autoref{eq:normalendifferenz} und \autoref{eq:bitmap}).
+Unter der Krümmung versteht man die Änderung der Normalen in einem Punkt.
+Eine gute Approximation liefert die in \autoref{eq:kruemmung} dargestellte Metrik.
 
-\begin{eqnarray}
-\label{eq:normalendifferenz}
-f: \mathbb{R}^3, \mathbb{R}^3 \rightarrow \mathbb{R} & \mathrm{mit} & f(\overrightarrow{n}, \overrightarrow{m}) \mapsto \overrightarrow{n} \angle \overrightarrow{m} = acos(\overrightarrow{n} * \overrightarrow{m})\\
-\kappa : \mathbb{R}^3, \mathbb{R}^3 \rightarrow \mathbb{R} & \mathrm{mit} & \kappa = f'
+%\begin{eqnarray}
+%\label{eq:normalendifferenz}
+%f: \mathbb{R}^3, \mathbb{R}^3 \rightarrow \mathbb{R} & \mathrm{mit} & f(\overrightarrow{n}, \overrightarrow{m}) \mapsto \overrightarrow{n} \angle \overrightarrow{m} = acos(\overrightarrow{n} * \overrightarrow{m})\\
+%\kappa : \mathbb{R}^3, \mathbb{R}^3 \rightarrow \mathbb{R} & \mathrm{mit} & \kappa = f'
+%\label{eq:kruemmung}
+%\end{eqnarray}
+
+\begin{definition}
+Sei $p \in P, P \subset \mathbb{R}^3$.
+Dann sind die $k$ nächsten Nachbarn $q_k(p) \subset P$, sodass
+\begin{equation}
+\label{eq:k-nearest-neighbors}
+\|p - q_1\| < \|p - q_2\| < \dotsc < \|p - q_k\|.
+\end{equation}
+Sei $E_k$ nun eine Ebene, welche die Punkte $q_k(p)$ nach least squares \cite{schomaker1959fit}, RANSAC \cite{fischler1981random} oder anders approximiert.
+Dann ist
+\begin{equation}
 \label{eq:kruemmung}
-\end{eqnarray}
+\kappa = r^2 = \|p - E_k\|^2,
+\end{equation}
+also der \ac{MSE} zwischen $E_k$ und $p$, eine Metrik zur Schätzung der Krümmung in $p$ (nach \cite[Abs. 2.1.2]{rabbani2006segmentation}).
+\end{definition}
 
 
 \subsection{Watershed-Algorithmus}
