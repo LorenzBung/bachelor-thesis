@@ -8,11 +8,14 @@
 \usepackage{amssymb}        % math. Symbole und Umgebungen
 \usepackage{mathtools}
 \usepackage{unicode-math}   % Erlaubt die Mathe Schrift zu setzen
+\newtheorem{definition}{Definition}		% Umgebung für Definitionen
+\newcommand{\definitionautorefname}{Definition}		% Autoref für Definitionen
 
 \usepackage{algorithm}		% Pseudocode listings
 \usepackage{algpseudocode}
 \algrenewcommand{\algorithmiccomment}[1]{\hskip3em$//$ #1}	% Kommentarformat
 \newcommand{\algorithmautorefname}{Algorithmus}		% Autoref für Pseudocode listings
+
 
 % Use german umlaute
 %\usepackage{ngerman}
@@ -159,7 +162,7 @@ linktoc=page 	% Im Inhaltsverzeichnis sind Seitenzahlen UND Text Links
 \headheight13.6pt
 
 % Abkuerzungsverzeichnis
-\usepackage[printonlyused, nohyperlinks]{acronym}
+\usepackage[printonlyused]{acronym}
 \usepackage[mode=buildnew]{standalone}
 
 \usepackage[toc, page]{appendix}

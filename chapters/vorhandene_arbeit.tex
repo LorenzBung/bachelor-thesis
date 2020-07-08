@@ -220,7 +220,7 @@ Der Threshold $\delta$ gibt dabei den minimalen Abstand zwischen zwei Clustern a
 	\ForAll{unprocessed points $q \in \mathcal{Q}$}
 		\State mark $q$ as processed
 		\State $\mathcal{N} \gets$ \Call{nearestKSearch}{$q, \delta$}
-		\Comment{$\delta$-region around q}
+		\Comment{$\delta$-region around $q$}
 		\State $\mathcal{Q} \gets$ all unprocessed points in $\mathcal{N}$
 	\EndFor
 	\State $\mathcal{C} \gets \mathcal{Q}$
@@ -247,19 +247,15 @@ Selbst bei gesetzter \ac{RoI} und somit bereits gefiltertem Hintergrund liegen O
 Der Region-Growing-Algorithmus umgeht dieses Problem, indem statt der Distanzmetrik die Krümmung im entsprechenden Punkt betrachtet wird.
 Unter der Krümmung versteht man die Änderung der Normalen in einem Punkt.
 Eine gute Approximation liefert die in \autoref{eq:kruemmung} dargestellte Metrik.
-
-%\begin{eqnarray}
-%\label{eq:normalendifferenz}
-%f: \mathbb{R}^3, \mathbb{R}^3 \rightarrow \mathbb{R} & \mathrm{mit} & f(\overrightarrow{n}, \overrightarrow{m}) \mapsto \overrightarrow{n} \angle \overrightarrow{m} = acos(\overrightarrow{n} * \overrightarrow{m})\\
-%\kappa : \mathbb{R}^3, \mathbb{R}^3 \rightarrow \mathbb{R} & \mathrm{mit} & \kappa = f'
-%\label{eq:kruemmung}
-%\end{eqnarray}
+Weiterhin spielt auch die Glattheit der Oberfläche eine Rolle (siehe dazu \autoref{def:glattheit}).
 
 \begin{definition}
 Sei $p \in P, P \subset \mathbb{R}^3$.
-Dann sind die $k$ nächsten Nachbarn $q_k(p) \subset P$, sodass
+Dann sind die $k$ nächsten Nachbarn
 \begin{equation}
 \label{eq:k-nearest-neighbors}
+Q_k = \bigcup\limits_{n=1}^{k} q_n(p), Q_k \subseteq P\ 
+\mathrm{mit}\ 
 \|p - q_1\| < \|p - q_2\| < \dotsc < \|p - q_k\|.
 \end{equation}
 Sei $E_k$ nun eine Ebene, welche die Punkte $q_k(p)$ nach least squares \cite{schomaker1959fit}, RANSAC \cite{fischler1981random} oder anders approximiert.
@@ -270,6 +266,53 @@ Dann ist
 \end{equation}
 also der \ac{MSE} zwischen $E_k$ und $p$, eine Metrik zur Schätzung der Krümmung in $p$ (nach \cite[Abs. 2.1.2]{rabbani2006segmentation}).
 \end{definition}
+
+\begin{definition}
+\label{def:glattheit}
+Sei $f$ eine Funktion.
+Dann gibt die Glattheit $\mathcal{G}(f)$ an, wie oft $f$ differenzierbar ist:
+\begin{equation}
+\mathcal{G}(f) = \left\{\begin{array}{ll}
+0 & f\ \mathrm{nicht\ differenzierbar}\\
+n & f^{(n)}\ \mathrm{definiert}\\
+\infty & f\ \mathrm{unendlich\ oft\ differenzierbar}
+\end{array}\right.
+\end{equation}
+\end{definition}
+
+Ansonsten verfährt sich der Region-Growing-Algorithmus sehr ähnlich zu \ac{ECE}.
+Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2$ werden Normalenwinkel und Krümmung betrachtet.
+\autoref{alg:region-growing} beschreibt den Ablauf bei maximaler Krümmung $\phi$, Normalendifferenz $\alpha$ und unter Betrachtung von $n$ Nachbarpunkten.
+
+\begin{algorithm}
+\caption{Region Growing}
+\label{alg:region-growing}
+\begin{algorithmic}
+\State $\mathcal{C} \gets \emptyset$
+\Comment{list of clusters}
+\State $\mathcal{Q} \gets \emptyset$
+\Comment{current cluster queue}
+\State sort $P$ by ascending curvature
+\ForAll{$p \in P$}
+	\State $\mathcal{Q} \gets p$
+	\ForAll{unprocessed points $q \in \mathcal{Q}$}
+		\State mark $q$ as processed
+		\State $\mathcal{N} \gets$ \Call{getKNeighbors}{$q, n$}
+		\Comment{$n$ nearest neighbors of $q$}
+		\ForAll{unprocessed candidates $c \in \mathcal{N}$}
+			\If{\Call{curvature}{$c$} $< \phi \wedge \cos^{-1}(\overrightarrow{n_p}, \overrightarrow{n_c}) < \alpha$}
+				\State $\mathcal{Q} \gets c$
+			\EndIf
+		\EndFor
+	\EndFor
+	\State $\mathcal{C} \gets \mathcal{Q}$
+	\Comment{add processed queue to clusters}
+	\State $\mathcal{Q} \gets \emptyset$
+	\Comment{reset the queue}
+\EndFor
+\State \Return{$\mathcal{C}$}
+\end{algorithmic}
+\end{algorithm}
 
 
 \subsection{Watershed-Algorithmus}
