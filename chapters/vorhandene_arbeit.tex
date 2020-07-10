@@ -196,7 +196,7 @@ Im dreidimensionalen Raum gibt es viele verschiedene Eigenschaften (Features), d
 Es spielt selbstverständlich die Distanz zwischen den Punkten eine Rolle, aber auch andere Faktoren wie Normalenorientierung, Farbe oder Krümmung bieten in vielen Fällen nützliche Zusatzinformationen.
 
 Im Folgenden werden die zwei getesteten Methoden \ac{ECE} und Region Growing erklärt.
-Eine gute Übersicht über die beiden Verfahren bietet auch \citeauthor{RusuDoctoralDissertation} in \cite[S.88--93]{RusuDoctoralDissertation}.
+Eine gute Übersicht über die beiden Verfahren bietet auch \citeauthor{RusuDoctoralDissertation} in \cite[88--93]{RusuDoctoralDissertation}.
 
 \subsubsection{\acl{ECE}}
 \label{subsubsec:euclidean-cluster-extraction}
@@ -204,7 +204,7 @@ Eine gute Übersicht über die beiden Verfahren bietet auch \citeauthor{RusuDoct
 Diese Methode der Segmentierung im dreidimensionalen Raum ist sehr einfach.
 Sie basiert auf der Annahme, dass Punkte so lange zu einem Cluster gehören, so lange ihr Abstand unter einem Grenzwert liegt.
 
-In \autoref{alg:euclidean-cluster-extraction} beschreibt, wie die Cluster $\mathcal{C} \subseteq P$ für die Punktwolke $P$ nach \cite[S.89f]{RusuDoctoralDissertation} errechnet werden.
+In \autoref{alg:euclidean-cluster-extraction} beschreibt, wie die Cluster $\mathcal{C} \subseteq P$ für die Punktwolke $P$ nach \cite[89--90]{RusuDoctoralDissertation} errechnet werden.
 Der Threshold $\delta$ gibt dabei den minimalen Abstand zwischen zwei Clustern an.
 
 \begin{algorithm}
@@ -256,7 +256,7 @@ Dann sind die $k$ nächsten Nachbarn
 \label{eq:k-nearest-neighbors}
 Q_k = \bigcup\limits_{n=1}^{k} q_n(p), Q_k \subseteq P\ 
 \mathrm{mit}\ 
-\|p - q_1\| < \|p - q_2\| < \dotsc < \|p - q_k\|.
+\|p - q_1\| \leq \|p - q_2\| \leq \dotsc \leq \|p - q_k\|.
 \end{equation}
 Sei $E_k$ nun eine Ebene, welche die Punkte $q_k(p)$ nach least squares \cite{schomaker1959fit}, RANSAC \cite{fischler1981random} oder anders approximiert.
 Dann ist
@@ -349,6 +349,8 @@ Hier kann auch eine beliebige andere Methode verwendet werden, jedoch liefert di
 \Comment{distance to next background pixel}
 \State $M \gets$ local minima
 \State $W \gets$ local maxima
+\State \Call{applyMask}{$input, W$}
+\Comment{Add region borders to original image}
 \ForAll{$marker \in M$}
 	\State \Call{floodFill}{$input$, $marker$}
 \EndFor
