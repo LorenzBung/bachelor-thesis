@@ -189,7 +189,7 @@ In den letzten Jahren findet auch verstärkt Forschung zur Segmentierung mithilf
 Survey \cite{shamir2008survey}, SDF \cite{shapira2008consistent}
 
 
-\subsection{3D-Ansätze}
+\subsection{Segmentierung im 3D}
 \label{subsec:3d-segmentation}
 
 Im dreidimensionalen Raum gibt es viele verschiedene Eigenschaften (Features), die zur Segmentierung von Punktwolken herangezogen werden können.
@@ -315,8 +315,45 @@ Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2
 \end{algorithm}
 
 
-\subsection{Watershed-Algorithmus}
+\subsection{Watershed-Transformation}
 \label{subsec:watershed}
+
+Die bisherigen Ansätze sind Möglichkeiten zur Segmentierung in 3D-Punktwolken.
+Während dies häufig deutliche Vorteile hat, können auch viele Nachteile dabei das Ergebnis beeinflussen.
+Beispielsweise können Objekte sehr nah aneinander liegen und \ac{ECE} damit erschweren.
+Kanten zwischen Objekten können im 2D-Grauwertbild jedoch deutlich besser sichtbar sein.
+Die Segmentierung auf zweidimensionalen RGB- oder Grauwerten kann daher in manchen Fällen bessere Ergebnisse als eine Segmentierung auf Basis der Geometrie liefern.
+
+Die Watershed-Transformation ist eine der bekanntesten Methoden, um eine solche Segmentierung vorzunehmen.
+Der Gedanke dahinter stammt aus der Geographie und beschreibt das Verhalten von ansteigendem Wasser in unebenem Terrain (vgl. \cite[1--2]{roerdink2000watershed}).
+Dabei bilden sich Wasserbecken, welche bei steigendem Pegel an bestimmten Linien zusammenlaufen.
+Diese Linien beschreiben im Fall des Clusterings die Grenzen zwischen unterschiedlichen Bildregionen.
+
+Der Ablauf der Watershed-Transformation ist in \autoref{alg:watershed} beschrieben.
+Dabei werden zunächst die garantierten Hintergrundpixel einheitlich auf 0 gesetzt und ein Preprocessing in Form eines Laplace-Filters vorgenommen.
+Weiterhin basiert die Binarisierung des Eingabebilds auf dem Thresholding nach Otsu \cite{otsu1979threshold}, welches die Varianz $\sigma$ zwischen aufeinanderfolgenden Grauwertbins $p_i$ und $p_{i+1}$ minimiert.
+Hier kann auch eine beliebige andere Methode verwendet werden, jedoch liefert dieser Ansatz bei einer binären Verteilung im Histogramm optimale Ergebnisse.
+
+\begin{algorithm}
+\caption[Watershed-Transformation]{Watershed-Transformation \cite{openCVwatershed}}
+\label{alg:watershed}
+\begin{algorithmic}
+\State $\mathcal{I} \gets input$
+\State Set guaranteed background pixels to $0$
+\State $L \gets \begin{bmatrix}1 & 1 & 1\\1 & -8 & 1\\1 & 1 & 1\end{bmatrix}$
+\State \Call{filter}{$\mathcal{I}, L$}
+\Comment{sharpening using laplace filter}
+\State \Call{binarize}{$\mathcal{I}, \text{``Otsu''}$}
+\Comment{binarize (e.g. Otsu's thresholding)}
+\State \Call{distanceTransform}{$\mathcal{I}$}
+\Comment{distance to next background pixel}
+\State $M \gets$ local minima
+\State $W \gets$ local maxima
+\ForAll{$marker \in M$}
+	\State \Call{floodFill}{$input$, $marker$}
+\EndFor
+\end{algorithmic}
+\end{algorithm}
 
 
 \section{Triangulierung}
