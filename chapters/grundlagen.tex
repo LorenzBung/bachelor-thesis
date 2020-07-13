@@ -25,8 +25,9 @@ Die so gewonnenen Informationen lassen sich durch mehrere verschiedene Datenmode
 \label{subsec:tiefenbild}
 
 Ein Tiefenbild ist eine einfache Möglichkeit, in einem zweidimensionalen Bild zusätzlich Informationen über die Entfernung der Kamera zu Objekten abzuspeichern.
-Diese Technik ist unter Anderem aus der Computergrafik bekannt, wo sie beim Z-Buffering Anwendung findet \cite[S.32]{catmull1974subdivision}.
+Diese Technik ist unter Anderem aus der Computergrafik bekannt, wo sie beim Z-Buffering Anwendung findet \cite[32]{catmull1974subdivision}.
 Dabei werden sowohl das aufgenommene Bild, aber zusätzlich auch ein 2D-Array mit der Tiefeninformation des zugehörigen Pixels gespeichert.
+Das Tiefenbild dient somit als \ac{LUT}, um die z-Information zu einem Pixel im 2D-Bild zu erhalten.
 Ein Beispiel für den Zusammenhang zwischen diesen beiden Komponenten ist in \autoref{fig:depth_map} dargestellt.
 
 So kann das originale 2D-Bild um eine dritte Dimension erweitert werden, wodurch sich beispielsweise dreidimensionale Formen modellieren oder rekonstruieren lassen \cite{arsalan2017synthesizing}.
@@ -35,7 +36,7 @@ Auch in der 3D-Fotografie finden Tiefenbilder Anwendung \cite{redert2006philips}
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.66\textwidth]{images/depth_map.png}
-	\caption{2D-Farbbild und zugehöriges Tiefenbild. Entnommen aus \cite[S.649]{muller2010depth}}
+	\caption{2D-Farbbild und zugehöriges Tiefenbild. Entnommen aus \cite[649]{muller2010depth}}
 	\label{fig:depth_map}
 \end{figure}
 
@@ -45,7 +46,7 @@ Jedoch gibt es auch einige Nachteile, die nicht umgangen werden können:
 \begin{itemize}
 \item Die 3D-Daten sind ausschließlich aus der Kameraperspektive vorhanden.
 Um Informationen aus einer anderen Perspektive zu erhalten, muss erst aufwändig umgerechnet werden.
-\item Da (in den meisten Fällen) nur ein zweidimensionales Array für die Tiefeninformation angelegt wird, können nur die Entfernungen zu den der Kamera nächsten Objekte gespeichert werden.
+\item Da (in den meisten Fällen) nur ein zweidimensionales Array mit einem Kanal für die Tiefeninformation angelegt wird, können nur die Entfernungen zu den der Kamera nächsten Objekte gespeichert werden.
 Verdeckte, reflektierende oder durchsichtige Oberflächen können nicht gespeichert werden.
 \item Das Array ist an die Auflösung der Kamera gebunden.
 Insbesondere bei großer Entfernung zu Objekten werden diese aufgrund des Bildwinkels sehr schlecht abgetastet, was später zu Aliasing-Effekten führen kann.
@@ -263,7 +264,7 @@ Der Nachteil ist jedoch, dass der Speicheraufwand sehr hoch und die Datenstruktu
 \fill (v_5) circle (1pt);
 \fill (v_6) circle (1pt);
 \end{tikzpicture}
-\caption{Vor- und Nachfolgerkanten der Winged-Edge-Datenstruktur (nach \cite[591]{baumgart1975polyhedron})}
+\caption{Vor- und Nachfolgerkanten der Winged-Edge-Datenstruktur nach \cite[591]{baumgart1975polyhedron}}
 \label{fig:winged-edge-edges}
 \end{figure}
 
@@ -347,7 +348,7 @@ $v_3$ & $e_{2b}, e_{3a}, e_{5b}$ & \multicolumn{4}{}{}\\
 $v_4$ & $e_{4b}, e_{5a}$ & \multicolumn{4}{}{}\\
 \cline{1-2}
 \end{tabular}
-\caption{Vertex-, Edge- und Face-Tabellen bei der Half-Edge-Darstellung (nach \cite{berg2000comp})}
+\caption{Vertex-, Edge- und Face-Tabellen bei der Half-Edge-Darstellung nach \cite{berg2000comp}}
 \label{tab:half-edge-table}
 \end{table}
 
