@@ -5,103 +5,110 @@
 \newgeometry{margin=0pt}
 \thispagestyle{empty}
 
-\backgroundsetup{
-    scale = 1, angle = 0, opacity = 1,
-    contents = {\hspace*{-0.46cm}
-    \includegraphics[width = \paperwidth,
-    height = \paperheight, keepaspectratio]
-    {title/report_cover_empty.pdf}}
-}
-
-%\vspace*{-2.5cm}
-
-%\begin{figure}[h]
-%\hspace*{-2cm}
-%\includegraphics[height=2cm]{title/HTWG-Logo_de_300dpi.png}
-%\hspace*{4cm}\includegraphics[height=2cm,]{title/IOS_Logo2016_lettering_de.png}
-
-
-%\end{figure}
-
-%\vspace{2cm}
-
-%\begin{center}
-%	 \LARGE{
-%		\textbf{\thema} \\[5cm]
-%	}
-%	\Large{
-%		\textbf{\autor}} \\[5.5cm]
-%	\large{
-%		\textbf{Konstanz, \abgabedatum} \\[2.3cm]
-%	}
-%	
-%	\Huge{
-%		\textbf{{\sf BACHELORARBEIT}}
-%	}
-%\end{center}
-
 %% We need the this to perform coordinate calculations in TikZ.
-    \usetikzlibrary{calc}%
-    \begin{tikzpicture}[remember picture,overlay]
+\usetikzlibrary{calc}%
+\usetikzlibrary{backgrounds}
+\begin{tikzpicture}[remember picture,overlay, background rectangle/.style={fill=htwg-dark-blue}, show background rectangle]
+
+% HTWG design elements (raster, lines etc)
+\begingroup
+    \foreach \x in {1,...,9} {
+        \foreach \y in {1,...,13} {
+        \pgfmathtruncatemacro{\xpos}{20.8 * \x}
+        \pgfmathtruncatemacro{\ypos}{-20.8 * \y}
+        \node (x\x y\y) at (\xpos mm, \ypos mm)[anchor=center,circle,draw,htwg-white,fill=htwg-white,scale=0.1]{};
+        }
+    }
+    \draw [htwg-white] (-2mm, -115mm) -- (41mm, -166mm);
+    \draw [htwg-white] (41mm, -270mm) -- (145mm, -228mm);
+
+    \draw [line width=15mm,cap=round,htwg-teal] (62mm, -124mm) -- (187mm, -166mm);
+
+    \node at (83mm, -124mm)[anchor=center,circle,draw,htwg-white,fill=htwg-white,scale=2.0]{};
+    \node at (145mm, -228mm)[anchor=center,circle,draw,htwg-white,fill=htwg-white,scale=1.5]{};
+\endgroup
+
+% BSC letters
+\begingroup
+    \node at (15.8mm,-82.1mm)[anchor=center, fill=htwg-dark-blue]{
+        \includegraphics[scale=0.165]{fonts/B_black}
+    };
+    \node at (36.8mm,-250.1mm)[anchor=center]{
+        \includegraphics[scale=0.17]{fonts/S_black}
+    };
+    \node at (162.8mm,-124.1mm)[anchor=center]{
+        \includegraphics[scale=0.15]{fonts/C_black}
+    };
+\endgroup
+
+% HTWG-IN and IOS logos
+\begingroup
+    \node at (16.5mm, -15mm)[anchor=north west, fill=htwg-dark-blue]{
+            \begin{minipage}[t]{30mm}
+                \includegraphics[width=26mm]{images/htwg_in.png}
+            \end{minipage}
+        };
     
-    %% Create the background elements.
-    %% - bachelor (B S C)
-    \begingroup
-        \node at (15.8mm,-82.1mm)[anchor=center]{
-            \includegraphics[scale=0.165]{fonts/B_black}
-        };
-        \node at (36.8mm,-250.1mm)[anchor=center]{
-            \includegraphics[scale=0.17]{fonts/S_black}
-        };
-        \node at (162.8mm,-124.1mm)[anchor=center]{
-            \includegraphics[scale=0.15]{fonts/C_black}
+        \node at (59.5mm, -15mm)[anchor=north west, fill=htwg-dark-blue]{
+            \begin{minipage}[t]{40mm}
+                \includegraphics[height=15mm]{images/ios_logo.png}
+            \end{minipage}
         };
     \endgroup
 
 
-        %% Create the title text box.
-        \node at (17.5mm,-180.5mm)[anchor=north west, fill=htwg-dark-blue]{
-            \begin{minipage}[t]{145mm}
-                \begin{flushleft}
-                    %% Print Report Type Text
-                    %\color{htwg-white}\Huge\textbf{\@report@typetext}
-                    %\\
-                    %% Print Report Title
-                    \color{htwg-white}\Huge{\thema}
-                \end{flushleft}
-            \end{minipage}
-        };
+% Thesis title
+\node at (17.5mm,-180.5mm)[anchor=north west, fill=htwg-dark-blue]{
+    \begin{minipage}[t]{145mm}
+        \begin{flushleft}
+            \color{htwg-white}\Huge{\thema}
+        \end{flushleft}
+    \end{minipage}
+};
+
+% Faculty etc
+\node at (143.8mm,-17mm)[anchor=north west, fill=htwg-dark-blue]{
+    \begin{minipage}[t]{55mm}
+        \begin{flushleft}
+            \color{htwg-white}\scriptsize\textbf{Hochschule Konstanz}
+            \linebreak
+            \color{htwg-white}\scriptsize{Fakultät Informatik}
+            \linebreak 
+            \color{htwg-white}\scriptsize{Institut für Optische Systeme}
+        \end{flushleft}
+    \end{minipage}
+};
 
 
-        %% Create the author text box.
-        \node at (143.8mm,-37mm)[anchor=north west, fill=htwg-dark-blue]{
-            \begin{minipage}[t]{55mm}
-                \begin{flushleft}
-                    \color{htwg-white}\scriptsize\textbf{Eingereicht von}
-                    \linebreak
-                    \color{htwg-white}\scriptsize{\autor}
-                    \linebreak 
-                    \color{htwg-white}\scriptsize{Matrikelnummer \matrikelnummer}
-                    \linebreak
-                    \linebreak
-                    \color{htwg-white}\scriptsize{\autorEmail}
-                \end{flushleft}
-            \end{minipage}
-        };
+% Author information
+\node at (143.8mm,-38mm)[anchor=north west, fill=htwg-dark-blue]{
+    \begin{minipage}[t]{55mm}
+        \begin{flushleft}
+            \color{htwg-white}\scriptsize\textbf{Eingereicht von}
+            \linebreak
+            \color{htwg-white}\scriptsize{\autor}
+            \linebreak 
+            \color{htwg-white}\scriptsize{Matrikelnummer \matrikelnummer}
+            \linebreak
+            \linebreak
+            \color{htwg-white}\scriptsize{\autorEmail}
+        \end{flushleft}
+    \end{minipage}
+};
 
 
-        %% Create the date text box.
-        \node at (143.8mm,-268mm)[anchor=north west, fill=htwg-dark-blue]{
-            \begin{minipage}[t]{55mm}
-                \begin{flushleft}
-                    \color{htwg-white}\scriptsize\textbf{\autorOrt,}
-                    \color{htwg-white}\scriptsize\textbf{\abgabedatum}
-                \end{flushleft}
-            \end{minipage}
-        };
+% Hand-in date
+\node at (143.8mm,-268mm)[anchor=north west, fill=htwg-dark-blue]{
+    \begin{minipage}[t]{55mm}
+        \begin{flushleft}
+            \color{htwg-white}\scriptsize\textbf{\autorOrt,}
+            \color{htwg-white}\scriptsize\textbf{\abgabedatum}
+        \end{flushleft}
+    \end{minipage}
+};
 
-    \end{tikzpicture}
-    %% Restore the margins and turn the page white again.
-    \restoregeometry
-    \pagecolor{white}
+\end{tikzpicture}
+%% Restore the margins and turn the page white again.
+\restoregeometry
+\pagecolor{white}
 \end{titlepage}
