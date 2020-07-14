@@ -452,12 +452,22 @@ Somit gilt für die Indikatorfunktion:
 \begin{displaymath}
 \begin{aligned}
 &&\nabla \chi_M && = &&\overrightarrow{V}\\
-\Leftrightarrow && \nabla \nabla \chi_M && = &&\nabla \overrightarrow{V}\\
+\Leftrightarrow && \nabla^2 \chi_M && = &&\nabla \overrightarrow{V}\\
 \Leftrightarrow && \Delta \chi_M && = &&\nabla \overrightarrow{V}
 \end{aligned}
 \end{displaymath}
 
 Dies ist eine Poisson-Gleichung \cite[Kap. 2]{ponce2016pde}, deren Lösung sich beispielsweise mit dem Gauß-Seidel-Verfahren iterativ berechnen bzw. annäheren lässt.
+Da eine genaue Lösung der Poissongleichung nur in der Nähe der Oberfläche erforderlich ist, kann nun ein Octree aufgestellt werden.
+
+Mit der Poisson-Rekonstruktion generierte Polygonmeshes weisen die Eigenschaft auf, immer wasserdicht zu sein.
+Dies ist in der Darstellung der Oberfläche als mehrdimensionale, kontinuierliche Funktion begründet.
+
+Die Auflösung des Meshes lässt sich durch die maximale Baumtiefe einstellen.
+Mit der Tiefe und damit der Qualität steigen jedoch auch Laufzeit und Speicherbedarf drastisch an.
+Weiterhin kann konfiguriert werden, wie viele Punkte einem Blatt im Baum zugewiesen werden.
+Hohe Werte führen zu einer verringerten Auflösung, aber auch zu einem gleichzeitigen Glättungseffekt.
+Außerdem verringern sich aufgrund der niedrigeren Zahl an Blättern der benötigte Speicher und die Laufzeit.
 
 
 \subsection{Weitere Ansätze}
