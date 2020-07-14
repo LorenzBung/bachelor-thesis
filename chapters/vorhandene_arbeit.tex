@@ -427,7 +427,37 @@ Durch eine Interpolation zwischen den Werten der beiden Eckpunkte des Voxels lä
 
 %TODO
 Die \citeyear{kazhdan2006poisson} von \citeauthor{kazhdan2006poisson} präsentierte Poisson-Rekonstruktion \cite{kazhdan2006poisson} basiert auf der impliziten Darstellung der Oberfläche als Funktion.
+Die mathematische Darstellung dieser Funktion lässt sich \autoref{def:poisson-surface} entnehmen.
 
+\begin{definition}
+\label{def:poisson-surface}
+Sei $M$ die zu rekonstruierende Oberfläche.
+Dann ist
+\begin{equation}
+\chi_M(p) = \left\{
+\begin{array}{ll}
+0 & p\ \mathrm{außerhalb\ von}\ M\\
+1 & p\ \mathrm{innerhalb\ von}\ M\\
+\end{array}
+\right.
+,\ \forall q \in M : \chi_M(q) = 0.5
+\end{equation}
+die implizite Funktion, die die Oberfläche im Punkt $p \in M$ darstellt.
+\end{definition}
+
+Der Gradient $\nabla \chi_M$ dieser Funktion nimmt also im optimalen Fall überall den Wert $0$ an, außer in der Oberfläche selbst.
+Dieser Gradient entspricht exakt den nach innen gerichteten Normalen in Oberflächenpunkten \cite[Abs. 3]{kazhdan2006poisson}.
+Somit gilt für die Indikatorfunktion:
+
+\begin{displaymath}
+\begin{aligned}
+&&\nabla \chi_M && = &&\overrightarrow{V}\\
+\Leftrightarrow && \nabla \nabla \chi_M && = &&\nabla \overrightarrow{V}\\
+\Leftrightarrow && \Delta \chi_M && = &&\nabla \overrightarrow{V}
+\end{aligned}
+\end{displaymath}
+
+Dies ist eine Poisson-Gleichung \cite[Kap. 2]{ponce2016pde}, deren Lösung sich beispielsweise mit dem Gauß-Seidel-Verfahren iterativ berechnen bzw. annäheren lässt.
 
 
 \subsection{Weitere Ansätze}
