@@ -251,7 +251,7 @@ Weiterhin spielt auch die Glattheit der Oberfläche eine Rolle (siehe dazu \auto
 
 \begin{definition}
 Sei $p \in P, P \subset \mathbb{R}^3$.
-Dann sind die $k$ nächsten Nachbarn
+Dann sind die $k \gets$ \ac{KNN}
 \begin{equation}
 \label{eq:k-nearest-neighbors}
 Q_k = \bigcup\limits_{n=1}^{k} q_n(p), Q_k \subseteq P\ 
@@ -282,7 +282,7 @@ n & f^{(n)}\ \mathrm{definiert}\\
 
 Ansonsten verfährt sich der Region-Growing-Algorithmus sehr ähnlich zu \ac{ECE}.
 Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2$ werden Normalenwinkel und Krümmung betrachtet.
-\autoref{alg:region-growing} beschreibt den Ablauf bei maximaler Krümmung $\phi$, Normalendifferenz $\alpha$ und unter Betrachtung von $n$ Nachbarpunkten.
+\autoref{alg:region-growing} beschreibt den Ablauf bei maximaler Krümmung $\phi$, Normalendifferenz $\alpha$ und unter Betrachtung der $n \gets$ \ac{KNN}.
 
 \begin{algorithm}
 \caption{Region Growing}
@@ -472,6 +472,48 @@ Außerdem verringern sich aufgrund der niedrigeren Zahl an Blättern der benöti
 
 \subsection{Weitere Ansätze}
 \label{subsec:triangulation-others}
-%TODO Ball Pivot, Greedy Triangulation, (Delaunay?)
-Greedy Projection \cite{Marton09ICRA},
+%TODO
+
+\subsubsection{Greedy-Triangulierung}
+\label{subsubsec:greedy-triangulierung}
+
+Bei der Greedy-Triangulierung der Wolke $\mathcal{P}$ werden zunächst alle Punkte $p, q \in \mathcal{P}$ miteinander verknüpft.
+So entstehen Kantenkandidaten, welche nun nach ihrer Länge sortiert werden.
+Diese werden nun nacheinander akzeptiert oder verworfen, wenn ein Schnittpunkt mit einer bereits akzeptierten Kante auftritt \cite[235--237]{preparata1985computational}.
+Der genaue Ablauf ist in \autoref{alg:greedy-triangulierung} dargestellt.
+
+\begin{algorithm}
+\caption{Greedy-Triangulierung}
+\label{alg:greedy-triangulierung}
+\begin{algorithmic}
+\State $\mathcal{C} \gets \emptyset$
+\ForAll{$p, q \in \mathcal{P},\ p \neq q$}
+\Comment{Add edge candidates to $\mathcal{C}$}
+	\State $\mathcal{C} \gets \overline{pq}$
+\EndFor
+\State \Call{sortByLength}{$\mathcal{C}$}
+\State $\mathcal{T} \gets \emptyset$
+\ForAll{$e \in \mathcal{C}$}
+	\ForAll{$f \in \mathcal{T}$}
+		\If{$e \cap f$}
+		\Comment{$e$ intersects $f$, remove from candidates}
+			\State $\mathcal{C} \gets \mathcal{C} \setminus \{e\}$
+		\EndIf
+	\EndFor
+	\State $\mathcal{T} \gets \mathcal{T} \cup \{e\}$
+\EndFor
+\State \Return{$\mathcal{T}$}
+\end{algorithmic}
+\end{algorithm}
+
+Ein enormer Vorteil der Greedy-Triangulierung ist ihre Geschwindigkeit.
+So zeigen \citeauthor{berg2000comp}, dass ein Polygon mit $n$ Vertices in $\mathcal{O}(n \log n)$ rekonstruiert werden kann \cite[56--58]{berg2000comp}.
+Dies ist beispielsweise für Echtzeitanwendungen relevant, wie die in \cite{Marton09ICRA} vorgestellte Methode demonstriert.
+
+\subsubsection{Delaunay-Triangulierung}
+\label{subsubsec:delaunay-triangulierung}
+
+\subsubsection{Ball Pivoting}
+\label{subsubsection:ball-pivoting}
 Ball Pivoting \cite{bernardini1999ball}
+
