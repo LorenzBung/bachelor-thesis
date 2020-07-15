@@ -480,7 +480,6 @@ Außerdem verringern sich aufgrund der niedrigeren Zahl an Blättern der benöti
 Bei der Greedy-Triangulierung der Wolke $\mathcal{P}$ werden zunächst alle Punkte $p, q \in \mathcal{P}$ miteinander verknüpft.
 So entstehen Kantenkandidaten, welche nun nach ihrer Länge sortiert werden.
 Diese werden nun nacheinander akzeptiert oder verworfen, wenn ein Schnittpunkt mit einer bereits akzeptierten Kante auftritt \cite[235--237]{preparata1985computational}.
-Der genaue Ablauf ist in \autoref{alg:greedy-triangulierung} dargestellt.
 
 \begin{algorithm}
 \caption{Greedy-Triangulierung}
@@ -488,11 +487,12 @@ Der genaue Ablauf ist in \autoref{alg:greedy-triangulierung} dargestellt.
 \begin{algorithmic}
 \State $\mathcal{C} \gets \emptyset$
 \ForAll{$p, q \in \mathcal{P},\ p \neq q$}
-\Comment{Add edge candidates to $\mathcal{C}$}
+\Comment{add edge candidates to $\mathcal{C}$}
 	\State $\mathcal{C} \gets \overline{pq}$
 \EndFor
 \State \Call{sortByLength}{$\mathcal{C}$}
 \State $\mathcal{T} \gets \emptyset$
+\Comment{the accepted edges}
 \ForAll{$e \in \mathcal{C}$}
 	\ForAll{$f \in \mathcal{T}$}
 		\If{$e \cap f$}
@@ -505,6 +505,11 @@ Der genaue Ablauf ist in \autoref{alg:greedy-triangulierung} dargestellt.
 \State \Return{$\mathcal{T}$}
 \end{algorithmic}
 \end{algorithm}
+
+Diese Art der Triangulierung funktioniert nur im zweidimensionalen Raum, da der Schnittpunkt zwischen zwei Geraden in höheren Dimensionen nicht als Kriterium ausreicht.
+Im $\mathbb{R}^3$ werden daher die Punkte über ihre Normale auf eine Ebene projeziert.
+Zur Anwendung auf 3D-Punktwolken ist daher eine vorherige Normalenschätzung notwendig.
+Anschließend der in \autoref{alg:greedy-triangulierung} dargestellte Ablauf regulär durchgeführt werden.
 
 Ein enormer Vorteil der Greedy-Triangulierung ist ihre Geschwindigkeit.
 So zeigen \citeauthor{berg2000comp}, dass ein Polygon mit $n$ Vertices in $\mathcal{O}(n \log n)$ rekonstruiert werden kann \cite[56--58]{berg2000comp}.
