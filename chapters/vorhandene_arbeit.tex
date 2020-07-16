@@ -184,9 +184,13 @@ Beispielsweise zeigen \citeauthor{uckermann2012real} einen Versuch, in Echtzeit 
 Eine Übersicht bieten \citeauthor{nguyen20133d}, die verschiedene Varianten vergleichen und die Vor- und Nachteile diskutieren \cite{nguyen20133d}.
 In den letzten Jahren findet auch verstärkt Forschung zur Segmentierung mithilfe von Neuronalen Netzen statt \cite{te2018rgcnn}.
 
-% Segmentierung auf Meshes
-%TODO
-Survey \cite{shamir2008survey}, SDF \cite{shapira2008consistent}
+Für die Segmentierung können viele Informationen über die vorhandene Szene relevant sein.
+Neben der reinen geometrischen Information können zum Beispiel auch Textur (also RGB-Werte), Normalenorientierung oder Topologie hilfreich sein, um zusammenhängende Regionen voneinander unterscheiden zu können.
+
+Die Segmentierung muss dabei keineswegs immer auf 2D-Bildern oder 3D-Punktwolken stattfinden.
+In \cite{shamir2008survey} wird beispielsweise eine Übersicht über Segmentierungsverfahren auf 3D-Meshes vorgestellt.
+Weiterhin müssen auch nicht zwingend unterschiedliche Objekte getrennt werden.
+Das Ziel kann es auch sein, nur eine Trennung verschiedener Partitionen innerhalb eines Objekts zu erzielen, zum Beispiel um eine Hand am menschlichen Körper zu identifizieren \cite{shapira2008consistent}.
 
 
 \subsection{Segmentierung im 3D}
@@ -195,7 +199,7 @@ Survey \cite{shamir2008survey}, SDF \cite{shapira2008consistent}
 Im dreidimensionalen Raum gibt es viele verschiedene Eigenschaften (Features), die zur Segmentierung von Punktwolken herangezogen werden können.
 Es spielt selbstverständlich die Distanz zwischen den Punkten eine Rolle, aber auch andere Faktoren wie Normalenorientierung, Farbe oder Krümmung bieten in vielen Fällen nützliche Zusatzinformationen.
 
-Im Folgenden werden die zwei getesteten Methoden \ac{ECE} und Region Growing erklärt.
+Im Folgenden werden die zwei getesteten Methoden \ac{ECE} und Region Growing zur Segmentierung von dreidimensionalen Punktwolken erklärt.
 Eine gute Übersicht über die beiden Verfahren bietet auch \citeauthor{RusuDoctoralDissertation} in \cite[88--93]{RusuDoctoralDissertation}.
 
 \subsubsection{\acl{ECE}}
@@ -204,7 +208,7 @@ Eine gute Übersicht über die beiden Verfahren bietet auch \citeauthor{RusuDoct
 Diese Methode der Segmentierung im dreidimensionalen Raum ist sehr einfach.
 Sie basiert auf der Annahme, dass Punkte so lange zu einem Cluster gehören, so lange ihr Abstand unter einem Grenzwert liegt.
 
-In \autoref{alg:euclidean-cluster-extraction} beschreibt, wie die Cluster $\mathcal{C} \subseteq P$ für die Punktwolke $P$ nach \cite[89--90]{RusuDoctoralDissertation} errechnet werden.
+In \autoref{alg:euclidean-cluster-extraction} wird beschrieben, wie die Cluster $\mathcal{C} \subseteq P$ für die Punktwolke $P$ nach \cite[89--90]{RusuDoctoralDissertation} errechnet werden.
 Der Threshold $\delta$ gibt dabei den minimalen Abstand zwischen zwei Clustern an.
 
 \begin{algorithm}
@@ -252,13 +256,12 @@ Weiterhin spielt auch die Glattheit der Oberfläche eine Rolle (siehe dazu \auto
 \begin{definition}
 Sei $p \in P, P \subset \mathbb{R}^3$.
 Dann sind die $k \gets$ \ac{KNN}
-\begin{equation}
-\label{eq:k-nearest-neighbors}
-Q_k = \bigcup\limits_{n=1}^{k} q_n(p), Q_k \subseteq P\ 
+$$
+Q_k(p) = \bigcup\limits_{n=1}^{k} q_n(p), Q_k \subseteq P \setminus \{p\}\ 
 \mathrm{mit}\ 
-\|p - q_1\| \leq \|p - q_2\| \leq \dotsc \leq \|p - q_k\|.
-\end{equation}
-Sei $E_k$ nun eine Ebene, welche die Punkte $q_k(p)$ nach least squares \cite{schomaker1959fit}, RANSAC \cite{fischler1981random} oder anders approximiert.
+\|p - q_1\| \leq \|p - q_2\| \leq \dotsc \leq \|p - q_k\| \leq \dotsc \leq \|p - q_{|P|}\|.
+$$
+Sei $E_k$ nun eine Ebene, welche die Punkte $Q_k(p)$ nach least squares \cite{schomaker1959fit}, RANSAC \cite{fischler1981random} oder anders approximiert.
 Dann ist
 \begin{equation}
 \label{eq:kruemmung}
@@ -282,7 +285,7 @@ n & f^{(n)}\ \mathrm{definiert}\\
 
 Ansonsten verfährt sich der Region-Growing-Algorithmus sehr ähnlich zu \ac{ECE}.
 Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2$ werden Normalenwinkel und Krümmung betrachtet.
-\autoref{alg:region-growing} beschreibt den Ablauf bei maximaler Krümmung $\phi$, Normalendifferenz $\alpha$ und unter Betrachtung der $n \gets$ \ac{KNN}.
+\autoref{alg:region-growing} beschreibt den Ablauf bei maximaler Krümmung $\phi$, Normalendifferenz $\alpha$ und unter Betrachtung der $k$ \ac{KNN}.
 
 \begin{algorithm}
 \caption{Region Growing}
@@ -297,8 +300,8 @@ Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2
 	\State $\mathcal{Q} \gets p$
 	\ForAll{unprocessed points $q \in \mathcal{Q}$}
 		\State mark $q$ as processed
-		\State $\mathcal{N} \gets$ \Call{getKNeighbors}{$q, n$}
-		\Comment{$n$ nearest neighbors of $q$}
+		\State $\mathcal{N} \gets$ \Call{getKNeighbors}{$q, k$}
+		\Comment{$k$ nearest neighbors of $q$}
 		\ForAll{unprocessed candidates $c \in \mathcal{N}$}
 			\If{\Call{curvature}{$c$} $< \phi \wedge \cos^{-1}(\overrightarrow{n_p}, \overrightarrow{n_c}) < \alpha$}
 				\State $\mathcal{Q} \gets c$
@@ -331,7 +334,7 @@ Diese Linien beschreiben im Fall des Clusterings die Grenzen zwischen unterschie
 
 Der Ablauf der Watershed-Transformation ist in \autoref{alg:watershed} beschrieben.
 Dabei werden zunächst die garantierten Hintergrundpixel einheitlich auf 0 gesetzt und ein Preprocessing in Form eines Laplace-Filters vorgenommen.
-Weiterhin basiert die Binarisierung des Eingabebilds auf dem Thresholding nach Otsu \cite{otsu1979threshold}, welches die Varianz $\sigma$ zwischen aufeinanderfolgenden Grauwertbins $p_i$ und $p_{i+1}$ minimiert.
+Weiterhin basiert die Binarisierung des Eingabebilds auf dem Thresholding nach Otsu \cite{otsu1979threshold}, welches die Varianz $\sigma$ zwischen den Grauwertbins minimiert.
 Hier kann auch eine beliebige andere Methode verwendet werden, jedoch liefert dieser Ansatz bei einer binären Verteilung im Histogramm optimale Ergebnisse.
 
 \begin{algorithm}
@@ -380,7 +383,7 @@ Anschließend wird jeder Voxel getrennt betrachtet und anhand der Eckkonfigurati
 Dieses Vorgehen wird nun für jeden Voxel wiederholt, was zu einer vollständigen Rekonstruktion der Oberfläche führt.
 
 \begin{algorithm}[ht]
-\caption{Marching Cubes}
+\caption[Marching Cubes]{Marching Cubes \cite[Abs. 4]{lorensen1987marching}}
 \label{alg:marching-cubes}
 \begin{algorithmic}
 \Function{marchingCubes}{}
@@ -473,6 +476,7 @@ Außerdem verringern sich aufgrund der niedrigeren Zahl an Blättern der benöti
 \subsection{Weitere Ansätze}
 \label{subsec:triangulation-others}
 %TODO
+Neben den bereits genannten Rekonstruktionsalgorithmen Marching Cubes und Poisson gibt es noch weitere unterschiedliche Ideen, um ein Polygonnetz zu triangulieren.
 
 \subsubsection{Greedy-Triangulierung}
 \label{subsubsec:greedy-triangulierung}
@@ -526,7 +530,7 @@ Die Delaunay-Triangulierung behebt dieses Problem weitestgehend, da sie die mini
 Eine weitere Eigenschaft ist, dass kein Umkreis eines der Dreiecke einen Knoten beinhaltet, der nicht eine Ecke des Dreiecks ist \cite[196]{berg2000comp}. Der Ablauf der Delaunay-Triangulierung ist in \autoref{alg:delaunay-triangulierung} zu sehen.
 
 \begin{algorithm}
-\caption[Delaunay-Triangulierung]{Delaunay-Triangulierung nach \cite[200--201]{berg2000comp}}
+\caption[Delaunay-Triangulierung]{Delaunay-Triangulierung \cite[200--201]{berg2000comp}}
 \label{alg:delaunay-triangulierung}
 \begin{algorithmic}
 \State $\mathcal{P} \gets$ list of $n$ vertices $p_1, \dots, p_n$
@@ -556,13 +560,40 @@ Eine weitere Eigenschaft ist, dass kein Umkreis eines der Dreiecke einen Knoten 
 		\State get two triangles $a, b \in \mathcal{T}$ separated by $t$
 		\State connect vertices $p_1 \in a$ and $p_2 \in b$ not connected by $t$
 		\State remove $t$
-		\State check untouched edges not ending at $p$ using \Call{checkFlipped}{$p$, edge}
+		\State check old edges not ending at $p$ using \Call{checkFlipped}{$p$, edge}
 	\EndIf
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
 
+
 \subsubsection{Ball Pivoting}
 \label{subsubsection:ball-pivoting}
-Ball Pivoting \cite{bernardini1999ball}
 
+Die Ball-Pivoting-Rekonstruktion liefert eine sehr anschauliche und intuitive Möglichkeit, eine Punktwolke zu triangulieren.
+Dabei wird ein imaginärer Ball mit Radius $\rho$ auf ein Seed-Dreieck gelegt und nacheinander über die Kanten gerollt \cite{bernardini1999ball}.
+Trifft er dabei auf einen weiteren Punkt, wird aus diesem und der bereits existierenden Kante ein neues Dreieck gebildet.
+Falls er auf keinen Punkt trifft, handelt es sich um eine Außenkante, die nicht weiter betrachtet wird.
+Der genaue Ablauf ist in \autoref{alg:ball-pivoting} dargestellt.
+
+\begin{algorithm}
+\caption[Ball Pivoting]{Ball Pivoting \cite[Abs. 4]{bernardini1999ball}}
+\label{alg:ball-pivoting}
+\begin{algorithmic}
+\State $\rho \gets$ the ball radius
+\State $\mathcal{F} \gets$ seed triangle
+\While{true}
+	\While{$e_{i,j} \gets$ \Call{getActiveEdge}{$\mathcal{F}$}}
+		\If{$\sigma_k \gets$ \Call{ballPivot}{$e_{i,j}$} $\wedge\ ($\Call{notUsed}{$\sigma_k$} $\vee$ \Call{onFront}{$\sigma_k$}$)\ $}
+			\State do stuff %TODO
+		\EndIf
+	\EndWhile
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+Ein Nachteil des Ball-Pivoting-Algorithmus ist, dass bei zu groß gewählten Radii einige Details verloren gehen können.
+Dies tritt insbesondere dann auf, wenn die rekonstrukierte Oberfläche stark konkav ist und die Abstände zwischen den Punkten deutlich kleiner als der gewählte Radius sind.
+
+Um diesem Fall vorzubeugen kann man mehrere Triangulierungen mit unterschiedlichen Werten für $\rho$ kombinieren.
+Aufgrund der mehrfachen Ausführung führt dies jedoch zu einer deutlich erhöhten Laufzeit.
