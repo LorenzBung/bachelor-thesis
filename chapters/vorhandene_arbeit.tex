@@ -515,8 +515,52 @@ Ein enormer Vorteil der Greedy-Triangulierung ist ihre Geschwindigkeit.
 So zeigen \citeauthor{berg2000comp}, dass ein Polygon mit $n$ Vertices in $\mathcal{O}(n \log n)$ rekonstruiert werden kann \cite[56--58]{berg2000comp}.
 Dies ist beispielsweise für Echtzeitanwendungen relevant, wie die in \cite{Marton09ICRA} vorgestellte Methode demonstriert.
 
+
 \subsubsection{Delaunay-Triangulierung}
 \label{subsubsec:delaunay-triangulierung}
+
+Dreiecke mit mindestens einem kleinen Innenwinkel sind häufig problematisch in der Computergrafik.
+Beim Renderingprozess können aufgrund von Präzisions- und Rundungsfehlern Artefakte und Aliasingeffekte auftreten.
+
+Die Delaunay-Triangulierung behebt dieses Problem weitestgehend, da sie die minimalen Innenwinkel der generierten Dreiecke maximiert \cite[199]{berg2000comp}.
+Eine weitere Eigenschaft ist, dass kein Umkreis eines der Dreiecke einen Knoten beinhaltet, der nicht eine Ecke des Dreiecks ist \cite[196]{berg2000comp}. Der Ablauf der Delaunay-Triangulierung ist in \autoref{alg:delaunay-triangulierung} zu sehen.
+
+\begin{algorithm}
+\caption[Delaunay-Triangulierung]{Delaunay-Triangulierung nach \cite[200--201]{berg2000comp}}
+\label{alg:delaunay-triangulierung}
+\begin{algorithmic}
+\State $\mathcal{P} \gets$ list of $n$ vertices $p_1, \dots, p_n$
+\State $\mathcal{T} \gets$ a triangle $p_0 q r$ with $p_0 \in \mathcal{P}$ so that $\forall p \in \mathcal{P} : p \mathrm{\ inside\ } p_0 q r$
+\State $\mathcal{P} \gets \mathcal{P} \setminus \{p_0\}$
+\While{$\mathcal{P} \neq \emptyset$}
+	\State $p_r \gets$ \Call{pop}{$\mathcal{P}$}
+	\State find triangle $t \in \mathcal{T}$ so that $p_r$ is inside $t$
+	\State $\mathcal{T} \gets \mathcal{T} \setminus \{t\}$
+	\If{$p_r$ is on edge $t_1t_2 \in t$}
+		\State find vertices $f_1$ and $f_2$ of the two triangles seperated by $t_1t_2$
+		\State create triangles $t_1p_rf_1$, $t_1f_2p_r$, $t_2f_1p_r$ and $t_2p_rf_2$
+		\State check the untouched edges using \Call{checkFlipped}{$p_r$, edge}
+		\State add the triangles to $\mathcal{T}$
+	\Else
+		\State $p_r$ is inside $t = t_1t_2t_3$
+		\State split $t$ into three triangles with $p_r$ as vertex
+		\State check the old edges using \Call{checkFlipped}{$p_r$, edge}
+		\State add them to $\mathcal{T}$
+	\EndIf
+	\State remove all triangles $t \in \mathcal{T}$ which have $q$ or $r$ as vertex
+\EndWhile
+\State \Return{$\mathcal{T}$}
+
+\Function{checkFlipped}{new vertex $p$, edge $t$}
+	\If{the smallest angle is bigger after a flip}
+		\State get two triangles $a, b \in \mathcal{T}$ separated by $t$
+		\State connect vertices $p_1 \in a$ and $p_2 \in b$ not connected by $t$
+		\State remove $t$
+		\State check untouched edges not ending at $p$ using \Call{checkFlipped}{$p$, edge}
+	\EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Ball Pivoting}
 \label{subsubsection:ball-pivoting}
