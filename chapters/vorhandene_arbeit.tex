@@ -4,171 +4,11 @@
 \label{ch:vorhandene-arbeit}
 
 In diesem Kapitel werden die Kernaufgaben dieser Arbeit behandelt:
-Registrierung von mehreren Punktwolken in einem Koordinatensystem (\ref{sec:registration}), Segmentierung in einzelne Cluster (\ref{sec:segmentation}) und Triangulation der Wolke zu einem Polygonnetz (\ref{sec:triangulation}).
+Segmentierung in einzelne Cluster (\ref{sec:segmentation}), Registrierung von mehreren Punktwolken in einem Koordinatensystem (\ref{sec:registration}) und Triangulation der Wolke zu einem Polygonnetz (\ref{sec:triangulation}).
 
 Neben Erläuterung der Problematik wird ein Blick auf die aktuelle Forschung zum jeweiligen Thema geworfen.
 Außerdem werden mögliche Lösungsansätze auf ihren praktischen Nutzen untersucht und die Vor- und Nachteile diskutiert.
 
-
-\section{Registrierung von Punktwolken}
-\label{sec:registration}
-
-Beim Erfassen von Objekten in der Realität, beispielsweise mithilfe eines Laserscanners, werden häufig Punktwolken aus verschiedenen Perspektiven aufgenommen.
-Der Grund dafür ist, dass aus einer Scanposition nicht immer die gesamte Oberfläche sichtbar ist, etwa aufgrund von Verschattungen durch das Objekt selbst.
-Weiterhin können so Reflektionen und spiegelnde Oberflächen wie auch Hintergrundrauschen gemittelt werden, sodass weitgehend robuste Daten erhalten werden.
-
-In vielen Fällen ist die zugehörige Aufnahmeposition nicht bekannt, unzureichend genau oder es liegt kein kalibriertes System vor.
-Aus diesem Grund müssen die erfassten Punktwolken erst in ein globales Koordinatensystem gebracht werden.
-Diesen Prozess nennt man Registrierung.
-
-
-\subsection{Lokale Registrierung}
-\label{subsec:local-registration}
-
-Bei der lokalen Registrierung von zwei Punktwolken müssen diese bereits grob aneinander ausgerichtet sein.
-Der Registrierungsalgorithmus verfeinert diese Ausrichtung dann weiter und findet ein lokales Minimum.
-Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und seine vielen verschiedenen Varianten.
-
-
-\subsubsection{\acl{ICP}}
-\label{subsubsec:icp}
-
-\ac{ICP} \cite{besl1992method} ist der wohl bekannteste Algorithmus zur lokalen Registrierung von Punktwolken.
-Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt, die beispielsweise auch die Normalen in den Punkten in Betracht ziehen oder besonders resistent gegen statistische Ausreißer sind \cite{rusinkiewicz2001efficient, bouaziz2013sparse, munch2010modified}. Unter anderem existiert auch eine vorhandene Implementierung in der \ac{PCL} \cite{holz2015registration}.
-
-\autoref{alg:icp} beschreibt, wie Punktwolke $A$ an Punktwolke $B$ registriert werden kann.
-Der Ablauf lässt sich folgendermaßen grob erklären:
-
-\begin{enumerate}
-\item $A$ wird iterativ durch Anwendung von Translationen und Rotationen in eine neue Position gebracht, zum Beispiel mithilfe von Quaternionen \cite{horn1987closed}.
-\item Zu jedem Punkt $p \in A$ wird der Punkt $q \in B$ gesucht, der den geringsten Abstand $e = \|p - q\|$ von $p$ hat.
-\item Berechne den Fehler $\varepsilon = \sum e^2$, Standard ist der \ac{MSE}.
-\item Wiederholung, bis eine der Abbruchbedingungen eintritt.
-\end{enumerate}
-
-Die Abbruchbedingungen sind dabei je nach Implementierung unterschiedlich.
-Meist terminiert der Algorithmus jedoch, wenn
-
-\begin{itemize}
-\item $\varepsilon < \alpha$ mit Grenzwert $\alpha > 0$ für den Restfehler
-\item $\Delta e > \delta$, mit $\delta > 0$ als Grenzwert für die Änderung des Fehlers
-\item eine festgelegte Zahl von Iterationen abgelaufen ist.
-\end{itemize}
-
-Selbstverständlich lassen sich beliebig viele zusätzliche Kriterien definieren, beispielsweise eine festgelegte maximale Laufzeit.
-
-
-\begin{algorithm}[ht]
-\caption{\acl{ICP}}
-\label{alg:icp}
-\begin{algorithmic}
-\Function{ICP}{$cloud1, cloud2$}
-	\State $PointMap \gets \emptyset$
-	\ForAll{$p \in cloud1$}
-	\Comment{Find corresponding points}
-		\State $q \gets$ \Call{findNearestNeighbor}{$cloud2, p$}
-		\If{\Call{dist}{$p, q$} $< maxDist$}
-			\State \Call{$PointMap$.add}{$p, q$}
-		\EndIf
-	\EndFor
-	\While{termination Criteria not met}
-	\Comment{Now, align the clouds}
-		\State $t \gets$ \Call{estimateTransformation()}{}
-		\State \Call{$cloud1$.transform}{$t$}
-		\State $\varepsilon \gets$ \Call{calculateError}{$PointMap$}
-	\EndWhile
-\EndFunction
-\Function{calculateError}{$PointMap$}
-	\State $\varepsilon \gets 0$
-	\ForAll{$p, q \in PointMap$}
-		\State $e \gets \|p - q\| = \sqrt{(p_x - q_x)^2 + (p_y - q_y)^2 + (p_z - q_z)^2}$
-		\State $\varepsilon \gets \varepsilon + e^2$
-	\EndFor
-	\State \Return{$\varepsilon$}
-\EndFunction
-\end{algorithmic}
-\end{algorithm}
-
-
-\subsubsection{Kinect Fusion}
-\label{subsubsec:kinfu}
-
-Durch die Veröffentlichung der Microsoft Kinect im Jahr 2010 wurde aufgrund ihres niedrigen Preises erstmals der breiten Masse der Zugang zu Tiefenkameras ermöglicht \cite[1:55]{kinfuTalkYoutube}.
-Die Kinect ist eine 3D-Kamera, welche ursprünglich für die Nutzung im Entertainment- und Gamingbereich entwickelt worden ist.
-Bestehend aus einem Lichtemitter, Infrarotsensor, einer 2D-RGB-Kamera und weiteren Sensoren, liefert sie 3D-Daten bei einer Bildwiederholfrequenz von 30 Hz.
-Neben dem ursprünglichen Anwendungsgebiet findet sie heute auch in vielen anderen, auch wissenschaftlichen Bereichen Anwendung, beispielsweise bei der Aufzeichnung geomorphologischer Daten \cite{mankoff2013kinect}.
-
-\ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion, microsoftKinfuYoutube} und bietet eine Möglichkeit, mithilfe der Kinect 3D-Rekonstruktionen in Echtzeit durchzuführen.
-\ac{KinFu} kombiniert dabei die lokale Registrierung durch den \ac{ICP}-Algorithmus mit einem \ac{TSDF}.
-Ein \ac{TSDF} ist im Grunde genommen nichts anderes als ein Voxel Grid.
-Während der Wert eines Voxel im ursprünglichen Voxel Grid Informationen über die Daten im betreffenden Voxel enthält, wird hier die Entfernung zur nächsten Oberfläche gespeichert \cite{curless1996volumetric}.
-Somit stehen innerhalb des Objekts negative Werte in den Voxeln und außerhalb positive Werte.
-Die Oberfläche wird damit implizit durch den Nulldurchgang der Distanzen in den Voxeln definiert.
-
-Dies ermöglicht bei einer relativ geringen Auflösung dennoch eine recht genaue Rekonstruktion der vorhandenen Oberflächen.
-Um dies zu erreichen, werden die Distanzen in den Voxeln interpoliert und Fehler durch die geringe Auflösung oder Sensorrauschen minimiert.
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.66\textwidth, frame]{images/kinfu-integration.png}
-	\caption{Integration eines Tiefenbilds in \ac{KinFu}. Entnommen aus \cite{izadi2011kinectfusion}}
-	\label{fig:kinfu-integration}
-\end{figure}
-
-Durch eine schnelle GPU-Implementierung auf Basis von \ac{CUDA} erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz, der Bildwiederholfrequenz der Kinect.
-Somit ist die zeitliche Differenz zwischen zwei Aufnahmen sehr niedrig.
-Es wird davon ausgegangen, dass die Kamera handgeführt (bzw. mit geringer Geschwindigkeit bewegt) wird, daher hält sich auch die räumliche Distanz zwischen einzelnen Frames in Grenzen.
-Aufgrund dieser Gegebenheiten reicht bei \ac{KinFu} eine lokale Registrierung aus, es kann also direkt \ac{ICP} verwendet werden.
-
-In \autoref{fig:kinfu-integration} ist der Ablauf der Integration eines neuen Tiefenbilds ins \ac{TSDF} bei \ac{KinFu} dargestellt.
-Das Tiefenbild wird zunächst in eine Punktwolke konvertiert.
-Diese wird anschließend durch \ac{ICP} registriert, um dann unter Bildung eines Mittelwerts in das \ac{TSDF} integriert zu werden.
-Zur Darstellung der Szene wird dieses anschließend mithilfe eines Raycasters gerendert.
-
-
-Es gibt zahlreiche Optimierungen und veränderte Versionen von \ac{KinFu}.
-Unter anderem gibt es in der \ac{PCL} eine freie Implementierung \cite{pirovano2012kinfu}.
-Eine optimierte Version ist beispielsweise Chisel \cite{klingensmith2015chisel}, wo eine effizientere Voxelstrategie verwendet wird.
-Weiterhin ist Chisel eine reine CPU-Implementierung, was die Nutzung auf Mobilgeräten ohne Grafikkarte ermöglicht.
-
-Die in dieser Arbeit verwendete Implementierung ist \ac{YAK}.
-\ac{YAK} ist eine auf \ac{ROS} angepasste Version von \ac{KinFu}, um Trajectory Waypoints für die Robotersteuerung zu errechnen \cite{schornak2019yak}.
-Die Verwendung von \ac{KinFu} in industriellen Robotikanlagen ist in vielerlei Hinsicht sinnvoll:
-\begin{itemize}
-\item Objekte können aus mehreren Perspektiven gescannt werden, was eine bessere Darstellung der Szene liefert.
-\item Rauschen durch den Bildsensor wird aufgrund der Mittelwertbildung minimiert.
-Das Ergebnis ist ein glatteres und realistischeres Modell.
-\item Durch die GPU-Implementierung können Tiefenbilder in Echtzeit integriert werden, was insbesondere bei Robotikanwendungen ein großer Vorteil ist.
-\item Ein häufig in der Bildverarbeitung auftretendes Problem sind reflektierende bzw. spiegelnde Oberflächen.
-Die betroffenen Regionen können oft nur falsch, verzerrt oder gar nicht modelliert werden.
-Da hier eine Aufnahme aus mehreren Perspektiven möglich ist, können derartige Fehler weitestgehend vermieden werden. In \autoref{fig:yak-reflecting-model} ist dies an einem Beispiel besonders gut sichtbar.
-\end{itemize}
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.4\textwidth]{images/yak-reflecting-scene.jpg}
-	\includegraphics[width=0.4\textwidth]{images/yak-reflecting-reconstruction.png}
-	\caption{Szene und Rekonstruktion eines reflektierenden Objekts durch \ac{YAK}. Entnommen aus \cite{schornak2019yak}}
-	\label{fig:yak-reflecting-model}
-\end{figure}
-
-Der Vorteil der Echtzeitintegration ist jedoch gleichzeitig auch ein großes Problem.
-In industriellen Robotikanlagen sind nur selten Grafikkarten verbaut.
-Eine Hochleistungs-GPU-Einheit mit \ac{CUDA}-Unterstützung ist dabei aber unerlässlich, da sonst nur ein Bruchteil der Geschwindigkeit erreicht werden kann.
-
-
-\subsection{Globale Registrierung}
-\label{subsec:global-registration}
-
-Bei der globalen Registrierung müssen sich die beiden Punktwolken nicht nahe der endgültigen Ausrichtung befinden - Translation und Rotation können beliebig sein.
-Ein Nachteil ist jedoch, dass die globale Registrierung oft nur eine Grobregistrierung bietet, also keine optimalen Ergebnisse liefert.
-Aus diesem Grund bietet es sich meist an, anschließend noch eine lokale Registrierung zur Verbesserung der Ergebnisse durchzuführen.
-
-Zur globalen Registrierung von Punktwolken existieren verschiedene Ansätze \cite{chaudhury2015global, zhou2016fast, rusu2009fast}.
-Die in dieser Arbeit verwendete Methode ist Super4PCS \cite{mellado2014super4pcs}, eine optimierte Version von \ac{4PCS} \cite{aiger2008fpcs}.
-Dieser Ansatz wird verwendet, da die vorhandene Implementierung \ac{OpenGR} \cite{mellado2018opengr} über einen Wrapper bereits zur \ac{PCL} kompatibel ist.
-
-%TODO 4PCS Funktionsweise erklären
 
 
 \section{Segmentierung}
@@ -359,6 +199,169 @@ Hier kann auch eine beliebige andere Methode verwendet werden, jedoch liefert di
 \EndFor
 \end{algorithmic}
 \end{algorithm}
+
+
+
+\section{Registrierung von Punktwolken}
+\label{sec:registration}
+
+Beim Erfassen von Objekten in der Realität, beispielsweise mithilfe eines Laserscanners, werden häufig Punktwolken aus verschiedenen Perspektiven aufgenommen.
+Der Grund dafür ist, dass aus einer Scanposition nicht immer die gesamte Oberfläche sichtbar ist, etwa aufgrund von Verschattungen durch das Objekt selbst.
+Weiterhin können so Reflektionen und spiegelnde Oberflächen wie auch Hintergrundrauschen gemittelt werden, sodass weitgehend robuste Daten erhalten werden.
+
+In vielen Fällen ist die zugehörige Aufnahmeposition nicht bekannt, unzureichend genau oder es liegt kein kalibriertes System vor.
+Aus diesem Grund müssen die erfassten Punktwolken erst in ein globales Koordinatensystem gebracht werden.
+Diesen Prozess nennt man Registrierung.
+
+
+\subsection{Globale Registrierung}
+\label{subsec:global-registration}
+
+Bei der globalen Registrierung müssen sich die beiden Punktwolken nicht nahe der endgültigen Ausrichtung befinden - Translation und Rotation können beliebig sein.
+Ein Nachteil ist jedoch, dass die globale Registrierung oft nur eine Grobregistrierung bietet, also keine optimalen Ergebnisse liefert.
+Aus diesem Grund bietet es sich meist an, anschließend noch eine lokale Registrierung zur Verbesserung der Ergebnisse durchzuführen.
+
+Zur globalen Registrierung von Punktwolken existieren verschiedene Ansätze \cite{chaudhury2015global, zhou2016fast, rusu2009fast}.
+Die in dieser Arbeit verwendete Methode ist Super4PCS \cite{mellado2014super4pcs}, eine optimierte Version von \ac{4PCS} \cite{aiger2008fpcs}.
+Dieser Ansatz wird verwendet, da die vorhandene Implementierung \ac{OpenGR} \cite{mellado2018opengr} über einen Wrapper bereits zur \ac{PCL} kompatibel ist.
+
+%TODO 4PCS Funktionsweise erklären
+
+
+\subsection{Lokale Registrierung}
+\label{subsec:local-registration}
+
+Bei der lokalen Registrierung von zwei Punktwolken müssen diese bereits grob aneinander ausgerichtet sein.
+Der Registrierungsalgorithmus verfeinert diese Ausrichtung dann weiter und findet ein lokales Minimum.
+Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und seine vielen verschiedenen Varianten.
+
+
+\subsubsection{\acl{ICP}}
+\label{subsubsec:icp}
+
+\ac{ICP} \cite{besl1992method} ist der wohl bekannteste Algorithmus zur lokalen Registrierung von Punktwolken.
+Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt, die beispielsweise auch die Normalen in den Punkten in Betracht ziehen oder besonders resistent gegen statistische Ausreißer sind \cite{rusinkiewicz2001efficient, bouaziz2013sparse, munch2010modified}. Unter anderem existiert auch eine vorhandene Implementierung in der \ac{PCL} \cite{holz2015registration}.
+
+\autoref{alg:icp} beschreibt, wie Punktwolke $A$ an Punktwolke $B$ registriert werden kann.
+Der Ablauf lässt sich folgendermaßen grob erklären:
+
+\begin{enumerate}
+\item $A$ wird iterativ durch Anwendung von Translationen und Rotationen in eine neue Position gebracht, zum Beispiel mithilfe von Quaternionen \cite{horn1987closed}.
+\item Zu jedem Punkt $p \in A$ wird der Punkt $q \in B$ gesucht, der den geringsten Abstand $e = \|p - q\|$ von $p$ hat.
+\item Berechne den Fehler $\varepsilon = \sum e^2$, Standard ist der \ac{MSE}.
+\item Wiederholung, bis eine der Abbruchbedingungen eintritt.
+\end{enumerate}
+
+Die Abbruchbedingungen sind dabei je nach Implementierung unterschiedlich.
+Meist terminiert der Algorithmus jedoch, wenn
+
+\begin{itemize}
+\item $\varepsilon < \alpha$ mit Grenzwert $\alpha > 0$ für den Restfehler
+\item $\Delta e > \delta$, mit $\delta > 0$ als Grenzwert für die Änderung des Fehlers
+\item eine festgelegte Zahl von Iterationen abgelaufen ist.
+\end{itemize}
+
+Selbstverständlich lassen sich beliebig viele zusätzliche Kriterien definieren, beispielsweise eine festgelegte maximale Laufzeit.
+
+
+\begin{algorithm}[ht]
+\caption{\acl{ICP}}
+\label{alg:icp}
+\begin{algorithmic}
+\Function{ICP}{$cloud1, cloud2$}
+	\State $PointMap \gets \emptyset$
+	\ForAll{$p \in cloud1$}
+	\Comment{Find corresponding points}
+		\State $q \gets$ \Call{findNearestNeighbor}{$cloud2, p$}
+		\If{\Call{dist}{$p, q$} $< maxDist$}
+			\State \Call{$PointMap$.add}{$p, q$}
+		\EndIf
+	\EndFor
+	\While{termination Criteria not met}
+	\Comment{Now, align the clouds}
+		\State $t \gets$ \Call{estimateTransformation()}{}
+		\State \Call{$cloud1$.transform}{$t$}
+		\State $\varepsilon \gets$ \Call{calculateError}{$PointMap$}
+	\EndWhile
+\EndFunction
+\Function{calculateError}{$PointMap$}
+	\State $\varepsilon \gets 0$
+	\ForAll{$p, q \in PointMap$}
+		\State $e \gets \|p - q\| = \sqrt{(p_x - q_x)^2 + (p_y - q_y)^2 + (p_z - q_z)^2}$
+		\State $\varepsilon \gets \varepsilon + e^2$
+	\EndFor
+	\State \Return{$\varepsilon$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection{Kinect Fusion}
+\label{subsubsec:kinfu}
+
+Durch die Veröffentlichung der Microsoft Kinect im Jahr 2010 wurde aufgrund ihres niedrigen Preises erstmals der breiten Masse der Zugang zu Tiefenkameras ermöglicht \cite[1:55]{kinfuTalkYoutube}.
+Die Kinect ist eine 3D-Kamera, welche ursprünglich für die Nutzung im Entertainment- und Gamingbereich entwickelt worden ist.
+Bestehend aus einem Lichtemitter, Infrarotsensor, einer 2D-RGB-Kamera und weiteren Sensoren, liefert sie 3D-Daten bei einer Bildwiederholfrequenz von 30 Hz.
+Neben dem ursprünglichen Anwendungsgebiet findet sie heute auch in vielen anderen, auch wissenschaftlichen Bereichen Anwendung, beispielsweise bei der Aufzeichnung geomorphologischer Daten \cite{mankoff2013kinect}.
+
+\ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion, microsoftKinfuYoutube} und bietet eine Möglichkeit, mithilfe der Kinect 3D-Rekonstruktionen in Echtzeit durchzuführen.
+\ac{KinFu} kombiniert dabei die lokale Registrierung durch den \ac{ICP}-Algorithmus mit einem \ac{TSDF}.
+Ein \ac{TSDF} ist im Grunde genommen nichts anderes als ein Voxel Grid.
+Während der Wert eines Voxel im ursprünglichen Voxel Grid Informationen über die Daten im betreffenden Voxel enthält, wird hier die Entfernung zur nächsten Oberfläche gespeichert \cite{curless1996volumetric}.
+Somit stehen innerhalb des Objekts negative Werte in den Voxeln und außerhalb positive Werte.
+Die Oberfläche wird damit implizit durch den Nulldurchgang der Distanzen in den Voxeln definiert.
+
+Dies ermöglicht bei einer relativ geringen Auflösung dennoch eine recht genaue Rekonstruktion der vorhandenen Oberflächen.
+Um dies zu erreichen, werden die Distanzen in den Voxeln interpoliert und Fehler durch die geringe Auflösung oder Sensorrauschen minimiert.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.66\textwidth, frame]{images/kinfu-integration.png}
+	\caption{Integration eines Tiefenbilds in \ac{KinFu}. Entnommen aus \cite{izadi2011kinectfusion}}
+	\label{fig:kinfu-integration}
+\end{figure}
+
+Durch eine schnelle GPU-Implementierung auf Basis von \ac{CUDA} erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz, der Bildwiederholfrequenz der Kinect.
+Somit ist die zeitliche Differenz zwischen zwei Aufnahmen sehr niedrig.
+Es wird davon ausgegangen, dass die Kamera handgeführt (bzw. mit geringer Geschwindigkeit bewegt) wird, daher hält sich auch die räumliche Distanz zwischen einzelnen Frames in Grenzen.
+Aufgrund dieser Gegebenheiten reicht bei \ac{KinFu} eine lokale Registrierung aus, es kann also direkt \ac{ICP} verwendet werden.
+
+In \autoref{fig:kinfu-integration} ist der Ablauf der Integration eines neuen Tiefenbilds ins \ac{TSDF} bei \ac{KinFu} dargestellt.
+Das Tiefenbild wird zunächst in eine Punktwolke konvertiert.
+Diese wird anschließend durch \ac{ICP} registriert, um dann unter Bildung eines Mittelwerts in das \ac{TSDF} integriert zu werden.
+Zur Darstellung der Szene wird dieses anschließend mithilfe eines Raycasters gerendert.
+
+
+Es gibt zahlreiche Optimierungen und veränderte Versionen von \ac{KinFu}.
+Unter anderem gibt es in der \ac{PCL} eine freie Implementierung \cite{pirovano2012kinfu}.
+Eine optimierte Version ist beispielsweise Chisel \cite{klingensmith2015chisel}, wo eine effizientere Voxelstrategie verwendet wird.
+Weiterhin ist Chisel eine reine CPU-Implementierung, was die Nutzung auf Mobilgeräten ohne Grafikkarte ermöglicht.
+
+Die in dieser Arbeit verwendete Implementierung ist \ac{YAK}.
+\ac{YAK} ist eine auf \ac{ROS} angepasste Version von \ac{KinFu}, um Trajectory Waypoints für die Robotersteuerung zu errechnen \cite{schornak2019yak}.
+Die Verwendung von \ac{KinFu} in industriellen Robotikanlagen ist in vielerlei Hinsicht sinnvoll:
+\begin{itemize}
+\item Objekte können aus mehreren Perspektiven gescannt werden, was eine bessere Darstellung der Szene liefert.
+\item Rauschen durch den Bildsensor wird aufgrund der Mittelwertbildung minimiert.
+Das Ergebnis ist ein glatteres und realistischeres Modell.
+\item Durch die GPU-Implementierung können Tiefenbilder in Echtzeit integriert werden, was insbesondere bei Robotikanwendungen ein großer Vorteil ist.
+\item Ein häufig in der Bildverarbeitung auftretendes Problem sind reflektierende bzw. spiegelnde Oberflächen.
+Die betroffenen Regionen können oft nur falsch, verzerrt oder gar nicht modelliert werden.
+Da hier eine Aufnahme aus mehreren Perspektiven möglich ist, können derartige Fehler weitestgehend vermieden werden. In \autoref{fig:yak-reflecting-model} ist dies an einem Beispiel besonders gut sichtbar.
+\end{itemize}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.4\textwidth]{images/yak-reflecting-scene.jpg}
+	\includegraphics[width=0.4\textwidth]{images/yak-reflecting-reconstruction.png}
+	\caption{Szene und Rekonstruktion eines reflektierenden Objekts durch \ac{YAK}. Entnommen aus \cite{schornak2019yak}}
+	\label{fig:yak-reflecting-model}
+\end{figure}
+
+Der Vorteil der Echtzeitintegration ist jedoch gleichzeitig auch ein großes Problem.
+In industriellen Robotikanlagen sind nur selten Grafikkarten verbaut.
+Eine Hochleistungs-GPU-Einheit mit \ac{CUDA}-Unterstützung ist dabei aber unerlässlich, da sonst nur ein Bruchteil der Geschwindigkeit erreicht werden kann.
+
 
 
 \section{Triangulierung}
