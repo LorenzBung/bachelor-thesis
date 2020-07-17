@@ -227,6 +227,31 @@ Dieser Ansatz wird verwendet, da die vorhandene Implementierung \ac{OpenGR} \cit
 
 %TODO 4PCS Funktionsweise erklären
 
+\ac{4PCS} basiert auf der Erkenntnis, dass die Verhältnisse der Distanzen zwischen Punkten bei einer affinen Transformation erhalten bleiben.
+Wählt man nun also vier koplanare Punkte (vgl. \autoref{def:koplanar}), überschneiden sich mindestens zwei der Geraden, die die Eckpunkte verbinden.
+Da es in der Realität jedoch sehr unwahrscheinlich ist, vier koplanare Punkte zu finden, wird eine leichte Abweichung akzeptiert.
+
+\begin{definition}
+\label{def:koplanar}
+Seien $p, q, r, s \in \mathcal{P} \subseteq \mathbb{R}^3$. Dann heißen $p,q,r,s$ koplanar, wenn $\overrightarrow{a} = \overline{pq}$, $\overrightarrow{b} = \overline{pr}$ und $\overrightarrow{c} = \overline{ps}$ linear abhängig sind, also eine Lösung für
+$$
+\alpha \overrightarrow{a} + \beta \overrightarrow{b} + \gamma \overrightarrow{c} = \begin{pmatrix}0\\0\\0\end{pmatrix},\ \alpha,\beta,\gamma \neq 0
+$$
+existiert.
+\end{definition}
+
+Seien $(p, q)$ und $(r, s)$ nun die Paare, deren jeweilige Verbindungsgeraden sich im Punkt $e$ schneiden.
+Die Verhältnisse $r_1 = \frac{\|p - e\|}{\|p - q\|}$ und $r_2 = \frac{\|r - e\|}{\|r - s\|}$ bleiben nach affiner Transformation $T$ gleich.
+Da es eine solche (gesuchte) Transformation von $\mathcal{P}$ nach $\mathcal{S}$ geben muss, gilt \autoref{eq:4pcs-ratios}.
+
+\begin{equation}
+\label{eq:4pcs-ratios}
+\forall p,q,r,s \in \mathcal{P}\ \exists p',q',r',s' \in \mathcal{S} : r_1 = r_1' \wedge r_2 = r_2'
+\end{equation}
+
+Also werden die Punkte $p',q',r',s'$ mit den Verhältnissen $r_1' = \frac{\|p' - e'\|}{\|p' - q'\|}$ und $r_2' = \frac{\|r' - e\|}{\|r' - s'\|}$ gesucht, indem $d_1 = r_1' - r_1$ und $d_2 = r_2' - r_2$ minimiert werden.
+Weiterhin muss $\|\mathcal{P} * T - \mathcal{S}\| < \delta$ für die gefundene Transformation $T$ gelten, also der \ac{MSE} unter einem Grenzwert $\delta$ liegen.
+
 
 \subsection{Lokale Registrierung}
 \label{subsec:local-registration}
@@ -431,7 +456,6 @@ Durch eine Interpolation zwischen den Werten der beiden Eckpunkte des Voxels lä
 \subsection{Poisson}
 \label{subsec:poisson}
 
-%TODO
 Die \citeyear{kazhdan2006poisson} von \citeauthor{kazhdan2006poisson} präsentierte Poisson-Rekonstruktion \cite{kazhdan2006poisson} basiert auf der impliziten Darstellung der Oberfläche als Funktion.
 Die mathematische Darstellung dieser Funktion lässt sich \autoref{def:poisson-surface} entnehmen.
 
@@ -478,7 +502,7 @@ Außerdem verringern sich aufgrund der niedrigeren Zahl an Blättern der benöti
 
 \subsection{Weitere Ansätze}
 \label{subsec:triangulation-others}
-%TODO
+
 Neben den bereits genannten Rekonstruktionsalgorithmen Marching Cubes und Poisson gibt es noch weitere unterschiedliche Ideen, um ein Polygonnetz zu triangulieren.
 
 \subsubsection{Greedy-Triangulierung}
