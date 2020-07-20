@@ -190,7 +190,8 @@ Zum besseren Verständnis wird das in \autoref{fig:triangles-example} dargestell
 \subsection{\acl{VVM}}
 \label{subsec:v-v-mesh}
 
-Beim \ac{VVM} werden nur Vertices gespeichert, Kanten und Flächen ergeben sich implizit.
+Beim \ac{VVM} werden zu jedem Vertex nur die verbundenen Vertices gespeichert.
+Kanten und Flächen ergeben sich daraus implizit.
 Zu den in \autoref{fig:triangles-example} dargestellten Dreiecken wird also die Liste in \autoref{tab:vvm-table} gespeichert.
 
 \begin{table}[ht]
@@ -240,7 +241,7 @@ Der Nachteil ist jedoch, dass der Speicheraufwand sehr hoch und die Datenstruktu
 \coordinate[label=45:$v_6$] (v_6) at (2.5,0);
 \coordinate[label=$F_1$] (F_1) at (1.5,0.2);
 \coordinate[label=$F_2$] (F_2) at (1.5,1.5);
-\draw (v_1) to node[below]{$e$} (v_2);
+\draw[->,shorten >=2pt] (v_1) to node[below]{$e$} (v_2);
 \draw (v_1) to node[above right]{$\leftarrow\circlearrowleft$} (v_3);
 \draw (v_1) to node[below right]{$\leftarrow\circlearrowright$} (v_4);
 \draw (v_2) to node[above left]{$\rightarrow\circlearrowleft$} (v_5);
@@ -262,6 +263,9 @@ Der Nachteil ist jedoch, dass der Speicheraufwand sehr hoch und die Datenstruktu
 
 Bei der Winged-Edge-Darstellung werden in der Kantentabelle jeweils die vorhergehenden und nachfolgenden Kanten im und gegen den Uhrzeigersinn gespeichert.
 Dies ermöglicht die schnelle Bestimmung von angrenzenden Kanten, Vertices oder Faces, bedeutet aber gleichzeitig auch viel Verwaltungsaufwand der Indizes.
+
+Um Vor- und Nachfolger jeweils im und gegen den Uhrzeigersinn definieren zu können, muss eine Orientierung vorliegen.
+Die Kanten in der Winged-Edge-Datenstruktur sind daher immer gerichtet.
 In \autoref{fig:winged-edge-edges} findet sich eine Übersicht über die entsprechenden Kanten.
 
 Die Winged-Edge-Datenstruktur zum Beispiel in \autoref{fig:triangles-example} ist in \autoref{tab:winged-edge-table} zu sehen.
@@ -302,6 +306,7 @@ $v_4$ & $e_4, e_5$ & \multicolumn{5}{}{}\\\cline{1-2}
 
 Im Gegensatz zu bisherigen Modellen ist die Idee bei der Half-Edge-Datenstruktur, die Edges in jeweils zwei Halbkanten aufzuteilen.
 Eine Halbkante hat somit einen Vor- und Nachfolger, sowie einen gegenüberliegenden Nachbarn.
+Da wie bei der Winged-Edge-Darstellung eine Orientierung notwendig ist, ist die Halbkante gerichtet.
 
 Der Vorteil dieser Art der Speicherung ist, dass sowohl Kantenvorgänger und -nachfolger schnell bestimmt werden können, aber insbesondere auch aneinander angrenzende Faces. Das Hinzufügen, Entfernen oder Ändern von Daten ist jedoch leichter als bei der Winged-Edge-Darstellung, da nicht zu jeder Kante 4 Nachbarkanten und alle Faces gespeichert werden müssen.
 
@@ -343,16 +348,3 @@ $v_4$ & $e_{4b}, e_{5a}$ & \multicolumn{4}{}{}\\
 \caption{Vertex-, Edge- und Face-Tabellen bei der Half-Edge-Darstellung nach \cite{berg2000comp}}
 \label{tab:half-edge-table}
 \end{table}
-
-
-\section{\acl{PCL}}
-\label{sec:pcl}
-
-Bei der \ac{PCL} \cite{rusu2011pcl} handelt es sich um eine Bibliothek, welche die Arbeit mit 3D-Punktwolken immens vereinfacht.
-Sie bietet Möglichkeiten zur Filterung, Segmentierung, Oberflächenrekonstruktion und Visualisierung von Punktwolken, sowie weitere Module.
-Mit ihrer Hilfe werden Filterung, Segmentierung und Visualisierung von Punktwolken immens vereinfacht.
-Es existieren weiterhin auch schon einige Möglichkeiten zur Oberflächenrekonstruktion sowie viele weitere Module.
-
-Neben den zahlreichen unterstützten Anwendungsgebieten und implementierten Algorithmen bietet die \ac{PCL} den weiteren entscheidenden Vorteil, dass sie direkt zu \ac{ROS} kompatibel ist.
-Die Kompatibilität wird durch ROS-Nodelets im Paket \texttt{perception\_pcl} hergestellt, sodass Punktwolken, Meshes oder andere Datenstrukturen direkt zwischen \ac{ROS}-basierten Komponenten versendet werden können.
-%TODO Zu Implementierung?

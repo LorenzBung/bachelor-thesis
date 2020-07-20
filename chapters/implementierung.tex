@@ -7,8 +7,14 @@
 \section{Aufbau}
 \label{sec:aufbau}
 
+Die Pipeline ist in C++ auf Basis der \ac{PCL} \cite{rusu2011pcl} geschrieben.
+Dabei handelt es sich um eine Open-Source-Bibliothek, welche die Arbeit mit 3D-Punktwolken immens vereinfacht.
+Sie bietet Möglichkeiten zur Filterung, Segmentierung, Oberflächenrekonstruktion und Visualisierung von Punktwolken, sowie weitere Module.
+
+Neben den zahlreichen unterstützten Anwendungsgebieten und implementierten Algorithmen bietet die \ac{PCL} den weiteren entscheidenden Vorteil, dass sie direkt zu \ac{ROS} kompatibel ist.
+Die Kompatibilität wird durch ROS-Nodelets im Paket \texttt{perception\_pcl} hergestellt, sodass Punktwolken, Meshes oder andere Datenstrukturen direkt zwischen \ac{ROS}-basierten Komponenten versendet werden können.
+
 Um eine modulare Verwendung des Tools zu gewährleisten wurde ein einzelnes \ac{ROS}-Paket erstellt.
-Es bestehen Abhängigkeiten zu den Bibliotheken \ac{PCL}, \ac{OpenGR} und OpenCV.
 Die 3D-Datenverarbeitung findet hauptsächlich auf Basis der \ac{PCL} statt, mit einer Grobregistrierung über \ac{OpenGR}.
 Zur 2D-Segmentierung über den Watershed-Algorithmus wird OpenCV verwendet.
 
