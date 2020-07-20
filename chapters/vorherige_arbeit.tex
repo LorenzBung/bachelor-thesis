@@ -1,7 +1,7 @@
 % !TEX root = ../thesis.tex
 
-\chapter{Vorhandene Arbeit}
-\label{ch:vorhandene-arbeit}
+\chapter{Vorherige Arbeit}
+\label{ch:vorherige-arbeit}
 
 In diesem Kapitel werden die Kernaufgaben dieser Arbeit behandelt:
 Segmentierung in einzelne Cluster (\ref{sec:segmentation}), Registrierung von mehreren Punktwolken in einem Koordinatensystem (\ref{sec:registration}) und Triangulation der Wolke zu einem Polygonnetz (\ref{sec:triangulation}).
@@ -403,7 +403,9 @@ Diese und andere Probleme führen dazu, dass es viele verschiedene Ansätze zur 
 \subsection{Marching Cubes}
 \label{subsec:marching-cubes}
 
-Bei Marching Cubes \cite{lorensen1987marching} handelt es sich um einen Algorithmus, der die Triangulation einer Punktwolke auf ein Voxel Grid zurückführt.
+Bei Marching Cubes \cite{lorensen1987marching} handelt es sich um einen Algorithmus, der ursprünglich zur Triangulierung medizinischer Computertomographiescans entwickelt wurde.
+Diese werden in den meisten Fällen als Voxel Grid dargestellt.
+Für die Anwendung auf einee Punktwolke muss diese also zunächst konvertiert werden.
 Der Ablauf ist in \autoref{alg:marching-cubes} beschrieben.
 
 Die eingegebene Punktwolke wird also zunächst diskretisiert, was bei geringer Kantenlänge der Voxel zu Datenverlust führt.
@@ -430,7 +432,7 @@ Dieses Vorgehen wird nun für jeden Voxel wiederholt, was zu einer vollständige
 \EndFunction
 \Function{calculateIndex}{$voxel$}
 	\State $voxelIndex \gets 0$
-	\For{$cornerIndex \in [0..8]$}
+	\For{$cornerIndex \in [0..7]$}
 		\If{$voxel[cornerIndex] < isolevel$}
 		\Comment{corner inside isosurface}
 			\State $voxelIndex\ |=\ 1 << cornerIndex$
@@ -445,8 +447,10 @@ Dieses Vorgehen wird nun für jeden Voxel wiederholt, was zu einer vollständige
 Einer der entscheidenden Nachteile bei diesem Algorithmus ist, dass die Qualität des Meshs direkt abhängig von der gewählten Kantenlänge der Voxel ist.
 Dies macht viele Vorteile der Punktwolke gegenüber einem Voxel Grid zunichte.
 Bei zu geringer Kantenlänge nimmt die Zahl der möglichen rekonstruierten Polygone ab, was zu einer geringeren Qualität führt.
+
 Wählt man die Auflösung jedoch zu hoch, treten Oversampling-Effekte auf und es entstehen Lücken im Mesh.
 Insbesondere bei großen Differenzen der Distanzen zwischen Punkten in der Punktwolke führt dies zu Problemen.
+Insgesamt kann bei Marching Cubes die Topologie des Objekts verfälscht dargestellt werden \cite[2]{chernyaev1995marching}.
 
 Weiterhin weisen die Meshes in der Standardimplementierung zackenartige Artefakte auf.
 Dies passiert dann, wenn die Vertices zu den entsprechenden Kanten mittig auf diesen gewählt werden.

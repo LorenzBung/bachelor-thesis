@@ -14,7 +14,8 @@ Auch hier wird diskutiert, welche positiven und negativen Aspekte die jeweiligen
 
 %TODO Tiefergehende / fundiertere Informationen zur Aufnahme. Quellen fehlen.
 Zur Aufnahme von 3D-Bilddaten gibt es mehrere verschiedene Möglichkeiten.
-Ein LIDAR-System sendet beispielsweise mehrere Lichtstrahlen in verschiedene Richtungen, die anschließend Informationen über die Entfernung zu einem Objekt in diesem Punkt liefern.
+Ein LIDAR-System sendet beispielsweise mehrere Lichtstrahlen in verschiedene Richtungen.
+So können anschließend Informationen über die Entfernung zum jeweiligen Punkt geliefert werden, in dem die einzelnen Strahlen auf ein Objekt treffen.
 Eine Stereokamera liefert im Gegensatz dazu zwei Bilder, die anschließend durch spezielle Software zu einem dreidimensionalen Bild zusammengesetzt werden.
 Eine weitere Möglichkeit besteht darin, ein bestimmtes Muster auf die Umgebung zu projezieren, dieses dann aus einer anderen Perspektive aufzunehmen und aus der räumlichen Verzerrung des Musters die Tiefe zu errechnen.
 
@@ -69,7 +70,7 @@ v_{21} & v_{22} & v_{23} & \cdots & v_{2j}\\
 v_{31} & v_{32} & v_{33} &        & v_{3j}\\
        & \vdots &        & \ddots & \vdots\\
 v_{i1} & v_{i2} & v_{i3} & \cdots & v_{ij}
-\end{pmatrix},\ v_{ij} \in [0; 2^b),\ b, i, j \in \mathbb{N}^+
+\end{pmatrix},\ v_{ij} \in [0; 2^b - 1],\ b, i, j \in \mathbb{N}^+
 \label{eq:bitmap}
 \end{equation}
 
@@ -77,7 +78,7 @@ Dieses Prinzip lässt sich einfach auf den dreidimensionalen Raum erweitern.
 Die so erhaltene Datenstruktur nennt sich Voxel Grid.
 Als Voxel bezeichnet man somit eine einzelne Datenzelle im 3D-Array, also das dreidimensionale Äquivalent zum Pixel.
 
-Voxel Grids finden in vielen Bereichen Anwendung, zum Beispiel in der Medizin \cite{van2008hippocampus, klein2009elastix, mohanty2012secure, roche1999towards} oder Geographie \cite{chmielewski2017estimating}.
+Voxel Grids finden in vielen Bereichen Anwendung, zum Beispiel in der Computertomographie \cite[15]{carr1996surface}, Archäologie oder Stadtplanung \cite{chmielewski2017estimating}.
 Auch zum Downsampling von Punktwolken werden sie verwendet \cite{pclVoxelGrid}.
 
 Gegenüber einem Tiefenbild hat ein Voxel Grid den inhärenten Nachteil, dass Speicherplatz für jeden Voxel benötigt wird.
@@ -85,7 +86,7 @@ Dies führt schnell zu großem Speicherbedarf $M$, da dieser kubisch zur Auflös
 Da der Speicher bereits bei der Initialisierung reserviert werden muss, ist die Änderung der Auflösung oder der Größe des abgedeckten Raumes unmöglich.
 In diesem Fall müssen ein neues Voxel Grid (mit der neuen Auflösung bzw. Größe) angelegt und sämtliche Daten kopiert werden.
 
-Zur Reduzierung des großen Speicherbedarfs werden deswegen häufig Baumstrukturen (sogenannte Octrees) eingesetzt.
+Zur Reduzierung des großen Speicherbedarfs werden deswegen häufig Baumstrukturen (sogenannte Octrees) eingesetzt \cite{meagher1982efficient}.
 Dabei wird der Raum in 8 Subvoxel geteilt, welche jeweils ein Blatt des Baumes darstellen.
 Ist der Voxel gefüllt, wird er wieder entsprechend in 8 Subvoxel geteilt.
 Dies wird wiederholt, bis die gewünschte Auflösung erreicht oder eine bestimmte Tiefe im Baum erreicht ist.
@@ -105,19 +106,10 @@ Dies führt zu verbesserter Auflösung bei entfernten und zu schlechterer Auflö
 \label{subsec:punktwolken}
 
 Ein weiteres häufig verwendetes Datenmodell ist eine Punktwolke.
-Als Punktwolke bezeichnet man eine Menge $M \subset \mathbb{R}^3$ von Punkten im (mindestens) dreidimensionalen Raum.
+Hier werden die Daten als Teilmenge eines Vektorraums dargestellt.
+Im Fall dreidimensionaler Daten ist eine Punktwolke also $M \subseteq \mathbb{R}^3$.
+In den meisten Fällen repräsentieren die Punkte dabei eine Diskretisierung der Oberfläche.
 Zusätzlich zur räumlichen Information können auch noch weitere Daten pro Punkt gespeichert sein, wie RGB-Werte, Normalen, Genauigkeit oder Objektklasse (falls schon eine Segmentierung vorgenommen wurde).
-Dadurch gilt \autoref{eq:punktwolke} für $M$.
-
-\begin{equation}
-M = \begin{pmatrix}
-p_x^1 & p_y^1 & p_z^1 & \cdots\\
-p_x^2 & p_y^2 & p_z^2 & \cdots\\
-p_x^3 & p_y^3 & p_z^3 & \cdots\\
-\vdots & \vdots & \vdots & \ddots
-\end{pmatrix}
-\label{eq:punktwolke}
-\end{equation}
 
 \begin{figure}[ht]
 	\centering
@@ -129,7 +121,7 @@ p_x^3 & p_y^3 & p_z^3 & \cdots\\
 Die Nutzung von Punktwolken bringt im Vergleich zu anderen 3D-Datenmodellen einige Vorteile.
 
 \begin{itemize}
-\item Die zugrundeliegende Datenstruktur ist extrem trivial; es handelt sich um eine einfache Liste.
+\item Die zugrundeliegende Datenstruktur ist Liste.
 Dies ermöglicht sehr schnelle Operationen, wie zum Beispiel das Hinzufügen eines Punktes oder die Erweiterung um zusätzliche Informationen.
 Es lässt sich sehr einfach über die Punkte iterieren.
 \item Der Speicherbedarf einer Punktwolke wächst dynamisch, und zwar linear mit der Zahl der enthaltenen Punkte.
@@ -138,7 +130,7 @@ Beim Voxel Grid muss dagegen bereits am Anfang Speicher für jede Zelle reservie
 Beim Tiefenbild können maximal $n * m$ Punkte (ein Wert pro Pixel) mit einer Tiefeninformation versehen werden, beim Voxel Grid maximal $x * y * z$ Punkte (ein Wert pro Voxel).
 Eine Kapazitätserweiterung, wie beispielsweise das Hinzufügen neuer Pixelspalten oder -zeilen im Tiefenbild, ist bei der Punktwolke nicht notwendig.
 \item Die Auflösung ist nur durch die Gleitkommagenauigkeit der Maschine limitiert.
-Beim Voxel Grid ist sie im Gegensatz dazu durch die Größe der Voxel limitiert.
+Beim Voxel Grid ist sie im Gegensatz dazu durch die Größe der Voxel limitiert, welche aufgrund des Speicherbedarfs nicht beliebig klein gewählt werden kann.
 Beim Tiefenbild ist die Auflösung abhängig von der Bittiefe und der z-Tiefe im Bild - bei weiter entfernten Objekten ist die Auflösung auch niedriger.
 \end{itemize}
 
@@ -191,7 +183,7 @@ Zum besseren Verständnis wird das in \autoref{fig:triangles-example} dargestell
 \fill (v_3) circle (1pt);
 \fill (v_4) circle (1pt);
 \end{tikzpicture}
-\caption{Beispielhaftes Polygonnetz, bestehend aus Knoten, Kanten und Facetten}
+\caption{Beispielhaftes Polygonnetz, bestehend aus Knoten, Kanten und Faces}
 \label{fig:triangles-example}
 \end{figure}
 
