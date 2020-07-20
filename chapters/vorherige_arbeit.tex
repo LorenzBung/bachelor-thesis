@@ -3,10 +3,10 @@
 \chapter{Vorherige Arbeit}
 \label{ch:vorherige-arbeit}
 
-In diesem Kapitel werden die Kernaufgaben dieser Arbeit behandelt:
+Das Kernproblem der Arbeit lässt sich in drei verschiedene Teile gliedern:
 Segmentierung in einzelne Cluster (\ref{sec:segmentation}), Registrierung von mehreren Punktwolken in einem Koordinatensystem (\ref{sec:registration}) und Triangulation der Wolke zu einem Polygonnetz (\ref{sec:triangulation}).
 
-Neben Erläuterung der Problematik wird ein Blick auf die aktuelle Forschung zum jeweiligen Thema geworfen.
+Im Folgenden werden die wissenschaftlichen Erkenntnisse zum jeweiligen Thema erläutert.
 Außerdem werden mögliche Lösungsansätze auf ihren praktischen Nutzen untersucht und die Vor- und Nachteile diskutiert.
 
 
@@ -48,11 +48,11 @@ Eine gute Übersicht über die beiden Verfahren bietet auch \citeauthor{RusuDoct
 Diese Methode der Segmentierung im dreidimensionalen Raum ist sehr einfach.
 Sie basiert auf der Annahme, dass Punkte so lange zu einem Cluster gehören, so lange ihr Abstand unter einem Grenzwert liegt.
 
-In \autoref{alg:euclidean-cluster-extraction} wird beschrieben, wie die Cluster $\mathcal{C} \subseteq P$ für die Punktwolke $P$ nach \cite[89--90]{RusuDoctoralDissertation} errechnet werden.
+In \autoref{alg:euclidean-cluster-extraction} wird beschrieben, wie die Cluster $\mathcal{C} \subseteq P$ für die Punktwolke $P$ errechnet werden.
 Der Threshold $\delta$ gibt dabei den minimalen Abstand zwischen zwei Clustern an.
 
 \begin{algorithm}
-\caption{\acl{ECE}}
+\caption[\acl{ECE}]{\acl{ECE} \cite[89--90]{RusuDoctoralDissertation}}
 \label{alg:euclidean-cluster-extraction}
 \begin{algorithmic}
 \State $\mathcal{C} \gets \emptyset$
@@ -94,12 +94,10 @@ Eine gute Approximation liefert die in \autoref{eq:kruemmung} dargestellte Metri
 Weiterhin spielt auch die Glattheit der Oberfläche eine Rolle (siehe dazu \autoref{def:glattheit}).
 
 \begin{definition}
-Sei $p \in P, P \subset \mathbb{R}^3$.
-Dann sind die $k \gets$ \ac{KNN}
+Sei $p \in P \subset \mathbb{R}^3$ und $P' = P \setminus \{p\}$ die Menge der aufsteigend nach Abstand von $p$ sortierten Punkte.
+Dann sind die \acl{KNN}
 $$
-Q_k(p) = \bigcup\limits_{n=1}^{k} q_n(p), Q_k \subseteq P \setminus \{p\}\ 
-\mathrm{mit}\ 
-\|p - q_1\| \leq \|p - q_2\| \leq \dotsc \leq \|p - q_k\| \leq \dotsc \leq \|p - q_{|P|}\|.
+Q_k(p) = \left\{ q_i(p) | i = 1, \dots, k,\ i < j \Rightarrow \|p - q_i\| \leq \|p - q_j\| \right\}.
 $$
 Sei $E_k$ nun eine Ebene, welche die Punkte $Q_k(p)$ nach least squares \cite{schomaker1959fit}, RANSAC \cite{fischler1981random} oder anders approximiert.
 Dann ist
@@ -265,15 +263,15 @@ Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und se
 \label{subsubsec:icp}
 
 \ac{ICP} \cite{besl1992method} ist der wohl bekannteste Algorithmus zur lokalen Registrierung von Punktwolken.
-Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt, die beispielsweise auch die Normalen in den Punkten in Betracht ziehen oder besonders resistent gegen statistische Ausreißer sind \cite{rusinkiewicz2001efficient, bouaziz2013sparse, munch2010modified}. Unter anderem existiert auch eine vorhandene Implementierung in der \ac{PCL} \cite{holz2015registration}.
+Im Laufe der Zeit wurden zahlreiche Varianten und Optimierungen dafür entwickelt, die beispielsweise auch die Normalen in den Punkten in Betracht ziehen \cite{munch2010modified}, besonders resistent gegen statistische Ausreißer sind \cite{bouaziz2013sparse} oder die Effizienz des Algorithmus erhöhen \cite{rusinkiewicz2001efficient}. Unter anderem existiert auch eine vorhandene Implementierung in der \ac{PCL} \cite{holz2015registration}.
 
-\autoref{alg:icp} beschreibt, wie Punktwolke $A$ an Punktwolke $B$ registriert werden kann.
+\autoref{alg:icp} beschreibt, wie Punktwolke $\mathcal{P}$ an Punktwolke $\mathcal{Q}$ registriert werden kann.
 Der Ablauf lässt sich folgendermaßen grob erklären:
 
 \begin{enumerate}
-\item $A$ wird iterativ durch Anwendung von Translationen und Rotationen in eine neue Position gebracht, zum Beispiel mithilfe von Quaternionen \cite{horn1987closed}.
-\item Zu jedem Punkt $p \in A$ wird der Punkt $q \in B$ gesucht, der den geringsten Abstand $e = \|p - q\|$ von $p$ hat.
-\item Berechne den Fehler $\varepsilon = \sum e^2$, Standard ist der \ac{MSE}.
+\item $\mathcal{P}$ wird iterativ durch Anwendung von Translationen und Rotationen in eine neue Position gebracht, zum Beispiel mithilfe von Quaternionen \cite{horn1987closed}.
+\item Zu jedem Punkt $p \in \mathcal{P}$ wird der Punkt $q \in \mathcal{Q}$ gesucht, der den geringsten Abstand $d = \|p - q\|$ von $p$ hat.
+\item Berechne den Fehler $\varepsilon = \sum d^2$, Standard ist der \ac{MSE}.
 \item Wiederholung, bis eine der Abbruchbedingungen eintritt.
 \end{enumerate}
 
@@ -282,41 +280,31 @@ Meist terminiert der Algorithmus jedoch, wenn
 
 \begin{itemize}
 \item $\varepsilon < \alpha$ mit Grenzwert $\alpha > 0$ für den Restfehler
-\item $\Delta e > \delta$, mit $\delta > 0$ als Grenzwert für die Änderung des Fehlers
-\item eine festgelegte Zahl von Iterationen abgelaufen ist.
+\item $\Delta d > \delta$, mit $\delta > 0$ als Grenzwert für die Änderung des Fehlers
+\item eine festgelegte Zahl von $\beta$ Iterationen abgelaufen ist.
 \end{itemize}
 
 Selbstverständlich lassen sich beliebig viele zusätzliche Kriterien definieren, beispielsweise eine festgelegte maximale Laufzeit.
 
 
 \begin{algorithm}[ht]
-\caption{\acl{ICP}}
+\caption[\acl{ICP}]{\acl{ICP} \cite[56]{elkhrachy2008phdthesis}}
 \label{alg:icp}
 \begin{algorithmic}
-\Function{ICP}{$cloud1, cloud2$}
-	\State $PointMap \gets \emptyset$
-	\ForAll{$p \in cloud1$}
-	\Comment{Find corresponding points}
-		\State $q \gets$ \Call{findNearestNeighbor}{$cloud2, p$}
-		\If{\Call{dist}{$p, q$} $< maxDist$}
-			\State \Call{$PointMap$.add}{$p, q$}
-		\EndIf
+\State $C_\mathcal{P} \gets$ \Call{getCenterOfMass}{$\mathcal{P}$}
+\State $C_\mathcal{Q} \gets$ \Call{getCenterOfMass}{$\mathcal{Q}$}
+\State \Call{translate}{$C_\mathcal{P}$ into $C_\mathcal{Q}$}
+\Comment{align cloud position by center of mass}
+\While{$\sum\|\mathcal{P} - \mathcal{Q}\|^2 > \alpha \wedge n < \beta$}
+	\ForAll{$p_i \in \mathcal{P}$}
+	\Comment{find tuples $(p_i, s_i)$ for alignment}
+		\State $s_i \gets$ \Call{nearestNeighbor}{$p_i$, $\mathcal{Q}$}
 	\EndFor
-	\While{termination Criteria not met}
-	\Comment{Now, align the clouds}
-		\State $t \gets$ \Call{estimateTransformation()}{}
-		\State \Call{$cloud1$.transform}{$t$}
-		\State $\varepsilon \gets$ \Call{calculateError}{$PointMap$}
-	\EndWhile
-\EndFunction
-\Function{calculateError}{$PointMap$}
-	\State $\varepsilon \gets 0$
-	\ForAll{$p, q \in PointMap$}
-		\State $e \gets \|p - q\| = \sqrt{(p_x - q_x)^2 + (p_y - q_y)^2 + (p_z - q_z)^2}$
-		\State $\varepsilon \gets \varepsilon + e^2$
-	\EndFor
-	\State \Return{$\varepsilon$}
-\EndFunction
+	\State $T \gets \min_T \sum\limits_{k=0}^{i} \|q_k - T(p_k)\|^2$
+	\Comment{translation that minimizes MSE}
+	\State $\mathcal{P} \gets$ \Call{applyTransformation}{$T$, $\mathcal{P}$}
+	\State $n \gets n + 1$
+\EndWhile
 \end{algorithmic}
 \end{algorithm}
 
@@ -326,13 +314,15 @@ Selbstverständlich lassen sich beliebig viele zusätzliche Kriterien definieren
 
 Durch die Veröffentlichung der Microsoft Kinect im Jahr 2010 wurde aufgrund ihres niedrigen Preises erstmals der breiten Masse der Zugang zu Tiefenkameras ermöglicht \cite[1:55]{kinfuTalkYoutube}.
 Die Kinect ist eine 3D-Kamera, welche ursprünglich für die Nutzung im Entertainment- und Gamingbereich entwickelt worden ist.
-Bestehend aus einem Lichtemitter, Infrarotsensor, einer 2D-RGB-Kamera und weiteren Sensoren, liefert sie 3D-Daten bei einer Bildwiederholfrequenz von 30 Hz.
+Bestehend aus einem Lichtemitter, einem Infrarotsensor, einer 2D-RGB-Kamera und weiteren Sensoren, liefert sie 3D-Daten bei einer Bildwiederholfrequenz von 30 Hz.
 Neben dem ursprünglichen Anwendungsgebiet findet sie heute auch in vielen anderen, auch wissenschaftlichen Bereichen Anwendung, beispielsweise bei der Aufzeichnung geomorphologischer Daten \cite{mankoff2013kinect}.
 
 \ac{KinFu} ist das Ergebnis einer Forschungsarbeit von Microsoft Research \cite{izadi2011kinectfusion, microsoftKinfuYoutube} und bietet eine Möglichkeit, mithilfe der Kinect 3D-Rekonstruktionen in Echtzeit durchzuführen.
 \ac{KinFu} kombiniert dabei die lokale Registrierung durch den \ac{ICP}-Algorithmus mit einem \ac{TSDF}.
+
 Ein \ac{TSDF} ist im Grunde genommen nichts anderes als ein Voxel Grid.
-Während der Wert eines Voxel im ursprünglichen Voxel Grid Informationen über die Daten im betreffenden Voxel enthält, wird hier die Entfernung zur nächsten Oberfläche gespeichert \cite{curless1996volumetric}.
+Normalerweise enthält dieses Informationen über die Daten im betreffenden Voxel.
+Hier werden jedoch mithilfe einer signed distance function die Entfernungen zur nächsten Oberfläche gespeichert \cite{curless1996volumetric}.
 Somit stehen innerhalb des Objekts negative Werte in den Voxeln und außerhalb positive Werte.
 Die Oberfläche wird damit implizit durch den Nulldurchgang der Distanzen in den Voxeln definiert.
 
@@ -346,7 +336,7 @@ Um dies zu erreichen, werden die Distanzen in den Voxeln interpoliert und Fehler
 	\label{fig:kinfu-integration}
 \end{figure}
 
-Durch eine schnelle GPU-Implementierung auf Basis von \ac{CUDA} erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz, der Bildwiederholfrequenz der Kinect.
+Durch eine schnelle GPU-Implementierung auf Basis von CUDA erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz, der Bildwiederholfrequenz der Kinect.
 Somit ist die zeitliche Differenz zwischen zwei Aufnahmen sehr niedrig.
 Es wird davon ausgegangen, dass die Kamera handgeführt (bzw. mit geringer Geschwindigkeit bewegt) wird, daher hält sich auch die räumliche Distanz zwischen einzelnen Frames in Grenzen.
 Aufgrund dieser Gegebenheiten reicht bei \ac{KinFu} eine lokale Registrierung aus, es kann also direkt \ac{ICP} verwendet werden.
@@ -385,7 +375,8 @@ Da hier eine Aufnahme aus mehreren Perspektiven möglich ist, können derartige 
 
 Der Vorteil der Echtzeitintegration ist jedoch gleichzeitig auch ein großes Problem.
 In industriellen Robotikanlagen sind nur selten Grafikkarten verbaut.
-Eine Hochleistungs-GPU-Einheit mit \ac{CUDA}-Unterstützung ist dabei aber unerlässlich, da sonst nur ein Bruchteil der Geschwindigkeit erreicht werden kann.
+Eine Hochleistungs-GPU-Einheit ist dabei aber unerlässlich, da sonst nur ein Bruchteil der Geschwindigkeit erreicht werden kann.
+Weiterhin ist CUDA ein proprietäres Softwarepaket, was die Nutzung mit Grafikkarten von anderen Herstellern unmöglich macht.
 
 
 
@@ -409,7 +400,7 @@ Für die Anwendung auf einee Punktwolke muss diese also zunächst konvertiert we
 Der Ablauf ist in \autoref{alg:marching-cubes} beschrieben.
 
 Die eingegebene Punktwolke wird also zunächst diskretisiert, was bei geringer Kantenlänge der Voxel zu Datenverlust führt.
-Anschließend wird jeder Voxel getrennt betrachtet und anhand der Eckkonfiguration die zu verbindenden Kanten mithilfe einer \ac{LUT} ermittelt.
+Anschließend wird jeder Voxel getrennt betrachtet und anhand der Eckkonfiguration die zu verbindenden Kanten mithilfe einer Lookup Table ermittelt.
 Dieses Vorgehen wird nun für jeden Voxel wiederholt, was zu einer vollständigen Rekonstruktion der Oberfläche führt.
 
 \begin{algorithm}[ht]
@@ -421,7 +412,7 @@ Dieses Vorgehen wird nun für jeden Voxel wiederholt, was zu einer vollständige
 	\Comment{The list of output vertices (Faces implicit)}
 	\State $V \gets Voxels$
 	\ForAll{$v \in V$}
-		\State $index \gets$ \Call{calculateIndex}{v}
+		\State $index \gets$ \Call{calculateIndex}{$v$}
 		\State $edgeList \gets edgeTable[index]$
 		\ForAll{$edge \in edgeList$}
 			\State $vertex \gets$ \Call{interpolate}{$edge[0], edge[1]$}
@@ -523,7 +514,7 @@ Diese werden nun nacheinander akzeptiert oder verworfen, wenn ein Schnittpunkt m
 \State $\mathcal{C} \gets \emptyset$
 \ForAll{$p, q \in \mathcal{P},\ p \neq q$}
 \Comment{add edge candidates to $\mathcal{C}$}
-	\State $\mathcal{C} \gets \overline{pq}$
+	\State \Call{add}{$\mathcal{C}$, $\overline{pq}$}
 \EndFor
 \State \Call{sortByLength}{$\mathcal{C}$}
 \State $\mathcal{T} \gets \emptyset$
