@@ -3,6 +3,12 @@
 \chapter{Implementierung}
 \label{ch:implementierung}
 
+Nachdem nun die theoretischen Grundlagen gelegt sind, wird im Folgenden die Implementierung der Pipeline erklärt.
+Zunächst wird in \ref{sec:aufbau} der Aufbau des Programms beschrieben.
+Die Interaktion und Parametrisierung wird in \ref{sec:interaktion} erläutert.
+In \ref{sec:pipeline} wird dann der gesamte Ablauf der Pipeline und das Zusammenspiel der verschiedenen Komponenten noch einmal zusammengefasst.
+
+
 
 \section{Aufbau}
 \label{sec:aufbau}
@@ -20,6 +26,7 @@ Zur 2D-Segmentierung über den Watershed-Algorithmus wird OpenCV verwendet.
 
 Weiterhin werden eine aktuelle Version des Ensenso SDKs und die \ac{ROS}-Serviceheader zu den von Mikado versendeten Nachrichten benötigt.
 Mit ihrer Hilfe können die aktuellen 2D-Grauwertbilder ausgelesen und zur Segmentierung verwendet werden.
+
 
 
 \section{Interaktion und Parametrisierung}
@@ -42,6 +49,7 @@ Dies bietet mehrere Vorteile gegenüber anderen Optionen:
 Auch die Triangulation wird durch einen externen Trigger angestoßen.
 Dieser wird als \texttt{rosservice} zur Verfügung gestellt, welcher mit dem Output-Dateipfad aufgerufen wird.
 Auch hier ist durch die Verwendung der \ac{ROS}-basierten Schnittstelle eine hohe Flexibilität gegeben.
+
 
 
 \section{Pipelineablauf}
@@ -72,6 +80,7 @@ Das Ziel ist die Eliminierung von unvermeidbarem Sensorrauschen.
 In diesem Schritt könnten auch noch andere Preprocessingmethoden durchgeführt werden.
 Dabei kann es sich sowohl um ein Downsampling zur Datenreduktion handeln als auch um Prozesse wie eine Normalenschätzung, falls diese nicht bereits vorher stattgefunden hat.
 
+
 \subsection{Segmentierung}
 \label{subsec:pipeline-segmentierung}
 
@@ -79,6 +88,7 @@ Dieser Block wird nur ausgeführt, wenn der entsprechende Modus gewählt ist.
 In diesem Schritt findet die Segmentierung der Punktwolke statt.
 Je nach gewählter Methode lässt sich dabei zwischen \ac{ECE}, Region Growing und Watershed-Segmentierung wählen.
 Die Punktwolke wird dabei in einen Vektor gespalten, der die einzelnen Cluster beinhaltet.
+
 
 \subsection{Registrierung}
 \label{subsec:pipeline-registrierung}
@@ -94,6 +104,7 @@ Bei \ac{ICP} beschreibt dieser Score den \ac{MSE}.
 Die Registrierung wird durch Parametrisierung aktiviert bzw. deaktiviert.
 Hat zuvor eine Segmentierung stattgefunden, wird jeder Cluster seperat diesem Block zugeführt.
 
+
 \subsection{Integration}
 \label{subsec:pipeline-integration}
 
@@ -103,6 +114,7 @@ Es wird vorausgesetzt, dass vorher bereits eine Registrierung stattgefunden hat.
 In der Praxis ist dieser Block sehr einfach gehalten.
 Liegt die Zahl der Punkte unter einem Grenzwert, werden diese überschrieben.
 Ist dies nicht der Fall, müssen die beiden Vektoren konkateniert werden.
+
 
 \subsection{Triangulierung}
 \label{subsec:pipeline-triangulierung}

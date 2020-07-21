@@ -4,7 +4,7 @@
 \label{ch:vorherige-arbeit}
 
 Das Kernproblem der Arbeit lässt sich in drei verschiedene Teile gliedern:
-Segmentierung in einzelne Cluster (\ref{sec:segmentation}), Registrierung von mehreren Punktwolken in einem Koordinatensystem (\ref{sec:registration}) und Triangulation der Wolke zu einem Polygonnetz (\ref{sec:triangulation}).
+Segmentierung in einzelne Cluster (\ref{sec:segmentation}), Registrierung von mehreren Punktwolken in einem Koordinatensystem (\ref{sec:registration}) und Triangulierung der Wolke zu einem Polygonnetz (\ref{sec:triangulation}).
 
 Im Folgenden werden die wissenschaftlichen Erkenntnisse zum jeweiligen Thema erläutert.
 Außerdem werden mögliche Lösungsansätze auf ihren praktischen Nutzen untersucht und die Vor- und Nachteile diskutiert.
@@ -59,19 +59,21 @@ Der Threshold $\delta$ gibt dabei den minimalen Abstand zwischen zwei Clustern a
 \Comment{list of clusters}
 \State $\mathcal{Q} \gets \emptyset$
 \Comment{current cluster queue}
-\ForAll{$p \in P$}
-	\State $\mathcal{Q} \gets p$
-	\ForAll{unprocessed points $q \in \mathcal{Q}$}
-		\State mark $q$ as processed
-		\State $\mathcal{N} \gets$ \Call{nearestKSearch}{$q, \delta$}
+\While{$P \neq \emptyset$}
+	\State $p \gets$ \Call{$P$.pop()}{}
+	\State \Call{$\mathcal{Q}$.append}{$p$}
+	\While{$\mathcal{Q} \neq \emptyset$}
+		\State $q \gets$ \Call{$\mathcal{Q}$.pop()}{}
+		\State $\mathcal{N} \gets$ \Call{pointsInRegion}{$q, \delta$}
 		\Comment{$\delta$-region around $q$}
-		\State $\mathcal{Q} \gets$ all unprocessed points in $\mathcal{N}$
-	\EndFor
-	\State $\mathcal{C} \gets \mathcal{Q}$
+		\State \Call{$\mathcal{Q}$.addAll}{$\mathcal{N}$}
+		\State \Call{$P$.removeAll}{$\mathcal{N}$}
+	\EndWhile
+	\State \Call{$\mathcal{C}$.add}{$\mathcal{Q}$}
 	\Comment{add processed queue to clusters}
 	\State $\mathcal{Q} \gets \emptyset$
 	\Comment{reset the queue}
-\EndFor
+\EndWhile
 \State \Return{$\mathcal{C}$}
 \end{algorithmic}
 \end{algorithm}
@@ -134,23 +136,25 @@ Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2
 \State $\mathcal{Q} \gets \emptyset$
 \Comment{current cluster queue}
 \State sort $P$ by ascending curvature
-\ForAll{$p \in P$}
-	\State $\mathcal{Q} \gets p$
-	\ForAll{unprocessed points $q \in \mathcal{Q}$}
-		\State mark $q$ as processed
+\While{$P \neq \emptyset$}
+	\State $p \gets$ \Call{$P$.pop()}{}
+	\State \Call{$\mathcal{Q}$.append}{$p$}
+	\While{$\mathcal{Q} \neq \emptyset$}
+		\State $q \gets$ \Call{$\mathcal{Q}$.pop()}{}
 		\State $\mathcal{N} \gets$ \Call{getKNeighbors}{$q, k$}
 		\Comment{$k$ nearest neighbors of $q$}
-		\ForAll{unprocessed candidates $c \in \mathcal{N}$}
+		\ForAll{$c \in \mathcal{N}$}
 			\If{\Call{curvature}{$c$} $< \phi \wedge \cos^{-1}(\overrightarrow{n_p}, \overrightarrow{n_c}) < \alpha$}
-				\State $\mathcal{Q} \gets c$
+				\State \Call{$\mathcal{Q}$.add}{$c$}
+				\State \Call{$P$.remove}{$c$}
 			\EndIf
 		\EndFor
-	\EndFor
-	\State $\mathcal{C} \gets \mathcal{Q}$
+	\EndWhile
+	\State \Call{$\mathcal{C}$.add}{$\mathcal{Q}$}
 	\Comment{add processed queue to clusters}
 	\State $\mathcal{Q} \gets \emptyset$
 	\Comment{reset the queue}
-\EndFor
+\EndWhile
 \State \Return{$\mathcal{C}$}
 \end{algorithmic}
 \end{algorithm}
@@ -160,7 +164,7 @@ Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2
 \label{subsec:watershed}
 
 Die bisherigen Ansätze sind Möglichkeiten zur Segmentierung in 3D-Punktwolken.
-Während dies häufig deutliche Vorteile hat, können auch viele Nachteile dabei das Ergebnis beeinflussen.
+Dies kann häufig deutliche Vorteile gegenüber einer Segmentierung im zweidimensionalen Raum haben, aber in manchen Fällen auch weniger brauchbare Informationen liefern.
 Beispielsweise können Objekte sehr nah aneinander liegen und \ac{ECE} damit erschweren.
 Kanten zwischen Objekten können im 2D-Grauwertbild jedoch deutlich besser sichtbar sein.
 Die Segmentierung auf zweidimensionalen RGB- oder Grauwerten kann daher in manchen Fällen bessere Ergebnisse als eine Segmentierung auf Basis der Geometrie liefern.
@@ -383,7 +387,7 @@ Weiterhin ist CUDA ein proprietäres Softwarepaket, was die Nutzung mit Grafikka
 \section{Triangulierung}
 \label{sec:triangulation}
 
-Die Konvertierung einer Datenstruktur zu einem aus Polygonen bestehenden Mesh nennt sich Triangulierung.
+Die Konvertierung von punktbasierten Objektinformationen zu einem aus zusammenhängenden Dreiecken bestehenden Mesh nennt sich Triangulierung.
 Gerade bei der Triangulierung von Punktwolken gibt es jedoch nicht immer eine einzelne korrekte Lösung dieses Problems.
 Es ist beispielweise nicht immer sichergestellt, dass jeder Punkt auch tatsächlich die zu rekonstruierende Oberfläche darstellt - Rauschen, Reflektionen oder sonstige Fehler können auftreten.
 Weiterhin stellt sich die Frage, aus welchen der Punkten in der Wolke sich ein bestimmtes Polygon zusammensetzt.
@@ -396,8 +400,13 @@ Diese und andere Probleme führen dazu, dass es viele verschiedene Ansätze zur 
 
 Bei Marching Cubes \cite{lorensen1987marching} handelt es sich um einen Algorithmus, der ursprünglich zur Triangulierung medizinischer Computertomographiescans entwickelt wurde.
 Diese werden in den meisten Fällen als Voxel Grid dargestellt.
-Für die Anwendung auf einee Punktwolke muss diese also zunächst konvertiert werden.
+Für die Anwendung auf einer Punktwolke muss diese also zunächst konvertiert werden.
 Der Ablauf ist in \autoref{alg:marching-cubes} beschrieben.
+
+Das Ziel des Algorithmus ist es, die sogenannte Isofläche aus den 3D-Daten zu extrahieren, welche dann durch die einzelnen Dreiecke approximiert wird.
+Die Isofläche repräsentiert im Falle einer Punktwolke die Oberfläche eines Objekts.
+Die Punkte liegen also bei fehlerfreien Daten exakt darauf.
+Um festzulegen, ab wann ein Punkt innerhalb der Oberfläche gesehen wird, muss sein Wert unter dem Parameter $\alpha$ liegen.
 
 Die eingegebene Punktwolke wird also zunächst diskretisiert, was bei geringer Kantenlänge der Voxel zu Datenverlust führt.
 Anschließend wird jeder Voxel getrennt betrachtet und anhand der Eckkonfiguration die zu verbindenden Kanten mithilfe einer Lookup Table ermittelt.
@@ -407,30 +416,29 @@ Dieses Vorgehen wird nun für jeden Voxel wiederholt, was zu einer vollständige
 \caption[Marching Cubes]{Marching Cubes \cite[Abs. 4]{lorensen1987marching}}
 \label{alg:marching-cubes}
 \begin{algorithmic}
-\Function{marchingCubes}{}
-	\State $vertexList \gets \emptyset$
-	\Comment{The list of output vertices (Faces implicit)}
-	\State $V \gets Voxels$
-	\ForAll{$v \in V$}
-		\State $index \gets$ \Call{calculateIndex}{$v$}
-		\State $edgeList \gets edgeTable[index]$
-		\ForAll{$edge \in edgeList$}
-			\State $vertex \gets$ \Call{interpolate}{$edge[0], edge[1]$}
-			\Comment{interpolate corners}
-			\State \Call{$vertexList$.add}{$vertex$}
-		\EndFor
+\State $\mathcal{L} \gets \emptyset$
+\Comment{The list of output vertices (Faces implicit)}
+\State $\mathcal{V} \gets Voxels$
+\ForAll{$v \in \mathcal{V}$}
+	\State $i \gets$ \Call{calculateIndex}{$v$}
+	\State $\mathcal{E} \gets edgeTable[i]$
+	\ForAll{$e \in \mathcal{E}$}
+		\State $p \gets$ \Call{interpolate}{$e[0], e[1]$}
+		\Comment{interpolate corners}
+		\State \Call{$\mathcal{L}$.add}{$p$}
 	\EndFor
-\EndFunction
-\Function{calculateIndex}{$voxel$}
-	\State $voxelIndex \gets 0$
-	\For{$cornerIndex \in [0..7]$}
-		\If{$voxel[cornerIndex] < isolevel$}
+\EndFor
+\State \Return{$\mathcal{L}$}
+\Function{calculateIndex}{$v$}
+	\State $x \gets 0$
+	\For{$corner \in \{0, \dots, 7\}$}
+		\If{$v[corner] < \alpha$}
 		\Comment{corner inside isosurface}
-			\State $voxelIndex\ |=\ 1 << cornerIndex$
-			\Comment{Set the i-th bit of the index}
+			\State $x\ |=\ 1 << corner$
+			\Comment{Set the i-th bit to $1$}
 		\EndIf
 	\EndFor
-	\State \Return{$voxelIndex$}
+	\State \Return{$x$}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
