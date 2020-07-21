@@ -17,7 +17,7 @@ Die Pipeline ist in C++ auf Basis der \ac{PCL} \cite{rusu2011pcl} geschrieben.
 Dabei handelt es sich um eine Open-Source-Bibliothek, welche die Arbeit mit 3D-Punktwolken immens vereinfacht.
 Sie bietet Möglichkeiten zur Filterung, Segmentierung, Oberflächenrekonstruktion und Visualisierung von Punktwolken, sowie weitere Module.
 
-Neben den zahlreichen unterstützten Anwendungsgebieten und implementierten Algorithmen bietet die \ac{PCL} den weiteren entscheidenden Vorteil, dass sie direkt zu \ac{ROS} kompatibel ist.
+Neben den zahlreichen unterstützten Anwendungsgebieten und implementierten Algorithmen bietet die \ac{PCL} den weiteren entscheidenden Vorteil, dass sie direkt zu \ac{ROS} \cite{quigley2009ros} kompatibel ist.
 Die Kompatibilität wird durch ROS-Nodelets im Paket \texttt{perception\_pcl} hergestellt, sodass Punktwolken, Meshes oder andere Datenstrukturen direkt zwischen \ac{ROS}-basierten Komponenten versendet werden können.
 
 Um eine modulare Verwendung des Tools zu gewährleisten wurde ein einzelnes \ac{ROS}-Paket erstellt.
@@ -33,7 +33,7 @@ Mit ihrer Hilfe können die aktuellen 2D-Grauwertbilder ausgelesen und zur Segme
 \label{sec:interaktion}
 
 Die Interaktion zwischen Mikado und dem Rekonstruktionstool findet über \ac{ROS} statt.
-Das Tool ist dabei ein \texttt{ros::Subscriber} auf das von Mikado veröffentlichte Topic \texttt{/point\_cloud}.
+Dabei handelt es sich um einen \texttt{ros::Subscriber} auf das von Mikado veröffentlichte Topic \texttt{/point\_cloud}.
 Bei Aufnahme einer neuen Punktwolke wird somit das Durchlaufen der Pipeline automatisch angestoßen.
 
 Weiterhin lassen sich über \texttt{rosparam set} und \texttt{rosparam get} Parameter setzen oder auslesen.
@@ -59,15 +59,15 @@ Der Ablauf der Pipeline ist stark abhängig von der durch den Nutzer gewählten 
 Diese kann jedoch auch nach Start des Programms noch geändert werden.
 Ohne vorherige Wahl eines Modus werden weder Segmentierung noch Registrierung vorgenommen.
 
-Der gesamte Ablauf des Prozesses vom Empfang einer Punktwolke bis zur Ausgabe des rekonstruierten Meshs ist in \autoref{fig:pipeline} sichtbar.
-Der Programmablauf kann in mehrere verschiedene Blöcke unterteilt werden, welche im Folgenden erläutert werden.
-
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
 	\includegraphics[width=\textwidth]{images/pipeline.png}
 	\caption{Ablauf der Pipeline}
 	\label{fig:pipeline}
 \end{figure}
+
+Der gesamte Ablauf des Prozesses vom Empfang einer Punktwolke bis zur Ausgabe des rekonstruierten Meshs ist in \autoref{fig:pipeline} sichtbar.
+Der Programmablauf kann in mehrere verschiedene Blöcke unterteilt werden, welche im Folgenden erläutert werden.
 
 
 \subsection{Preprocessing}
