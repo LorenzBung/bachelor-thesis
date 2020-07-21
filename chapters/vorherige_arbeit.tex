@@ -51,7 +51,7 @@ Sie basiert auf der Annahme, dass Punkte so lange zu einem Cluster gehören, so 
 In \autoref{alg:euclidean-cluster-extraction} wird beschrieben, wie die Cluster $\mathcal{C} \subseteq P$ für die Punktwolke $P$ errechnet werden.
 Der Threshold $\delta$ gibt dabei den minimalen Abstand zwischen zwei Clustern an.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption[\acl{ECE}]{\acl{ECE} \cite[89--90]{RusuDoctoralDissertation}}
 \label{alg:euclidean-cluster-extraction}
 \begin{algorithmic}
@@ -127,7 +127,7 @@ Ansonsten verfährt sich der Region-Growing-Algorithmus sehr ähnlich zu \ac{ECE
 Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2$ werden Normalenwinkel und Krümmung betrachtet.
 \autoref{alg:region-growing} beschreibt den Ablauf bei maximaler Krümmung $\phi$, Normalendifferenz $\alpha$ und unter Betrachtung der $k$ \ac{KNN}.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Region Growing}
 \label{alg:region-growing}
 \begin{algorithmic}
@@ -179,7 +179,7 @@ Dabei werden zunächst die garantierten Hintergrundpixel einheitlich auf 0 geset
 Weiterhin basiert die Binarisierung des Eingabebilds auf dem Thresholding nach Otsu \cite{otsu1979threshold}, welches die Varianz $\sigma$ zwischen den Grauwertbins minimiert.
 Hier kann auch eine beliebige andere Methode verwendet werden, jedoch liefert dieser Ansatz bei einer binären Verteilung im Histogramm optimale Ergebnisse.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption[Watershed-Transformation]{Watershed-Transformation \cite{openCVwatershed}}
 \label{alg:watershed}
 \begin{algorithmic}
@@ -226,8 +226,6 @@ Aus diesem Grund bietet es sich meist an, anschließend noch eine lokale Registr
 Zur globalen Registrierung von Punktwolken existieren verschiedene Ansätze \cite{chaudhury2015global, zhou2016fast, rusu2009fast}.
 Die in dieser Arbeit verwendete Methode ist Super4PCS \cite{mellado2014super4pcs}, eine optimierte Version von \ac{4PCS} \cite{aiger2008fpcs}.
 Dieser Ansatz wird verwendet, da die vorhandene Implementierung \ac{OpenGR} \cite{mellado2018opengr} über einen Wrapper bereits zur \ac{PCL} kompatibel ist.
-
-%TODO 4PCS Funktionsweise erklären
 
 \ac{4PCS} basiert auf der Erkenntnis, dass die Verhältnisse der Distanzen zwischen Punkten bei einer affinen Transformation erhalten bleiben.
 Wählt man nun also vier koplanare Punkte (vgl. \autoref{def:koplanar}), überschneiden sich mindestens zwei der Geraden, die die Eckpunkte verbinden.
@@ -291,7 +289,7 @@ Meist terminiert der Algorithmus jedoch, wenn
 Selbstverständlich lassen sich beliebig viele zusätzliche Kriterien definieren, beispielsweise eine festgelegte maximale Laufzeit.
 
 
-\begin{algorithm}[ht]
+\begin{algorithm}[H]
 \caption[\acl{ICP}]{\acl{ICP} \cite[56]{elkhrachy2008phdthesis}}
 \label{alg:icp}
 \begin{algorithmic}
@@ -412,7 +410,7 @@ Die eingegebene Punktwolke wird also zunächst diskretisiert, was bei geringer K
 Anschließend wird jeder Voxel getrennt betrachtet und anhand der Eckkonfiguration die zu verbindenden Kanten mithilfe einer Lookup Table ermittelt.
 Dieses Vorgehen wird nun für jeden Voxel wiederholt, was zu einer vollständigen Rekonstruktion der Oberfläche führt.
 
-\begin{algorithm}[ht]
+\begin{algorithm}[H]
 \caption[Marching Cubes]{Marching Cubes \cite[Abs. 4]{lorensen1987marching}}
 \label{alg:marching-cubes}
 \begin{algorithmic}
@@ -515,7 +513,7 @@ Bei der Greedy-Triangulierung der Wolke $\mathcal{P}$ werden zunächst alle Punk
 So entstehen Kantenkandidaten, welche nun nach ihrer Länge sortiert werden.
 Diese werden nun nacheinander akzeptiert oder verworfen, wenn ein Schnittpunkt mit einer bereits akzeptierten Kante auftritt \cite[235--237]{preparata1985computational}.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Greedy-Triangulierung}
 \label{alg:greedy-triangulierung}
 \begin{algorithmic}
@@ -559,7 +557,7 @@ Beim Renderingprozess können aufgrund von Präzisions- und Rundungsfehlern Arte
 Die Delaunay-Triangulierung behebt dieses Problem weitestgehend, da sie die minimalen Innenwinkel der generierten Dreiecke maximiert \cite[199]{berg2000comp}.
 Eine weitere Eigenschaft ist, dass kein Umkreis eines der Dreiecke einen Knoten beinhaltet, der nicht eine Ecke des Dreiecks ist \cite[196]{berg2000comp}. Der Ablauf der Delaunay-Triangulierung ist in \autoref{alg:delaunay-triangulierung} zu sehen.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption[Delaunay-Triangulierung]{Delaunay-Triangulierung \cite[200--201]{berg2000comp}}
 \label{alg:delaunay-triangulierung}
 \begin{algorithmic}
@@ -567,12 +565,12 @@ Eine weitere Eigenschaft ist, dass kein Umkreis eines der Dreiecke einen Knoten 
 \State $\mathcal{T} \gets$ a triangle $p_0 q r$ with $p_0 \in \mathcal{P}$ so that $\forall p \in \mathcal{P} : p \mathrm{\ inside\ } p_0 q r$
 \State $\mathcal{P} \gets \mathcal{P} \setminus \{p_0\}$
 \While{$\mathcal{P} \neq \emptyset$}
-	\State $p_r \gets$ \Call{pop}{$\mathcal{P}$}
+	\State $p_r \gets$ \Call{$\mathcal{P}$.pop()}{}
 	\State find triangle $t \in \mathcal{T}$ so that $p_r$ is inside $t$
 	\State $\mathcal{T} \gets \mathcal{T} \setminus \{t\}$
 	\If{$p_r$ is on edge $t_1t_2 \in t$}
-		\State find vertices $f_1$ and $f_2$ of the two triangles seperated by $t_1t_2$
-		\State create triangles $t_1p_rf_1$, $t_1f_2p_r$, $t_2f_1p_r$ and $t_2p_rf_2$
+		\State find vertices $v_1$ and $v_2$ of the two triangles seperated by $t_1t_2$
+		\State create triangles $t_1p_rv_1$, $t_1v_2p_r$, $t_2v_1p_r$ and $t_2p_rv_2$
 		\State check the untouched edges using \Call{checkFlipped}{$p_r$, edge}
 		\State add the triangles to $\mathcal{T}$
 	\Else
@@ -606,18 +604,35 @@ Trifft er dabei auf einen weiteren Punkt, wird aus diesem und der bereits existi
 Falls er auf keinen Punkt trifft, handelt es sich um eine Außenkante, die nicht weiter betrachtet wird.
 Der genaue Ablauf ist in \autoref{alg:ball-pivoting} dargestellt.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption[Ball Pivoting]{Ball Pivoting \cite[Abs. 4]{bernardini1999ball}}
 \label{alg:ball-pivoting}
 \begin{algorithmic}
 \State $\rho \gets$ the ball radius
 \State $\mathcal{F} \gets$ seed triangle
 \While{true}
-	\While{$e_{i,j} \gets$ \Call{getActiveEdge}{$\mathcal{F}$}}
-		\If{$\sigma_k \gets$ \Call{ballPivot}{$e_{i,j}$} $\wedge\ ($\Call{notUsed}{$\sigma_k$} $\vee$ \Call{onFront}{$\sigma_k$}$)\ $}
-			\State do stuff %TODO
+	\While{$e_{(i,j)} \gets$ \Call{getActiveEdge}{$\mathcal{F}$}}
+		\If{$\sigma_k \gets$ \Call{ballPivot}{$e_{(i,j)}$} $\wedge\ ($\Call{notUsed}{$\sigma_k$} $\vee$ \Call{onFront}{$\sigma_k$}$)\ $}
+			\State \Call{outputTriangle}{$\sigma_i$, $\sigma_k$, $\sigma_j$}
+			\State \Call{join}{$e_{(i,j)}$, $\sigma_k$, $\mathcal{F}$}
+			\If{$e_{(k,i)} \in \mathcal{F}$}
+				\State \Call{glue}{$e_{(i,k)}$, $e_{(k,i)}$, $\mathcal{F}$}
+			\EndIf
+			\If{$e_{(j,k)} \in \mathcal{F}$}
+				\State \Call{glue}{$e_{(k,j)}$, $e_{(j,k)}$, $\mathcal{F}$}
+			\EndIf
+		\Else
+			\State \Call{markAsBoundary}{$e_{(i,j)}$}
 		\EndIf
 	\EndWhile
+	\If{$(\sigma_i, \sigma_j, \sigma_k) \gets$ \Call{findSeedTriangle()}{}}
+		\State \Call{outputTriangle}{$\sigma_i$, $\sigma_j$, $\sigma_k$}
+		\State \Call{insertEdge}{$e_{(i,j)}$, $\mathcal{F}$}
+		\State \Call{insertEdge}{$e_{(j,k)}$, $\mathcal{F}$}
+		\State \Call{insertEdge}{$e_{(k,i)}$, $\mathcal{F}$}
+	\Else
+		\State \Return
+	\EndIf
 \EndWhile
 \end{algorithmic}
 \end{algorithm}
