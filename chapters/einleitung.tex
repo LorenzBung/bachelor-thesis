@@ -10,13 +10,14 @@
 Robotik im industriellen Kontext spielt in den letzten Jahren eine immer größer werdende Rolle für die Wirtschaft.
 Insbesondere das autonome Greifen von unsortierten Teilen (sogenanntes Bin-Picking) durch einen Roboter kann viele Prozesse beschleunigen und somit wertvolle Zeit und Ressourcen sparen.
 
-Zum Erkennen und Greifen der Objekte sind in vielen Fällen CAD-Modelle erforderlich \cite{drost2014recognition}.
-Dies stellt häufig ein Problem dar, da ein Modell aus verschiedenen Gründen nicht vorhanden sein kann.
-Etwa können die existierenden Modelle im aktuellen Fertigungszustand nicht vorhanden sein.
-Ein weiterer Grund für fehlende Modelle ist, dass diese aus organisatorischen Gründen schwer zu bekommen sind, beispielsweise wenn nur eine Weiterverarbeitung eines zugelieferten Bauteils stattfindet.
+Zum Greifen der Objekte müssen Position und Orientierung bekannt sein.
+Für die dabei durchgeführte Erkennung sind in vielen Fällen CAD-Modelle der Objekte erforderlich, beispielsweise für den ``surface based matching''-Algorithmus \cite{drost2014recognition}.
+Dies stellt häufig ein Problem dar, da diese aus verschiedenen Gründen nicht vorhanden sein können.
+Etwa können für Objekte im aktuellen Fertigungszustand keine Modelle existieren.
+Ein weiterer Grund für fehlende CAD-Daten ist, dass diese aus organisatorischen Gründen schwer zu bekommen sind, beispielsweise wenn nur eine Weiterverarbeitung eines zugelieferten Bauteils stattfindet.
 
-Neben fehlenden Modellen sind auch häufig falsche Modelle ein Problem.
-So kann es vorkommen, dass die existierenden Daten fertigungsbedingt nicht zum tatsächlichen Produkt passen und Teile daher nicht genau erkannt werden können.
+Neben fehlenden sind auch häufig falsche Modelle ein Problem.
+So kann es vorkommen, dass das tatsächlich vorhandene Produkt fertigungsbedingte Abweichungen von den existierenden Daten aufweist und Teile daher nicht korrekt erkannt werden können.
 
 Bei Bin-Picking-Anwendungen sind in vielen Fällen 3D-Kameras am Roboter verbaut.
 Um schnell eine korrekte Darstellung der Objekte zu erhalten ist es eine Möglichkeit, die aufgenommenen 3D-Daten zur Generierung eines CAD-Modells zu verwenden.
