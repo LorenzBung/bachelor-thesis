@@ -1,4 +1,7 @@
+# IntelliJ IDEA files
 .idea
+# KDE image preview files
+.directory
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

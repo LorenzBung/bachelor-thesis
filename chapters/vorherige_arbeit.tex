@@ -260,7 +260,6 @@ Bei der lokalen Registrierung von zwei Punktwolken müssen diese bereits grob an
 Der Registrierungsalgorithmus verfeinert diese Ausrichtung dann weiter und findet ein lokales Minimum.
 Einer der bekanntesten Algorithmen zur lokalen Registrierung ist \ac{ICP} und seine vielen verschiedenen Varianten.
 
-
 \subsubsection{\acl{ICP}}
 \label{subsubsec:icp}
 
@@ -309,7 +308,6 @@ Selbstverständlich lassen sich beliebig viele zusätzliche Kriterien definieren
 \EndWhile
 \end{algorithmic}
 \end{algorithm}
-
 
 \subsubsection{Kinect Fusion}
 \label{subsubsec:kinfu}
@@ -547,7 +545,6 @@ Ein enormer Vorteil der Greedy-Triangulierung ist ihre Geschwindigkeit.
 So zeigen \citeauthor{berg2000comp}, dass ein Polygon mit $n$ Vertices in $\mathcal{O}(n \log n)$ rekonstruiert werden kann \cite[56--58]{berg2000comp}.
 Dies ist beispielsweise für Echtzeitanwendungen relevant, wie die in \cite{Marton09ICRA} vorgestellte Methode demonstriert.
 
-
 \subsubsection{Delaunay-Triangulierung}
 \label{subsubsec:delaunay-triangulierung}
 
@@ -594,7 +591,6 @@ Eine weitere Eigenschaft ist, dass kein Umkreis eines der Dreiecke einen Knoten 
 \end{algorithmic}
 \end{algorithm}
 
-
 \subsubsection{Ball Pivoting}
 \label{subsubsection:ball-pivoting}
 
@@ -636,6 +632,7 @@ Der genaue Ablauf ist in \autoref{alg:ball-pivoting} dargestellt.
 \EndWhile
 \end{algorithmic}
 \end{algorithm}
+%TODO Algorithmus erklären? Methoden unklar
 
 Ein Nachteil des Ball-Pivoting-Algorithmus ist, dass bei zu groß gewählten Radii einige Details verloren gehen können.
 Dies tritt insbesondere dann auf, wenn die rekonstrukierte Oberfläche stark konkav ist und die Abstände zwischen den Punkten deutlich kleiner als der gewählte Radius sind.

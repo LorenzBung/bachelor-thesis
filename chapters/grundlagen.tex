@@ -5,7 +5,7 @@
 
 Zum Verständnis des Themas der Arbeit ist die Erklärung einiger Grundlagen notwendig.
 In \ref{sec:3d-bilder} werden zunächst wichtige Datenstrukturen zur Arbeit mit 3D-Daten eingeführt und die verschiedenen Vor- und Nachteile beleuchtet.
-Weiterhin werden in \ref{sec:meshrepr} unterschiedliche Methoden und Repräsentationen zur Arbeit mit Polygonnetzen erklärt.
+Weiterhin werden in \ref{sec:meshrepr} unterschiedliche Methoden und Repräsentationen von Polygonnetzen erklärt.
 Auch hier wird diskutiert, welche positiven und negativen Aspekte die jeweiligen Ansätze auszeichnet.
 
 
@@ -28,7 +28,7 @@ Die so gewonnenen Informationen lassen sich durch mehrere verschiedene Datenmode
 Ein Tiefenbild ist eine einfache Möglichkeit, in einem zweidimensionalen Bild zusätzlich Informationen über die Entfernung der Kamera zu Objekten abzuspeichern.
 Diese Technik ist unter Anderem aus der Computergrafik bekannt, wo sie beim Z-Buffering Anwendung findet \cite[32]{catmull1974subdivision}.
 Dabei werden sowohl das aufgenommene Bild, aber zusätzlich auch ein 2D-Array mit der Tiefeninformation des zugehörigen Pixels gespeichert.
-Das Tiefenbild dient somit als \ac{LUT}, um die z-Information zu einem Pixel im 2D-Bild zu erhalten.
+Das Tiefenbild dient somit als Lookup Table, um die z-Information zu einem Pixel im 2D-Bild zu erhalten.
 Ein Beispiel für den Zusammenhang zwischen diesen beiden Komponenten ist in \autoref{fig:depth_map} dargestellt.
 
 So kann das originale 2D-Bild um eine dritte Dimension erweitert werden, wodurch sich beispielsweise dreidimensionale Formen modellieren oder rekonstruieren lassen \cite{arsalan2017synthesizing}.
@@ -109,6 +109,7 @@ Ein weiteres häufig verwendetes Datenmodell ist eine Punktwolke.
 Hier werden die Daten als Teilmenge eines Vektorraums dargestellt.
 Im Fall dreidimensionaler Daten ist eine Punktwolke also $M \subseteq \mathbb{R}^3$.
 In den meisten Fällen repräsentieren die Punkte dabei eine Diskretisierung der Oberfläche.
+Die in \autoref{fig:bunny_pcd} dargestellte Punktwolke stellt beispielsweise die Oberfläche des Stanford Bunny \cite{stanfordbunny} dar.
 Zusätzlich zur räumlichen Information können auch noch weitere Daten pro Punkt gespeichert sein, wie RGB-Werte, Normalen, Genauigkeit oder Objektklasse (falls schon eine Segmentierung vorgenommen wurde).
 
 \begin{figure}[ht]
@@ -152,6 +153,7 @@ Die bisher angesprochenen Datenstrukturen beinhalten ausschließlich Information
 Das Polygonmesh erweitert diese Daten durch Kanteninformationen: Punkte (sogenannte Vertices) sind durch Kanten (Edges) miteinander verbunden.
 Die so entstehenden Flächen der Polygone werden als Faces bezeichnet.
 Da jedes Polygon in Dreiecke zerlegt werden kann, werden meist nur diese gespeichert.
+Die in \autoref{fig:bunny_pcd} dargestellte Punktwolke ist in \autoref{fig:bunny_mesh} als Mesh zu sehen.
 
 \begin{figure}[ht]
 	\centering
