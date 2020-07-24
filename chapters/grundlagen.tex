@@ -14,10 +14,10 @@ Auch hier wird diskutiert, welche positiven und negativen Aspekte die jeweiligen
 
 %TODO Tiefergehende / fundiertere Informationen zur Aufnahme. Quellen fehlen.
 Zur Aufnahme von 3D-Bilddaten gibt es mehrere verschiedene Möglichkeiten.
-Ein LIDAR-System sendet beispielsweise mehrere Lichtstrahlen in verschiedene Richtungen.
+Ein LIDAR-System sendet beispielsweise mehrere Laserstrahlen in verschiedene Richtungen.
 So können anschließend Informationen über die Entfernung zum jeweiligen Punkt geliefert werden, in dem die einzelnen Strahlen auf ein Objekt treffen.
-Eine Stereokamera liefert im Gegensatz dazu zwei Bilder, die anschließend durch spezielle Software (beispielweise durch den PatchMatch-Algorithmus \cite{barnes2009patchmatch}) zu einem dreidimensionalen Bild zusammengesetzt werden.
-Eine weitere Möglichkeit besteht darin, ein bestimmtes Muster auf die Umgebung zu projezieren, dieses dann aus einer anderen Perspektive aufzunehmen und aus der räumlichen Verzerrung des Musters die Tiefe zu errechnen.
+Eine Stereokamera liefert im Gegensatz dazu zwei Bilder, die anschließend durch spezielle Software (beispielweise durch Semiglobal Matching \cite{hirschmuller2007stereo} oder den PatchMatch-Algorithmus \cite{barnes2009patchmatch}) zu einem dreidimensionalen Bild zusammengesetzt werden.
+Eine weitere Möglichkeit besteht darin, ein bestimmtes Muster auf die Umgebung zu projezieren, dieses dann aus einer anderen Perspektive aufzunehmen und aus der räumlichen Verzerrung des Musters die Tiefe zu errechnen \cite{geng2011structured}.
 
 Die so gewonnenen Informationen lassen sich durch mehrere verschiedene Datenmodelle repräsentieren.
 
@@ -155,7 +155,7 @@ Die so entstehenden Flächen der Polygone werden als Faces bezeichnet.
 Da jedes Polygon in Dreiecke zerlegt werden kann, werden meist nur diese gespeichert.
 Die in \autoref{fig:bunny_pcd} dargestellte Punktwolke ist in \autoref{fig:bunny_mesh} als Mesh zu sehen.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.66\textwidth, frame]{images/bunny_mesh.png}
 	\caption{Mesh des Stanford Bunny \cite{stanfordbunny}}

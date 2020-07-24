@@ -15,7 +15,7 @@ Außerdem werden mögliche Lösungsansätze auf ihren praktischen Nutzen untersu
 \label{sec:segmentation}
 
 Ziel der Segmentierung ist es, zusammengehörende Bildregionen zu identifizieren und durch Zuweisung verschiedener Klassen voneinander zu trennen.
-Dies ist, insbesondere in der 2D-Bildverarbeitung, ein altes Problem, für das es viele verschiedene Lösungsansätze gibt.
+Dies ist, insbesondere in der 2D-Bildverarbeitung, ein lange bekanntes Problem, für das es viele verschiedene Lösungsansätze gibt.
 Auch im dreidimensionalen Raum ist eine Segmentierung häufig notwendig.
 In vielen Fällen gibt es dabei nicht eine beste Methode -- die Objektart, -größe, -form und viele weitere Faktoren beeinflussen die Wahl eines geeigneten Ansatzes.
 
@@ -329,7 +329,7 @@ Die Oberfläche wird damit implizit durch den Nulldurchgang der Distanzen in den
 Dies ermöglicht bei einer relativ geringen Auflösung dennoch eine recht genaue Rekonstruktion der vorhandenen Oberflächen.
 Um dies zu erreichen, werden die Distanzen in den Voxeln interpoliert und Fehler durch die geringe Auflösung oder Sensorrauschen minimiert.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.66\textwidth, frame]{images/kinfu-integration.png}
 	\caption{Integration eines Tiefenbilds in \ac{KinFu}. Entnommen aus \cite{izadi2011kinectfusion}}
@@ -366,7 +366,7 @@ Die betroffenen Regionen können oft nur falsch, verzerrt oder gar nicht modelli
 Da hier eine Aufnahme aus mehreren Perspektiven möglich ist, können derartige Fehler weitestgehend vermieden werden. In \autoref{fig:yak-reflecting-model} ist dies an einem Beispiel besonders gut sichtbar.
 \end{itemize}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.4\textwidth]{images/yak-reflecting-scene.jpg}
 	\includegraphics[width=0.4\textwidth]{images/yak-reflecting-reconstruction.png}
