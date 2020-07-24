@@ -37,7 +37,7 @@ Dabei handelt es sich um einen \texttt{ros::Subscriber} auf das von Mikado verö
 Bei Aufnahme einer neuen Punktwolke wird somit das Durchlaufen der Pipeline automatisch angestoßen.
 
 Weiterhin lassen sich über \texttt{rosparam set} und \texttt{rosparam get} Parameter setzen oder auslesen.
-Diese werden dann im Programm geparst und - falls nicht vorhanden - durch Standardwerte ersetzt.
+Diese werden dann im Programm geparst und -- falls nicht vorhanden -- durch Standardwerte ersetzt.
 Dies bietet mehrere Vorteile gegenüber anderen Optionen:
 
 \begin{itemize}
@@ -128,6 +128,5 @@ Dies ermöglicht selbst dann ein brauchbares Ergebnis, falls im Registrierungssc
 Im Optimalfall werden die fehlerhaften Daten aufgrund der hohen Punktdichte an der Oberfläche somit größtenteils entfernt.
 
 Nach dem anschließenden Downsampling findet eine Poisson-Triangulierung statt.
-Im letzten Schritt werden nun Dreiecke aus dem Polygonnetz entfernt, die über einer festgelegten Entfernung von der Punktwolke entfernt sind.
-Da die Poisson-Triangulierung immer wasserdichte Polygone erzeugt, können auch inkorrekte Dreiecke generiert werden.
-Diese werden hier entfernt.
+Da die Poisson-Triangulierung immer wasserdichte Polygone erzeugt, können hierbei auch inkorrekte Dreiecke generiert werden.
+Im letzten Schritt werden daher nun Dreiecke aus dem Polygonnetz entfernt, die eine festgelegte Distanz von der Punktwolke überschreiten.

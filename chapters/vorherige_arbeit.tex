@@ -17,12 +17,12 @@ Außerdem werden mögliche Lösungsansätze auf ihren praktischen Nutzen untersu
 Ziel der Segmentierung ist es, zusammengehörende Bildregionen zu identifizieren und durch Zuweisung verschiedener Klassen voneinander zu trennen.
 Dies ist, insbesondere in der 2D-Bildverarbeitung, ein altes Problem, für das es viele verschiedene Lösungsansätze gibt.
 Auch im dreidimensionalen Raum ist eine Segmentierung häufig notwendig.
-In vielen Fällen gibt es dabei nicht eine beste Methode - die Objektart, -größe, -form und viele weitere Faktoren beeinflussen die Wahl eines geeigneten Ansatzes.
+In vielen Fällen gibt es dabei nicht eine beste Methode -- die Objektart, -größe, -form und viele weitere Faktoren beeinflussen die Wahl eines geeigneten Ansatzes.
 
 Die Forschung ist in diesem Bereich weiterhin sehr aktuell:
 Beispielsweise zeigen \citeauthor{uckermann2012real} einen Versuch, in Echtzeit und ohne vorher bekannte Objekte zu segmentieren \cite{uckermann2012real}.
 Eine Übersicht bieten \citeauthor{nguyen20133d}, die verschiedene Varianten vergleichen und die Vor- und Nachteile diskutieren \cite{nguyen20133d}.
-In den letzten Jahren findet auch verstärkt Forschung zur Segmentierung mithilfe von Neuronalen Netzen statt \cite{te2018rgcnn}.
+In den letzten Jahren findet auch verstärkt Forschung zur Segmentierung mithilfe von neuronalen Netzen statt \cite{te2018rgcnn}.
 
 Für die Segmentierung können viele Informationen über die vorhandene Szene relevant sein.
 Neben der reinen geometrischen Information können zum Beispiel auch Textur (also RGB-Werte), Normalenorientierung oder Topologie hilfreich sein, um zusammenhängende Regionen voneinander unterscheiden zu können.
@@ -86,7 +86,7 @@ Die untere Grenze $\theta_{min}$ dient dabei der Robustheit gegen Rauschen und s
 \label{subsubsec:region-growing}
 
 Ein großer Nachteil von \ac{ECE} ist, dass nur die räumliche Distanz betrachtet wird.
-Bei nicht optimal getrennten Regionen wird die Punktwolke daher untersegmentiert, und aufgrund der Filterung am Ende werden viele Cluster wieder verworfen.
+Bei nicht optimal getrennten Regionen wird die Punktwolke daher untersegmentiert und aufgrund der Filterung am Ende werden viele Cluster wieder verworfen.
 Dies ist auch bei den meisten Anwendungen in der Realität der Fall.
 Selbst bei gesetzter \ac{RoI} und somit bereits gefiltertem Hintergrund liegen Objekte häufig nahe beieinander.
 
@@ -164,10 +164,10 @@ Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2
 \label{subsec:watershed}
 
 Die bisherigen Ansätze sind Möglichkeiten zur Segmentierung in 3D-Punktwolken.
-Dies kann häufig deutliche Vorteile gegenüber einer Segmentierung im zweidimensionalen Raum haben, aber in manchen Fällen auch weniger brauchbare Informationen liefern.
+Dies kann häufig deutliche Vorteile gegenüber einer Segmentierung im zweidimensionalen Raum haben, in manchen Fällen aber auch weniger brauchbare Informationen liefern.
 Beispielsweise können Objekte sehr nah aneinander liegen und \ac{ECE} damit erschweren.
 Kanten zwischen Objekten können im 2D-Grauwertbild jedoch deutlich besser sichtbar sein.
-Die Segmentierung auf zweidimensionalen RGB- oder Grauwerten kann daher in manchen Fällen bessere Ergebnisse als eine Segmentierung auf Basis der Geometrie liefern.
+Die Segmentierung auf zweidimensionalen RGB- oder Grauwerten kann daher in manchen Fällen bessere Ergebnisse liefern als eine Segmentierung auf Basis der Geometrie.
 
 Die Watershed-Transformation ist eine der bekanntesten Methoden, um eine solche Segmentierung vorzunehmen.
 Der Gedanke dahinter stammt aus der Geographie und beschreibt das Verhalten von ansteigendem Wasser in unebenem Terrain \cite[1--2]{roerdink2000watershed}.
@@ -177,7 +177,7 @@ Diese Linien beschreiben im Fall des Clusterings die Grenzen zwischen unterschie
 Der Ablauf der Watershed-Transformation ist in \autoref{alg:watershed} beschrieben.
 Dabei werden zunächst die garantierten Hintergrundpixel einheitlich auf 0 gesetzt und ein Preprocessing in Form eines Laplace-Filters vorgenommen.
 Weiterhin basiert die Binarisierung des Eingabebilds auf dem Thresholding nach Otsu \cite{otsu1979threshold}, welches die Varianz $\sigma$ zwischen den Grauwertbins minimiert.
-Hier kann auch eine beliebige andere Methode verwendet werden, jedoch liefert dieser Ansatz bei einer binären Verteilung im Histogramm optimale Ergebnisse.
+Hier kann auch eine beliebige andere Methode verwendet werden. Dieser Ansatz liefert jedoch bei einer binären Verteilung im Histogramm optimale Ergebnisse.
 
 \begin{algorithm}[H]
 \caption[Watershed-Transformation]{Watershed-Transformation \cite{openCVwatershed}}
@@ -209,7 +209,7 @@ Hier kann auch eine beliebige andere Methode verwendet werden, jedoch liefert di
 
 Beim Erfassen von Objekten in der Realität, beispielsweise mithilfe eines Laserscanners, werden häufig Punktwolken aus verschiedenen Perspektiven aufgenommen.
 Der Grund dafür ist, dass aus einer Scanposition nicht immer die gesamte Oberfläche sichtbar ist, etwa aufgrund von Verschattungen durch das Objekt selbst.
-Weiterhin können so Reflektionen und spiegelnde Oberflächen wie auch Hintergrundrauschen gemittelt werden, sodass weitgehend robuste Daten erhalten werden.
+Weiterhin können so Reflektionen und spiegelnde Oberflächen wie auch Hintergrundrauschen gemittelt werden, sodass die ermittelten Werte weitgehend robust sind.
 
 In vielen Fällen ist die zugehörige Aufnahmeposition nicht bekannt, unzureichend genau oder es liegt kein kalibriertes System vor.
 Aus diesem Grund müssen die erfassten Punktwolken erst in ein globales Koordinatensystem gebracht werden.
@@ -338,7 +338,8 @@ Um dies zu erreichen, werden die Distanzen in den Voxeln interpoliert und Fehler
 
 Durch eine schnelle GPU-Implementierung auf Basis von CUDA erreicht \ac{KinFu} dabei eine Integration neuer Tiefenbilder bei 30 Hz, der Bildwiederholfrequenz der Kinect.
 Somit ist die zeitliche Differenz zwischen zwei Aufnahmen sehr niedrig.
-Es wird davon ausgegangen, dass die Kamera handgeführt (bzw. mit geringer Geschwindigkeit bewegt) wird, daher hält sich auch die räumliche Distanz zwischen einzelnen Frames in Grenzen.
+Es wird davon ausgegangen, dass die Kamera handgeführt (bzw. mit geringer Geschwindigkeit bewegt) wird.
+Daher hält sich auch die räumliche Distanz zwischen einzelnen Frames in Grenzen.
 Aufgrund dieser Gegebenheiten reicht bei \ac{KinFu} eine lokale Registrierung aus, es kann also direkt \ac{ICP} verwendet werden.
 
 In \autoref{fig:kinfu-integration} ist der Ablauf der Integration eines neuen Tiefenbilds ins \ac{TSDF} bei \ac{KinFu} dargestellt.
@@ -349,7 +350,7 @@ Zur Darstellung der Szene wird dieses anschließend mithilfe eines Raycasters ge
 
 Es gibt zahlreiche Optimierungen und veränderte Versionen von \ac{KinFu}.
 Unter anderem gibt es in der \ac{PCL} eine freie Implementierung \cite{pirovano2012kinfu}.
-Eine optimierte Version ist beispielsweise Chisel \cite{klingensmith2015chisel}, wo eine effizientere Voxelstrategie verwendet wird.
+Eine optimierte Version ist beispielsweise Chisel \cite{klingensmith2015chisel}, bei der eine effizientere Voxelstrategie verwendet wird.
 Weiterhin ist Chisel eine reine CPU-Implementierung, was die Nutzung auf Mobilgeräten ohne Grafikkarte ermöglicht.
 
 Die in dieser Arbeit verwendete Implementierung ist \ac{YAK}.
@@ -385,7 +386,7 @@ Weiterhin ist CUDA ein proprietäres Softwarepaket, was die Nutzung mit Grafikka
 
 Die Konvertierung von punktbasierten Objektinformationen zu einem aus zusammenhängenden Dreiecken bestehenden Mesh nennt sich Triangulierung.
 Gerade bei der Triangulierung von Punktwolken gibt es jedoch nicht immer eine einzelne korrekte Lösung dieses Problems.
-Es ist beispielweise nicht immer sichergestellt, dass jeder Punkt auch tatsächlich die zu rekonstruierende Oberfläche darstellt - Rauschen, Reflektionen oder sonstige Fehler können auftreten.
+Es ist beispielweise nicht immer sichergestellt, dass jeder Punkt auch tatsächlich die zu rekonstruierende Oberfläche darstellt -- Rauschen, Reflektionen oder sonstige Fehler können auftreten.
 Weiterhin stellt sich die Frage, aus welchen der Punkten in der Wolke sich ein bestimmtes Polygon zusammensetzt.
 
 Diese und andere Probleme führen dazu, dass es viele verschiedene Ansätze zur Triangulierung gibt.
@@ -475,7 +476,7 @@ die implizite Funktion, die die Oberfläche im Punkt $p \in M$ darstellt.
 \end{definition}
 
 Der Gradient $\nabla \chi_M$ dieser Funktion nimmt also im optimalen Fall überall den Wert $0$ an, außer in der Oberfläche selbst.
-Dieser Gradient entspricht exakt den nach innen gerichteten Normalen in Oberflächenpunkten \cite[Abs. 3]{kazhdan2006poisson}.
+Dieser Gradient entspricht exakt den nach innen gerichteten Normalen in den Oberflächenpunkten \cite[Abs. 3]{kazhdan2006poisson}.
 Somit gilt für die Indikatorfunktion:
 
 \begin{displaymath}
@@ -486,7 +487,7 @@ Somit gilt für die Indikatorfunktion:
 \end{aligned}
 \end{displaymath}
 
-Dies ist eine Poisson-Gleichung \cite[Kap. 2]{ponce2016pde}, deren Lösung sich beispielsweise mit dem Gauß-Seidel-Verfahren iterativ berechnen bzw. annäheren lässt.
+Dies ist eine Poisson-Gleichung \cite[Kap. 2]{ponce2016pde}, deren Lösung sich beispielsweise mit dem Gauß-Seidel-Verfahren iterativ berechnen beziehungsweise annäheren lässt.
 Da eine genaue Lösung der Poissongleichung nur in der Nähe der Oberfläche erforderlich ist, kann nun ein Octree aufgestellt werden.
 
 Mit der Poisson-Rekonstruktion generierte Polygonmeshes weisen die Eigenschaft auf, immer wasserdicht zu sein.
@@ -539,7 +540,7 @@ Diese werden nun nacheinander akzeptiert oder verworfen, wenn ein Schnittpunkt m
 Diese Art der Triangulierung funktioniert nur im zweidimensionalen Raum, da der Schnittpunkt zwischen zwei Geraden in höheren Dimensionen nicht als Kriterium ausreicht.
 Im $\mathbb{R}^3$ werden daher die Punkte über ihre Normale auf eine Ebene projeziert.
 Zur Anwendung auf 3D-Punktwolken ist daher eine vorherige Normalenschätzung notwendig.
-Anschließend der in \autoref{alg:greedy-triangulierung} dargestellte Ablauf regulär durchgeführt werden.
+Anschließend kann der in \autoref{alg:greedy-triangulierung} dargestellte Ablauf regulär durchgeführt werden.
 
 Ein enormer Vorteil der Greedy-Triangulierung ist ihre Geschwindigkeit.
 So zeigen \citeauthor{berg2000comp}, dass ein Polygon mit $n$ Vertices in $\mathcal{O}(n \log n)$ rekonstruiert werden kann \cite[56--58]{berg2000comp}.
@@ -637,5 +638,5 @@ Der genaue Ablauf ist in \autoref{alg:ball-pivoting} dargestellt.
 Ein Nachteil des Ball-Pivoting-Algorithmus ist, dass bei zu groß gewählten Radii einige Details verloren gehen können.
 Dies tritt insbesondere dann auf, wenn die rekonstrukierte Oberfläche stark konkav ist und die Abstände zwischen den Punkten deutlich kleiner als der gewählte Radius sind.
 
-Um diesem Fall vorzubeugen kann man mehrere Triangulierungen mit unterschiedlichen Werten für $\rho$ kombinieren.
+Um diesem Fall vorzubeugen, kann man mehrere Triangulierungen mit unterschiedlichen Werten für $\rho$ kombinieren.
 Aufgrund der mehrfachen Ausführung führt dies jedoch zu einer deutlich erhöhten Laufzeit.

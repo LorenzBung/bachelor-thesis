@@ -34,7 +34,7 @@ Ein Beispiel für den Zusammenhang zwischen diesen beiden Komponenten ist in \au
 So kann das originale 2D-Bild um eine dritte Dimension erweitert werden, wodurch sich beispielsweise dreidimensionale Formen modellieren oder rekonstruieren lassen \cite{arsalan2017synthesizing}.
 Auch in der 3D-Fotografie finden Tiefenbilder Anwendung \cite{redert2006philips}.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.66\textwidth]{images/depth_map.png}
 	\caption{2D-Farbbild und zugehöriges Tiefenbild. Entnommen aus \cite[649]{muller2010depth}}
@@ -46,12 +46,12 @@ Jedoch gibt es auch einige Nachteile, die nicht umgangen werden können:
 
 \begin{itemize}
 \item Die 3D-Daten sind ausschließlich aus der Kameraperspektive vorhanden.
-Um Informationen aus einer anderen Perspektive zu erhalten, muss erst aufwändig umgerechnet werden.
-\item Da (in den meisten Fällen) nur ein zweidimensionales Array mit einem Kanal für die Tiefeninformation angelegt wird, können nur die Entfernungen zu den der Kamera nächsten Objekte gespeichert werden.
+Um Informationen aus einer anderen Perspektive zu erhalten, muss erst eine aufwändige Umrechnung stattfinden.
+\item Da (in den meisten Fällen) nur ein zweidimensionales Array mit einem Kanal für die Tiefeninformation angelegt wird, können nur die Entfernungen zu Objekten gespeichert werden, die der Kamera am nächsten sind.
 Verdeckte, reflektierende oder durchsichtige Oberflächen können nicht gespeichert werden.
 \item Das Array ist an die Auflösung der Kamera gebunden.
 Insbesondere bei großer Entfernung zu Objekten werden diese aufgrund des Bildwinkels sehr schlecht abgetastet, was später zu Aliasing-Effekten führen kann.
-\item Die Bittiefe der Werte im Array kann - je nach gewünschter Auflösung - zu niedrig sein, bzw. muss erhöht werden.
+\item Die Bittiefe der Werte im Array kann - je nach gewünschter Auflösung - zu niedrig sein, beziehungsweise muss erhöht werden.
 Eine typische Farbtiefe eines Grauwertbilds von 8 Bit repräsentiert beispielsweise nur $2^8 = 256$ Stufen - was schnell zu wenig wird.
 Insbesondere bei hoher notwendiger Auflösung im nahen Bereich, aber gleichzeitig vorhandenen weit entfernten Objekten kann dies zum Problem werden.
 \end{itemize}
@@ -84,12 +84,12 @@ Auch zum Downsampling von Punktwolken werden sie verwendet \cite{pclVoxelGrid}.
 Gegenüber einem Tiefenbild hat ein Voxel Grid den inhärenten Nachteil, dass Speicherplatz für jeden Voxel benötigt wird.
 Dies führt schnell zu großem Speicherbedarf $M$, da dieser kubisch zur Auflösung $r$ steigt: $M = r_x * r_y * r_z * b$ bei Bittiefe $b$.
 Da der Speicher bereits bei der Initialisierung reserviert werden muss, ist die Änderung der Auflösung oder der Größe des abgedeckten Raumes unmöglich.
-In diesem Fall müssen ein neues Voxel Grid (mit der neuen Auflösung bzw. Größe) angelegt und sämtliche Daten kopiert werden.
+In diesem Fall müssen ein neues Voxel Grid (mit der neuen Auflösung beziehungsweise Größe) angelegt und sämtliche Daten kopiert werden.
 
 Zur Reduzierung des großen Speicherbedarfs werden deswegen häufig Baumstrukturen (sogenannte Octrees) eingesetzt \cite{meagher1982efficient}.
 Dabei wird der Raum in 8 Subvoxel geteilt, welche jeweils ein Blatt des Baumes darstellen.
 Ist der Voxel gefüllt, wird er wieder entsprechend in 8 Subvoxel geteilt.
-Dies wird wiederholt, bis die gewünschte Auflösung erreicht oder eine bestimmte Tiefe im Baum erreicht ist.
+Dies wird so lange wiederholt, bis die gewünschte Auflösung oder eine bestimmte Tiefe im Baum erreicht ist.
 Szenen, die große Unterschiede in der Auflösung aufweisen oder viele leere Voxel beinhalten, brauchen so deutlich weniger Speicherplatz.
 
 Ein Vorteil im Vergleich zum Tiefenbild ist jedoch, dass die Abhängigkeit von der Kameraperspektive wegfällt.
@@ -97,9 +97,9 @@ Dadurch können hier auch Objekte modelliert werden, die im Tiefenbild durch ein
 Desweiteren ist der Raum einheitlich diskretisiert.
 Dies kann je nach Szene und Kameraposition sowohl ein Vor- als auch ein Nachteil sein:
 Bei einem Tiefenbild nimmt der Abstand der Messpunkte mit der Tiefe ab.
-Ist die Entfernung zwischen Objekt und Kamera gering, werden diese mit einer deutlich besseren Auflösung abgetastet als sehr weit entfernte Objekte.
+Ist die Entfernung zwischen Objekt und Kamera gering, werden diese in deutlich mehr Messpunkten erfasst als sehr weit entfernte Objekte.
 Im Voxel Grid werden Objekte jedoch überall gleich abgetastet.
-Dies führt zu verbesserter Auflösung bei entfernten und zu schlechterer Auflösung bei nahen Objekten.
+Dies führt zu verbesserter Auflösung bei Objekten, die weiter entfernt sind, jedoch zu schlechterer Auflösung bei nahen Objekten.
 
 
 \subsection{Punktwolken}
@@ -110,28 +110,28 @@ Hier werden die Daten als Teilmenge eines Vektorraums dargestellt.
 Im Fall dreidimensionaler Daten ist eine Punktwolke also $M \subseteq \mathbb{R}^3$.
 In den meisten Fällen repräsentieren die Punkte dabei eine Diskretisierung der Oberfläche.
 Die in \autoref{fig:bunny_pcd} dargestellte Punktwolke stellt beispielsweise die Oberfläche des Stanford Bunny \cite{stanfordbunny} dar.
-Zusätzlich zur räumlichen Information können auch noch weitere Daten pro Punkt gespeichert sein, wie RGB-Werte, Normalen, Genauigkeit oder Objektklasse (falls schon eine Segmentierung vorgenommen wurde).
+Zusätzlich zur räumlichen Information können auch noch weitere Daten pro Punkt gespeichert sein, wie RGB-Werte, Normalen, Genauigkeit oder Objektklasse, falls schon eine Segmentierung vorgenommen wurde.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.66\textwidth, frame]{images/bunny_pcd.png}
 	\caption{Punktwolke des Stanford Bunny \cite{stanfordbunny}}
 	\label{fig:bunny_pcd}
 \end{figure}
 
-Die Nutzung von Punktwolken bringt im Vergleich zu anderen 3D-Datenmodellen einige Vorteile.
+Die Nutzung von Punktwolken bringt im Vergleich zu anderen 3D-Datenmodellen einige Vorteile:
 
 \begin{itemize}
-\item Die zugrundeliegende Datenstruktur ist Liste.
+\item Die zugrundeliegende Datenstruktur ist eine Liste.
 Dies ermöglicht sehr schnelle Operationen, wie zum Beispiel das Hinzufügen eines Punktes oder die Erweiterung um zusätzliche Informationen.
 Es lässt sich sehr einfach über die Punkte iterieren.
 \item Der Speicherbedarf einer Punktwolke wächst dynamisch, und zwar linear mit der Zahl der enthaltenen Punkte.
 Beim Voxel Grid muss dagegen bereits am Anfang Speicher für jede Zelle reserviert werden, egal ob ein Punkt enthalten ist oder nicht.
 \item Man ist nicht, wie beim Tiefenbild oder Voxelgrid, auf eine feste Anzahl an Punkten limitiert.
-Beim Tiefenbild können maximal $n * m$ Punkte (ein Wert pro Pixel) mit einer Tiefeninformation versehen werden, beim Voxel Grid maximal $x * y * z$ Punkte (ein Wert pro Voxel).
+Beim Tiefenbild können maximal $n * m$ Punkte (ein Wert pro Pixel) mit einer Tiefeninformation versehen werden, das Voxel Grid kann maximal $x * y * z$ Punkte repräsentieren (ein Wert pro Voxel).
 Eine Kapazitätserweiterung, wie beispielsweise das Hinzufügen neuer Pixelspalten oder -zeilen im Tiefenbild, ist bei der Punktwolke nicht notwendig.
 \item Die Auflösung ist nur durch die Gleitkommagenauigkeit der Maschine limitiert.
-Beim Voxel Grid ist sie im Gegensatz dazu durch die Größe der Voxel limitiert, welche aufgrund des Speicherbedarfs nicht beliebig klein gewählt werden kann.
+Beim Voxel Grid ist sie im Gegensatz dazu durch die Größe der Voxel limitiert und kann aufgrund des Speicherbedarfs nicht beliebig gut gewählt werden.
 Beim Tiefenbild ist die Auflösung abhängig von der Bittiefe und der z-Tiefe im Bild - bei weiter entfernten Objekten ist die Auflösung auch niedriger.
 \end{itemize}
 
@@ -139,9 +139,9 @@ Es gibt jedoch auch einige Nachteile gegenüber den anderen Repräsentationen:
 
 \begin{itemize}
 \item Die Rekonstruktion eines Meshs ist nicht eindeutig.
-Beim Voxel Grid lässt sich, beispielsweise mithilfe des Marching-Cubes-Algorithmus \cite{lorensen1987marching}, ein eindeutiges Mesh rekonstruieren.
+Beim Voxel Grid lässt sich ein eindeutiges Mesh rekonstruieren, beispielsweise mithilfe des Marching-Cubes-Algorithmus \cite{lorensen1987marching}.
 Bei einer Punktwolke ist im Gegensatz dazu nicht festgelegt, welche Punkte miteinander verbunden werden sollen.
-\item Viele bekannte Techniken aus der 2D-Bildverarbeitung (wie zum Beispiel Segmentierung, Filterung usw.) lassen sich auf Tiefenbilder direkt übertragen.
+\item Viele bekannte Techniken aus der 2D-Bildverarbeitung wie zum Beispiel Segmentierung oder Filterung lassen sich auf Tiefenbilder direkt übertragen.
 Dies ist bei Punktwolken nicht möglich.
 \end{itemize}
 
@@ -149,7 +149,7 @@ Dies ist bei Punktwolken nicht möglich.
 \section{Meshrepräsentationen}
 \label{sec:meshrepr}
 
-Die bisher angesprochenen Datenstrukturen beinhalten ausschließlich Informationen über Punkte im dreidimensionalen Raum (Geometrie), nicht jedoch aber über die Relation, in der diese zueinander stehen (Topologie).
+Die bisher angesprochenen Datenstrukturen beinhalten ausschließlich Informationen über Punkte im dreidimensionalen Raum (Geometrie), nicht jedoch über die Relation, in der diese zueinander stehen (Topologie).
 Das Polygonmesh erweitert diese Daten durch Kanteninformationen: Punkte (sogenannte Vertices) sind durch Kanten (Edges) miteinander verbunden.
 Die so entstehenden Flächen der Polygone werden als Faces bezeichnet.
 Da jedes Polygon in Dreiecke zerlegt werden kann, werden meist nur diese gespeichert.
@@ -166,7 +166,7 @@ Vertices, Edges und Faces können in verschiedenen Repräsentationen gespeichert
 Diese haben unterschiedliche Eigenschaften und Vor- und Nachteile, die im folgenden genauer beleuchtet werden.
 Zum besseren Verständnis wird das in \autoref{fig:triangles-example} dargestellte Polygonnetz jeweils in den unterschiedlichen Strukturen codiert.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[scale=3]
 \coordinate[label=-135:$v_1$] (v_1) at (0,0);
@@ -196,7 +196,7 @@ Beim \ac{VVM} werden zu jedem Vertex nur die verbundenen Vertices gespeichert.
 Kanten und Flächen ergeben sich daraus implizit.
 Zu den in \autoref{fig:triangles-example} dargestellten Dreiecken wird also die Liste in \autoref{tab:vvm-table} gespeichert.
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \begin{tabular}{| c | c |}
 	\hline
@@ -230,9 +230,9 @@ Dies erhöht zwar den Speicherbedarf und die Komplexität der Datenstruktur, bes
 
 In der Winged-Edge-Datenstruktur \cite{baumgart1975polyhedron} werden sowohl Vertices als auch Edges und Faces explizit abgespeichert.
 Diese Repräsentation ermöglicht es, die Geometrie des Meshes im Vergleich zu anderen Strukturen leichter zu verändern.
-Der Nachteil ist jedoch, dass der Speicheraufwand sehr hoch und die Datenstruktur im Vergleich zu den anderen Darstellungen sehr komplex ist.
+Der Nachteil ist jedoch, dass der Speicheraufwand sehr hoch und die Datenstruktur im Vergleich zu den anderen Darstellungen relativ komplex ist.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[scale=2]
 \coordinate[label=45:$v_1$] (v_1) at (1,1);
@@ -273,7 +273,7 @@ In \autoref{fig:winged-edge-edges} findet sich eine Übersicht über die entspre
 Die Winged-Edge-Datenstruktur zum Beispiel in \autoref{fig:triangles-example} ist in \autoref{tab:winged-edge-table} zu sehen.
 
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 % Edges
 \begin{tabular}{| c | c | c | c | c | c | c |}
@@ -310,11 +310,11 @@ Im Gegensatz zu bisherigen Modellen ist die Idee bei der Half-Edge-Datenstruktur
 Eine Halbkante hat somit einen Vor- und Nachfolger, sowie einen gegenüberliegenden Nachbarn.
 Da wie bei der Winged-Edge-Darstellung eine Orientierung notwendig ist, ist die Halbkante gerichtet.
 
-Der Vorteil dieser Art der Speicherung ist, dass sowohl Kantenvorgänger und -nachfolger schnell bestimmt werden können, aber insbesondere auch aneinander angrenzende Faces. Das Hinzufügen, Entfernen oder Ändern von Daten ist jedoch leichter als bei der Winged-Edge-Darstellung, da nicht zu jeder Kante 4 Nachbarkanten und alle Faces gespeichert werden müssen.
+Der Vorteil dieser Art der Speicherung ist, dass sowohl Kantenvorgänger und -nachfolger schnell bestimmt werden können, aber insbesondere auch aneinander angrenzende Faces. Das Hinzufügen, Entfernen oder Ändern von Daten ist jedoch leichter als bei der Winged-Edge-Darstellung, da nicht zu jeder Kante vier Nachbarkanten und alle Faces gespeichert werden müssen.
 
-Die Vertex- Edge- und Face-Tabellen zu \autoref{fig:triangles-example} sind in \autoref{tab:half-edge-table} aufgelistet. Statt der vollständigen Außen- bzw. Innenzyklen können bei den Faces auch nur einzelne Halbkanten gespeichert werden. Die entsprechenden Vorgänger- und Nachfolgerhalbkanten repräsentieren den kompletten Zyklus implizit.
+Die Vertex-, Edge- und Face-Tabellen zu \autoref{fig:triangles-example} sind in \autoref{tab:half-edge-table} aufgelistet. Statt der vollständigen Außen- beziehungsweise Innenzyklen können bei den Faces auch nur einzelne Halbkanten gespeichert werden. Die entsprechenden Vorgänger- und Nachfolgerhalbkanten repräsentieren den kompletten Zyklus implizit.
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \begin{tabular}{| c | c | c | c | c | c |}
 \hline

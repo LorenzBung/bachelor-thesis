@@ -10,7 +10,7 @@
 Robotik im industriellen Kontext spielt in den letzten Jahren eine immer größer werdende Rolle für die Wirtschaft.
 Insbesondere das autonome Greifen von unsortierten Teilen (sogenanntes Bin-Picking) durch einen Roboter kann viele Prozesse beschleunigen und somit wertvolle Zeit und Ressourcen sparen.
 
-Zum Greifen der Objekte müssen Position und Orientierung bekannt sein.
+Zum Greifen der Objekte müssen jeweils Position und Orientierung bekannt sein.
 Für die dabei durchgeführte Erkennung sind in vielen Fällen CAD-Modelle der Objekte erforderlich, beispielsweise für den ``surface based matching''-Algorithmus \cite{drost2014recognition}.
 Dies stellt häufig ein Problem dar, da diese aus verschiedenen Gründen nicht vorhanden sein können.
 Etwa können für Objekte im aktuellen Fertigungszustand keine Modelle existieren.
@@ -37,7 +37,7 @@ Die Kameraposition ist durch die Pose des Roboters gegeben.
 \item Eine fest montierte, unbewegliche Kamera nimmt mehrere Aufnahmen eines Objekts auf, das zwischen den Aufnahmen bewegt wird.
 Da die Position des Teils unbekannt ist, muss diese geschätzt werden.
 \item Durch eine unbewegliche Kamera wird eine einzelne Aufnahme einer Kiste mit Objekten derselben Art aufgenommen.
-Durch die unterschiedliche Orientierung der Objekte innerhalb der Kiste ergeben sich Daten aus mehreren Perspektiven.
+Die unterschiedliche Orientierung der Objekte innerhalb der Kiste führt zu Daten aus mehreren Perspektiven.
 \end{enumerate}
 
 Ziel der Arbeit ist es, geeignete Lösungen für die verschiedenen Ansätze zu entwickeln sowie die unterschiedlichen Rekonstruktionsmöglichkeiten zu implementieren.
