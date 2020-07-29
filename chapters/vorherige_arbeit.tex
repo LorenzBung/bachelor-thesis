@@ -292,9 +292,9 @@ Selbstverständlich lassen sich beliebig viele zusätzliche Kriterien definieren
 \caption[\acl{ICP}]{\acl{ICP} \cite[56]{elkhrachy2008phdthesis}}
 \label{alg:icp}
 \begin{algorithmic}
-\State $C_\mathcal{P} \gets$ \Call{getCenterOfMass}{$\mathcal{P}$}
-\State $C_\mathcal{Q} \gets$ \Call{getCenterOfMass}{$\mathcal{Q}$}
-\State \Call{translate}{$C_\mathcal{P}$ into $C_\mathcal{Q}$}
+\State $C_{\mathcal{P}} \gets$ \Call{getCenterOfMass}{$\mathcal{P}$}
+\State $C_{\mathcal{Q}} \gets$ \Call{getCenterOfMass}{$\mathcal{Q}$}
+\State \Call{translate}{$C_{\mathcal{P}}$ into $C_{\mathcal{Q}}$}
 \Comment{align cloud position by center of mass}
 \While{$\sum\|\mathcal{P} - \mathcal{Q}\|^2 > \alpha \wedge n < \beta$}
 	\ForAll{$p_i \in \mathcal{P}$}
