@@ -89,6 +89,11 @@ In diesem Schritt findet die Segmentierung der Punktwolke statt.
 Je nach gewählter Methode lässt sich dabei zwischen \ac{ECE}, \ac{RG} und Watershed-Segmentierung wählen.
 Die Punktwolke wird dabei in einen Vektor gespalten, der die einzelnen Cluster beinhaltet.
 
+Im 2D-Bild der Kamera sind Daten vorhanden, die unter Umständen im 3D bereits durch eine \ac{RoI} herausgefiltert wurden.
+Dies kann bei einer Segmentierung mithilfe des Watershed-Algorithmus zu verschlechterten Ergebnissen führen.
+Um bereits gefilterte Regionen also nicht zu beachten, wird den entsprechenden Pixeln im 2D-Bild zunächst der Grauwert $0$ zugewiesen.
+Weiterhin kann eine algorithmische Kontrasterhöhung durchgeführt werden.
+
 
 \subsection{Registrierung}
 \label{subsec:pipeline-registrierung}
