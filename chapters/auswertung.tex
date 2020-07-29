@@ -18,6 +18,9 @@ Anschließend wurden mit einer fest montierten Kamera mehrere Aufnahmen eines Te
 Abschließend wurden mit der unbeweglichen Kamera jeweils zwei Aufnahmen einer Kiste gemacht, in der sich mehrere Teile gleicher Art befanden.
 Im ersten Fall waren diese räumlich gut getrennt, im zweiten Fall handelte es sich um eine volle Kiste.
 
+Da die generierte Rekonstruktion nicht am Referenzmodell ausgerichtet ist, wurde zum Vergleich eine manuelle Grobregistrierung durchgeführt.
+Diese wurde anschließend durch eine lokale Registrierung durch ICP auf Basis der Vertices verfeinert.
+
 
 \subsection{Werte}
 \label{subsec:auswertung-daten-werte}
@@ -156,9 +159,35 @@ Unter Umständen kann keine eindeutige Position gefunden werden und somit gehen 
 \section{Fehlerbetrachtung}
 \label{sec:auswertung-fehler}
 
+Bei Aufnahme der Testdatensätze können mögliche Fehler entstanden sein, die das Ergebnis der Evaluation verfälschen.
+Die folgende Liste stellt einen Auszug verschiedener Fehlerquellen dar.
+
+\begin{itemize}
+    \item unvermeidbares Sensorrauschen
+    \item Spiegelungen durch einfallendes Sonnenlicht
+    \item Ground Truth CAD-Modelle passen nicht zu tatsächlich vorhandenen Objekten
+    \item tatsächlich vorhandene Objekte sind nicht exakt gleich
+    \item unbeabsichtigte Bewegung des Objekts bei Rekonstruktion über Roboter
+    \item fehlerhafte Ausrichtung zwischen generiertem Mesh und Referenz
+\end{itemize}
+
 
 
 \section{Zukünftige Arbeit}
 \label{sec:auswertung-zukunft}
 
-\cite{kazhdan2020poisson}
+In der \nameref{subsec:auswertung-daten-bewertung} hat sich gezeigt, dass die Qualität des rekonstruierten Meshs abhängig vom Erfolg der Segmentierung ist.
+Hier ließe sich eine deutliche Verbesserung erzielen, indem intelligentere Verfahren eingesetzt würden.
+Eine Option wäre ein künstliches neuronales Netz, welches speziell auf industrielle Bauteile trainiert ist.
+
+Eine andere Erweiterungsmöglichkeit bietet die Triangulation.
+Hier könnten die Verschattungen der Objekte genutzt werden, um die Qualität der Rekonstruktion zu verbessern.
+Diesen Ansatz verfolgen beispielsweise auch \citeauthor{kazhdan2020poisson} in \cite{kazhdan2020poisson}.
+
+Weiterhin wäre es eine Möglichkeit, Informationen durch Nutzereingaben zu erlangen.
+Dies könnte sowohl den Bereich der Segmentierung als auch der Registrierung umfassen.
+
+Im Moment können Symmetrien und Spiegelungen in den Objekten nur sehr eingeschränkt betrachtet werden.
+Würden diese berücksichtigt, könnte eine deutlich vollständigeres Mesh generiert werden.
+
+
