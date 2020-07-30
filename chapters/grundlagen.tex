@@ -16,7 +16,7 @@ Auch hier wird diskutiert, welche positiven und negativen Aspekte die jeweiligen
 Zur Aufnahme von 3D-Bilddaten gibt es mehrere verschiedene Möglichkeiten.
 Ein LIDAR-System sendet beispielsweise mehrere Laserstrahlen in verschiedene Richtungen.
 So können anschließend Informationen über die Entfernung zum jeweiligen Punkt geliefert werden, in dem die einzelnen Strahlen auf ein Objekt treffen.
-Eine Stereokamera liefert im Gegensatz dazu zwei Bilder, die anschließend durch spezielle Software (beispielweise durch Semiglobal Matching \cite{hirschmuller2007stereo} oder den PatchMatch-Algorithmus \cite{barnes2009patchmatch}) zu einem dreidimensionalen Bild zusammengesetzt werden.
+Eine Stereokamera liefert im Gegensatz dazu zwei Bilder, die anschließend durch spezielle Software (beispielsweise durch Semiglobal Matching \cite{hirschmuller2007stereo} oder den PatchMatch-Algorithmus \cite{barnes2009patchmatch}) zu einem dreidimensionalen Bild zusammengesetzt werden.
 Eine weitere Möglichkeit besteht darin, ein bestimmtes Muster auf die Umgebung zu projezieren, dieses dann aus einer anderen Perspektive aufzunehmen und aus der räumlichen Verzerrung des Musters die Tiefe zu errechnen \cite{geng2011structured}.
 
 Die so gewonnenen Informationen lassen sich durch mehrere verschiedene Datenmodelle repräsentieren.
@@ -26,7 +26,7 @@ Die so gewonnenen Informationen lassen sich durch mehrere verschiedene Datenmode
 \label{subsec:tiefenbild}
 
 Ein Tiefenbild ist eine einfache Möglichkeit, in einem zweidimensionalen Bild zusätzlich Informationen über die Entfernung der Kamera zu Objekten abzuspeichern.
-Diese Technik ist unter Anderem aus der Computergrafik bekannt, wo sie beim Z-Buffering Anwendung findet \cite[32]{catmull1974subdivision}.
+Diese Technik ist unter anderem aus der Computergrafik bekannt, wo sie beim Z-Buffering Anwendung findet \cite[32]{catmull1974subdivision}.
 Dabei werden sowohl das aufgenommene Bild, aber zusätzlich auch ein 2D-Array mit der Tiefeninformation des zugehörigen Pixels gespeichert.
 Das Tiefenbild dient somit als Lookup Table, um die z-Information zu einem Pixel im 2D-Bild zu erhalten.
 Ein Beispiel für den Zusammenhang zwischen diesen beiden Komponenten ist in \autoref{fig:depth_map} dargestellt.

@@ -124,7 +124,7 @@ n & f^{(n)}\ \mathrm{definiert}\\
 \end{definition}
 
 Ansonsten verhält sich der \ac{RG}-Algorithmus sehr ähnlich zu \ac{ECE}.
-Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|_2$ werden Normalenwinkel und Krümmung betrachtet.
+Einzig die Fehlermetrik wird geändert; statt der euklidischen Norm $\|\cdot\|$ werden Normalenwinkel und Krümmung betrachtet.
 \autoref{alg:region-growing} beschreibt den Ablauf bei maximaler Krümmung $\phi$, Normalendifferenz $\alpha$ und unter Betrachtung der $k$ \ac{KNN}.
 
 \begin{algorithm}[H]
@@ -487,7 +487,7 @@ Somit gilt für die Indikatorfunktion:
 \end{aligned}
 \end{displaymath}
 
-Dies ist eine Poisson-Gleichung \cite[Kap. 2]{ponce2016pde}, deren Lösung sich beispielsweise mit dem Gauß-Seidel-Verfahren iterativ berechnen beziehungsweise annäheren lässt.
+Dies ist eine Poisson-Gleichung \cite[Kap. 2]{ponce2016pde}, deren Lösung sich beispielsweise mit dem Gauß-Seidel-Verfahren iterativ berechnen beziehungsweise annähern lässt.
 Da eine genaue Lösung der Poissongleichung nur in der Nähe der Oberfläche erforderlich ist, kann nun ein Octree aufgestellt werden.
 
 Mit der Poisson-Rekonstruktion generierte Polygonmeshes weisen die Eigenschaft auf, immer wasserdicht zu sein.
@@ -635,8 +635,8 @@ Der genaue Ablauf ist in \autoref{alg:ball-pivoting} dargestellt.
 \end{algorithm}
 %TODO Algorithmus erklären? Methoden unklar
 
-Ein Nachteil des Ball-Pivoting-Algorithmus ist, dass bei zu groß gewählten Radii einige Details verloren gehen können.
-Dies tritt insbesondere dann auf, wenn die rekonstrukierte Oberfläche stark konkav ist und die Abstände zwischen den Punkten deutlich kleiner als der gewählte Radius sind.
+Ein Nachteil des Ball-Pivoting-Algorithmus ist, dass bei zu groß gewählten Radien einige Details verloren gehen können.
+Dies tritt insbesondere dann auf, wenn die rekonstruierte Oberfläche stark konkav ist und die Abstände zwischen den Punkten deutlich kleiner als der gewählte Radius sind.
 
 Um diesem Fall vorzubeugen, kann man mehrere Triangulierungen mit unterschiedlichen Werten für $\rho$ kombinieren.
 Aufgrund der mehrfachen Ausführung führt dies jedoch zu einer deutlich erhöhten Laufzeit.

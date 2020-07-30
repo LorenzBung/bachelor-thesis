@@ -122,18 +122,24 @@ Diese ist insbesondere in jenen Regionen sehr hoch, in denen Lücken in der Reko
     \label{tab:dist-verhältnis}
 \end{table}
 
-Das Verhältnis der beiden Distanzmetriken ist in \autoref{tab:dist-verhältnis} sichtbar.
+Das Verhältnis der beiden Distanzmetriken ist in \autoref{tab:dist-verhältnis} und \autoref{fig:dist-verhältnis} sichtbar.
 Im optimalen Fall, also einer vollständigen Rekonstruktion mit perfekter Qualität, konvergiert dieses Verhältnis gegen $1$, da dann die Distanz in beide Richtungen etwa gleich ist.
 Ein höherer Wert steht hier also für eine höhere Vollständigkeit des rekonstruierten Meshs.
 
 Aus den Werten erschließt sich, dass in den meisten Testfällen die Rotation das Mesh mit der höchsten Vollständigkeit geliefert hat.
 Der Watershed-Algorithmus konnte im Vergleich mit den anderen Tests bei geringer räumlicher Distanz zwischen den Objekten nur den geringsten Teil der Oberfläche herstellen.
 
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=0.49\textwidth]{images/segmentation/meanDistance1.png}
+%	\includegraphics[width=0.49\textwidth]{images/segmentation/meanDistance2.png}
+%	\caption{Diagramme der Werte in \autoref{tab:dist-mesh-gt} und \autoref{tab:dist-gt-mesh}}
+%\end{figure}
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.49\textwidth]{images/segmentation/meanDistance1.png}
-	\includegraphics[width=0.49\textwidth]{images/segmentation/meanDistance2.png}
-	\caption{Diagramme der Werte in \autoref{tab:dist-mesh-gt} und \autoref{tab:dist-gt-mesh}}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/segmentation/ratio.png}
+    \caption{Diagramm der Distanzverhältnisse in \autoref{tab:dist-verhältnis}}
+    \label{fig:dist-verhältnis}
 \end{figure}
 
 
@@ -188,6 +194,6 @@ Weiterhin wäre es eine Möglichkeit, Informationen durch Nutzereingaben zu erla
 Dies könnte sowohl den Bereich der Segmentierung als auch der Registrierung umfassen.
 
 Im Moment können Symmetrien und Spiegelungen in den Objekten nur sehr eingeschränkt betrachtet werden.
-Würden diese berücksichtigt, könnte eine deutlich vollständigeres Mesh generiert werden.´
+Würden diese berücksichtigt, könnte ein deutlich vollständigeres Mesh generiert werden.
 
 

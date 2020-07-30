@@ -3,6 +3,19 @@
 \chapter{Zusammenfassung}
 \label{ch:zusammenfassung}
 
-Es wurde eine Pipeline zur Rekonstruktion von 3D-Polygonnetzen aus Punktwolken entwickelt.
+Es wurde eine Pipeline zur Rekonstruktion von 3D-Polygonnetzen aus Punktwolken entwickelt und mehrere verschiedene Ansätze dafür getestet.
+Die Segmentierungsalgorithmen \ac{RG}, \ac{ECE} und 2D-Watershed wurden implementiert.
+Die Registrierung der Cluster wurde zunächst global mithilfe \ac{4PCS} geschätzt, um anschließend durch \ac{ICP} verfeinert zu werden.
+Abschließend wurde die Punktwolke durch Poisson trianguliert und das resultierende Mesh nach Distanz von der Originalpunktwolke gefiltert.
+
+Die Aufnahme eines Objekts aus verschiedenen Perspektiven mit einer fest montierten Kamera, anschließende Registrierung der Punktwolken und abschließende Poisson-Triangulation resultierte dabei im qualitativ hochwertigsten Mesh.
+
+Bei der Segmentierung einer Aufnahme mehrerer sortenreiner Teile ist zudem aufgefallen, dass die gewählte Segmentierungsmethode stark variiert.
+Einfluss haben sowohl Objekteigenschaften wie Größe, Form und Oberflächenstruktur, jedoch auch andere Faktoren wie die Distanz zwischen den Objekten.
+Eine Entscheidung für einen Ansatz kann also nicht allgemein getroffen werden und ist unter Umständen auch nicht für ein Objekt eindeutig.
+
+Die Qualität der Segmentierung hat sich stark in der Qualität des resultierenden Meshs wiedergespiegelt.
+Bei Untersegmentierung stellten sich viele Cluster als unbrauchbar heraus und mussten verworfen werden.
+Trat aber eine Übersegmentierung auf, war eine korrekte Registrierung jedoch in vielen Fällen nicht möglich.
 
 %TODO

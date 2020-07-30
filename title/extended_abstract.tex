@@ -30,8 +30,36 @@ Es wurden verschiedene Ansätze dafür analysiert, verglichen und bewertet.
 
 \section*{Methodik}
 
+Die Pipeline wurde in großen Teilen auf Basis der Point Cloud Library \cite{rusu2011pcl} implementiert.
+Um größtmögliche Flexibilität zu erreichen, wurde das Robot Operating System \cite{quigley2009ros} für die Interaktion mit dem Programm eingesetzt.
+Zur Aufnahme der 3D-Punktwolken wurden Kameras von Ensenso \cite{ensensoWebsite} verwendet.
+
+Die Segmentierung der Punktwolke wurde sowohl im 3D durch Euclidean Cluster Extraction und Region Growing getestet, als auch im zweidimensionalen Grauwertbild mithilfe des Watershed-Algorithmus.
+
+Um Punktwolken aneinander auszurichten, wurde zunächst eine globale Registrierung durch 4-Point Congruent Sets \cite{aiger2008fpcs} durchgeführt.
+Diese wurde anschließend mit Iterative Closest Point \cite{besl1992method} lokal optimiert.
+
+Zur Triangulierung wurde der Poisson-Algorithmus \cite{kazhdan2006poisson} verwendet. Anschließend wurden alle Faces aus dem Mesh entfernt, welche eine gewählte Distanz von der Punktwolke überschritten.
 
 
+\section*{Ergebnisse}
+
+Zur Evaluation wurde die Cloud-Mesh-Distanz zwischen den Vertices des generierten Meshs und den Faces des Referenzobjekts bestimmt.
+Außerdem wurde die inverse Cloud-Mesh-Distanz errechnet, um die Vollständigkeit zu überprüfen.
+
+\begin{figure}[H]
+    \includegraphics[width=0.49\textwidth]{images/segmentation/meanDistance1.png}
+    \includegraphics[width=0.49\textwidth]{images/segmentation/ratio.png}
+    \caption{Cloud-Mesh-Distanz und Distanzverhältnis verschiedener Testobjekte}
+    \label{fig:ex-abstract-distances}
+\end{figure}
+
+Es hat sich gezeigt, dass eine Rekonstruktion aus mehreren Aufnahmen eines einzelnen Objekts aus verschiedenen Perspektiven die höchste Qualität erreicht.
+In \autoref{fig:ex-abstract-distances} sind die Cloud-Mesh-Distanz von Rekonstruktion zu Referenzobjekt sowie das Distanzverhältnis zu sehen.
+
+Weiterhin ist aufgefallen, dass eine gute Rekonstruktion nur bei korrekter Segmentierung möglich ist.
+Bei Untersegmentierung der Punktwolke müssen viele Cluster verworfen werden, während eine korrekte Registrierung bei einer Übersegmentierung oft nicht möglich ist.
+Die Wahl der besten Segmentierungsmethode ist abhängig von der Objektform und -größe.
 
 %TODO
 
