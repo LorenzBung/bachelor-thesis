@@ -385,7 +385,7 @@ Weiterhin ist CUDA ein proprietäres Softwarepaket, was die Nutzung mit Grafikka
 \label{sec:triangulation}
 
 Die Konvertierung von punktbasierten Objektinformationen zu einem aus zusammenhängenden Dreiecken bestehenden Mesh nennt sich Triangulierung.
-Gerade bei der Triangulierung von Punktwolken gibt es jedoch nicht immer eine einzelne korrekte Lösung dieses Problems.
+Gerade bei der Triangulierung von Punktwolken ist eine eindeutige korrekte Lösung dieses Problems jedoch häufig nicht vorhanden.
 Es ist beispielweise nicht immer sichergestellt, dass jeder Punkt auch tatsächlich die zu rekonstruierende Oberfläche darstellt -- Rauschen, Reflektionen oder sonstige Fehler können auftreten.
 Weiterhin stellt sich die Frage, aus welchen der Punkten in der Wolke sich ein bestimmtes Polygon zusammensetzt.
 
@@ -633,7 +633,6 @@ Der genaue Ablauf ist in \autoref{alg:ball-pivoting} dargestellt.
 \EndWhile
 \end{algorithmic}
 \end{algorithm}
-%TODO Algorithmus erklären? Methoden unklar
 
 Ein Nachteil des Ball-Pivoting-Algorithmus ist, dass bei zu groß gewählten Radien einige Details verloren gehen können.
 Dies tritt insbesondere dann auf, wenn die rekonstruierte Oberfläche stark konkav ist und die Abstände zwischen den Punkten deutlich kleiner als der gewählte Radius sind.
